@@ -1,0 +1,1036 @@
+<!doctype html>
+<html lang="ru">
+  <head>
+    <meta charset="UTF-8" />
+    <title>Дневник Артура Могрейна</title>
+    <style>
+      @page {
+        size: A5;
+        margin: 1.5cm 1.8cm;
+      }
+      * {
+        margin: 0;
+        padding: 0;
+        box-sizing: border-box;
+      }
+      body {
+        font-family: "Ink Free", "Segoe Print", "Caveat", "Bad Script", cursive;
+        font-size: 11.5pt;
+        line-height: 1.55;
+        color: #2c2c2c;
+        background: #f5f0e8;
+        padding: 1.5cm 1.8cm;
+        max-width: 14.8cm;
+        margin: 0 auto;
+      }
+      .page {
+        min-height: unset;
+        position: relative;
+        page-break-before: always;
+        page-break-inside: avoid;
+      }
+      @media print {
+        body {
+          padding: 0;
+        }
+        .page:first-of-type {
+          page-break-before: inherit;
+        }
+        .page:first-of-type .entry:first-of-type {
+          margin-top: 0;
+        }
+      }
+      .diary-image {
+        margin: 1em auto;
+        max-width: 90%;
+        display: block;
+        border: 1px solid #c8b898;
+        box-shadow: 2px 2px 8px rgba(0, 0, 0, 0.1);
+        transform: rotate(var(--rot, 0deg));
+        page-break-inside: avoid;
+      }
+      .diary-image.right {
+        float: right;
+        margin: 0.5em 0 0.5em 1em;
+        max-width: 45%;
+      }
+      .diary-image.left {
+        float: left;
+        margin: 0.5em 1em 0.5em 0;
+        max-width: 45%;
+      }
+      .image-caption {
+        text-align: center;
+        font-size: 0.75em;
+        color: #8a7a6a;
+        margin-top: 0.3em;
+        margin-bottom: 1em;
+        font-style: italic;
+        page-break-inside: avoid;
+      }
+      .entry {
+        margin-bottom: 0.3em;
+      }
+      .entry-date {
+        font-size: 10pt;
+        color: #8a7a6a;
+        margin-bottom: 0.3em;
+        border-bottom: 1px dashed #d8c8b0;
+        padding-bottom: 0.3em;
+      }
+      .entry-title {
+        font-size: 13pt;
+        color: #5a4a3a;
+        margin-bottom: 0.8em;
+        font-weight: normal;
+      }
+      .typo {
+        background: #ffe0e0;
+        text-decoration: line-through;
+        padding: 0 2px;
+        color: #aa5555;
+      }
+      .strikethrough {
+        text-decoration: line-through;
+        color: #8a7a6a;
+      }
+      .strikethrough-red {
+        text-decoration: line-through;
+        text-decoration-color: #aa3333;
+        color: #aa5555;
+      }
+      .margin-note {
+        margin: 0.5em 0 0.5em 2em;
+        padding: 0.3em 0.8em;
+        border-left: 2px solid #8a7a6a;
+        font-size: 0.9em;
+        color: #6a5a4a;
+        font-style: italic;
+        background: rgba(200, 190, 170, 0.15);
+        transform: rotate(-0.5deg);
+      }
+      .margin-note:before {
+        content: "※ ";
+        color: #8a7a6a;
+      }
+      .insert-above {
+        font-size: 0.8em;
+        color: #2a6a3a;
+        vertical-align: super;
+        position: relative;
+        top: -0.1em;
+      }
+      .underline-wavy {
+        text-decoration: underline wavy #aa6633;
+        text-underline-offset: 2px;
+      }
+      .sidebar-note {
+        float: right;
+        width: 30%;
+        margin: 0.3em 0 0.3em 0.8em;
+        padding: 0.4em 0.7em;
+        font-size: 0.82em;
+        color: #6a5a4a;
+        border: 1px dashed #c8b898;
+        background: rgba(220, 210, 190, 0.3);
+        transform: rotate(1deg);
+        shape-margin: 0.3em;
+      }
+      .shout {
+        font-size: 1.3em;
+        font-weight: bold;
+        letter-spacing: 1px;
+      }
+      .section-break {
+        text-align: center;
+        margin: 1.5em 0;
+        color: #b8a88a;
+        font-size: 1.2em;
+        letter-spacing: 0.5em;
+      }
+      p {
+        margin-bottom: 0.6em;
+        text-indent: 0.6em;
+      }
+      p.no-indent {
+        text-indent: 0;
+      }
+      /* сквозная нумерация удалена */
+      .chapter-break {
+        text-align: center;
+        margin: 2em 0 1.5em;
+      }
+      .chapter-break hr {
+        border: none;
+        border-top: 1px solid #b8a88a;
+        margin: 0.5em 3em;
+      }
+      .chapter-label {
+        font-size: 9pt;
+        color: #a09080;
+        letter-spacing: 3px;
+        text-transform: uppercase;
+      }
+    </style>
+  </head>
+  <body>
+    <div class="page">
+      <div class="entry">
+        <div class="entry-date">— Не помню когда. Давно. —</div>
+        <div class="entry-title">Детство</div>
+      </div>
+      <p class="no-indent">
+        У нас не было имени на картах. Просто три оврага, сходящихся в грязную
+        балку, десяток хат, где дым ел глаза, а доски гнили под весом снега.
+        Отец месил глину для печей. Мать пряла шерсть и знала, какие коренья
+        сбивают жар, а какие <span class="strikethrough">закрывают</span>
+        <span class="insert-above">открывают</span> глаза навечно.
+      </p>
+      <img
+        class="diary-image"
+        src="01_деревня.jpeg"
+        alt="Деревня"
+        style="--rot: -0.8deg; max-width: 85%"
+      />
+      <div class="image-caption">
+        Наша деревня. Таким я запомнил её в последний раз.
+      </div>
+      <p>
+        Я был обычным пацаном. Бегал босиком по крапиве, срывал колени, плакал,
+        когда шиповник впивался в ладонь. Жизнь казалась простой и
+        <span class="strikethrough">счастливой</span>
+        <span class="typo-correction">∗ ничего сложнее</span>, несмотря на нашу
+        бедность.
+      </p>
+      <div class="sidebar-note">
+        Странно писать об этом спустя столько лет. Помню запах сырой земли и
+        холод в пальцах...
+      </div>
+      <p>
+        Однажды ночью на деревню опустился туман. Отец серьёзно заболел, когда
+        вышел проверить, что за окном. Через несколько недель я помогал матери
+        закапывать его. Плакал над могилой громко, по-детски.
+      </p>
+      <p>
+        Дальше было хуже. В деревню стали заходить странные люди — красные
+        одеяния, ритуальные украшения. Мать велела мне не подходить к ним.
+        Говорила, что это <span class="strikethrough-red">плохие</span> люди. —
+        <span style="font-style: italic"
+          >тогда я ещё верил, что есть «плохие» и «хорошие»… наивный.</span
+        >
+      </p>
+      <p>
+        В одну из ночей она спрятала меня под пол. Потом тело матери рухнуло на
+        деревянный настил и придавило люк. Я просидел в темноте три дня. Пил
+        воду, скопившуюся в щелях. Ел <span class="strikethrough">ничего</span>
+        <span class="insert-above">нечего</span>.
+      </p>
+      <p>
+        Потом пришли другие. Люди в тяжёлой броне, с гербами на плащах. Меня
+        полуживого вытащили из-под пола и бросили к остальным детям в клетки.
+        Выдали ломоть чёрствого хлеба и кружку воды. Я был одной ногой в могиле.
+      </p>
+    </div>
+
+    <div class="page">
+      <div class="entry">
+        <div class="entry-date">— Не помню. После того дня. —</div>
+        <div class="entry-title">Посвящение</div>
+      </div>
+      <p class="no-indent">
+        Пришёл старший инквизитор: — Я буду отвечать за ваше п<span class="typo"
+          >о</span
+        ><span class="typo-correction">о</span>священие. Многие умрут на месте.
+        Кто-то станет безумцем.
+      </p>
+      <p>
+        Раскалённый герб ордена приложили к моей руке. Кожа зашипела. Из
+        бутылька на ожог капнули чёрную жидкость. Она впиталась
+        <span class="strikethrough">мгновенно</span>
+        <span class="insert-above">быстро</span>. Вспомнить могу только одно:
+        как я корчился и желал умереть.
+      </p>
+      <div class="sidebar-note">
+        Рука до сих пор иногда ноет. Особенно перед дождём. Или когда рядом
+        скверна.
+      </div>
+      <p>
+        На третий день меня облили холодной водой — посвящение пройдено. Хоть и
+        <span class="underline-wavy">с дефектом</span>. Моя кисть почернела.
+      </p>
+      <img
+        class="diary-image"
+        src="02_статуя_богини.jpeg"
+        alt="Статуя богини"
+        style="--rot: 0.3deg; max-width: 70%"
+      />
+      <div class="image-caption">
+        Часовня ордена. Огонь и череп на весах — жизнь и смерть во имя веры.
+      </div>
+
+      <div class="entry">
+        <div class="entry-date">— Последующие пятнадцать лет. —</div>
+        <div class="entry-title">Служба</div>
+      </div>
+      <p class="no-indent">
+        Нас учили стоять, бить и не падать. Деревянные палки оставляли синяки,
+        которые не сходили месяцами. За каждое проявление слабости — стояние на
+        горохе и плети. Со временем разум становится чище, а мысли яснее.
+      </p>
+    </div>
+
+    <div class="page">
+      <div class="entry">
+        <div class="entry-date">— Где-то между 10 и 15 годами. —</div>
+        <div class="entry-title">Первое оружие</div>
+      </div>
+      <p class="no-indent">
+        Метка никак себя не проявляла — клеймо, что я прошёл первое посвящение.
+      </p>
+      <p>
+        Дальше нас учили читать и писать. Книги о монстрах, о том, как их бить,
+        что нужно вырезать и где искать. Я возненавидел эти книги. — «Вырезать»
+        — мерзкое слово. Они не писали «убить». Они писали «вырезать». Как скот.
+      </p>
+      <p>
+        Когда мне в первый раз доверили меч — он был тяжёлый, неудобный и тупой.
+        Я помню, как долго дрался со своим первым мертвецом. Рубил всё, что
+        попадалось, оружие вязло в плоти, а он всё не падал. Слёг с лихорадкой
+        на пять дней.
+      </p>
+    </div>
+
+    <div class="page">
+      <div class="entry">
+        <div class="entry-date">— Год посвящения в братья. —</div>
+        <div class="entry-title">Мой клинок</div>
+      </div>
+      <p class="no-indent">
+        Нам предстояло закалить клинки в собственной крови. Мы резали руки и
+        капали на сталь. Клинок оказался лёгким, словно продолжение руки. Я
+        назвал его <span class="underline-wavy">«Валькирия»</span>.
+      </p>
+      <img
+        class="diary-image"
+        src="03_меч_и_щит.jpeg"
+        alt="Меч и щит"
+        style="--rot: 0.5deg; max-width: 75%"
+      />
+      <div class="image-caption">
+        «Валькирия» и мой щит. Единственное, что осталось со мной с тех дней.
+      </div>
+    </div>
+    <div class="page">
+      <div class="entry">
+        <div class="entry-date">— 22 года. —</div>
+        <div class="entry-title">Война</div>
+      </div>
+      <p class="">
+        Но потом сменился глава ордена. Приезжий вельможа раздавал приказы, не
+        вникая в суть.
+      </p>
+      <p class="no-indent">
+        Мы стали боевой силой на службе короны. Помню первый штурм — я бежал
+        впереди, закрываясь щитом от стрел. Маг получил стрелу в горло. До сих
+        пор снится, как он захлёбывался кровью.
+      </p>
+    </div>
+
+    <div class="page">
+      <div class="entry">
+        <div class="entry-date">— Сны до сих пор снятся. —</div>
+        <div class="entry-title">Пропасть</div>
+      </div>
+      <img
+        class="diary-image right"
+        src="04_кошмар_без_головы.jpeg"
+        alt="Кошмар"
+        style="--rot: -1.2deg; max-width: 50%"
+      />
+      <p class="no-indent">
+        Мы резали людей, как на скотобойне. У каждого была семья.
+        <span class="shout">Ненавижу войну.</span>
+      </p>
+      <p>
+        После захвата территорий к нам приводили детей из завоёванных земель.
+        Ритуал они не переживали — я видел, как они разбивали головы о каменный
+        пол.
+      </p>
+      <div class="margin-note">
+        Я до сих пор вижу их лица. Не могу забыть. И не хочу прощать себя.
+      </div>
+      <p>
+        Свет богини угасал. Рука начала ныть — кузнец выковал перчатку, прибитую
+        прямо к плоти. Рука до локтя в чешуйчатой стали.
+      </p>
+      <div class="sidebar-note">
+        До сих пор чувствую запах своей горелой кожи.
+      </div>
+    </div>
+
+    <div class="page">
+      <div class="entry">
+        <div class="entry-date">— 27 лет. —</div>
+        <div class="entry-title">Уход</div>
+      </div>
+      <p class="no-indent">
+        Я пошёл к командиру: — Если считаешь, что достоин большего — просто иди.
+        Я подам рапорт о твоей гибели.
+      </p>
+      <p>
+        Ушёл ночью. Моё имя —
+        <span class="strikethrough-red">Элеонор Мелрот</span> — отмечено как
+        «погибший».
+      </p>
+      <img
+        class="diary-image"
+        src="05_догмат_и_свиток.jpeg"
+        alt="Догмат и свиток"
+        style="--rot: -0.5deg; max-width: 70%"
+      />
+      <div class="image-caption">
+        Догмат, который я нарушил. Свиток, который я начал писать заново.
+      </div>
+      <p>
+        Через три недели я вступил в гильдию авантюристов. Взял имя
+        <span class="underline-wavy">Артур Могрейн</span>.
+      </p>
+    </div>
+
+    <div class="page">
+      <div class="entry">
+        <div class="entry-date">— 30 лет. —</div>
+        <div class="entry-title">Один</div>
+      </div>
+      <p class="no-indent">
+        В команде работал редко — зачистки нежити. Свет вернулся. Я вернулся к
+        цели — искоренить зло.
+      </p>
+      <div class="entry">
+        <div class="entry-date">— 31 год. Работа, работа, работа... —</div>
+        <div class="entry-title">Будни авантюриста</div>
+      </div>
+      <p class="no-indent">
+        Часто думал, что это будет последняя вылазка. Нежить меня загрызёт, и я
+        останусь гнить в канаве.
+      </p>
+      <p>
+        Первая работа в команде — идиоты штурмовали логово культистов огненным
+        шаром, крича:
+        <span style="font-style: italic">«ВЫХОДИТЕ ПОИГРАТЬ!»</span>
+      </p>
+      <div class="sidebar-note">
+        Серьёзно? Они реально так кричали. Я чуть не развернулся.
+      </div>
+      <p>
+        В том бою мы потеряли воина — плут неправильно взломал ловушку, беднягу
+        пронзили шипы.
+      </p>
+      <p>
+        Другой отряд — полгода работы, пока лидер не ушёл жениться. Удачи им.
+      </p>
+      <p>
+        Год выдался спокойным: у бабки украли сковородку, скрипучее дерево
+        чудилось воем покойной жены.
+      </p>
+      <div class="margin-note">
+        Иногда я завидую — их проблемы: скрипучее дерево. Мои: твари из-под
+        земли.
+      </div>
+      <p>
+        Одно задание запомнилось — неопытный волшебник случайно поднял мертвеца,
+        не смог его контролировать и запер в комнате. Долго читал ему лекцию о
+        некромантии.
+      </p>
+      <img
+        class="diary-image"
+        src="07_труп_на_пентограмме.jpeg"
+        alt="Труп на пентограмме"
+        style="--rot: 0.4deg; max-width: 70%"
+      />
+      <div class="image-caption">
+        Вот что бывает, когда берёшься за магию, не понимая её сути. Хорошо, что
+        я успел вовремя.
+      </div>
+    </div>
+
+    <div class="page">
+      <div class="entry">
+        <div class="entry-date">— 32 года. —</div>
+        <div class="entry-title">Новый отряд</div>
+      </div>
+      <p class="no-indent">
+        Решил снова вступить в отряд. Тяжело назвать их группой — скорее кружок
+        несостоявшихся интересов. Я не понял, что объединило Дроу и Человека
+        вместе.
+      </p>
+      <p>
+        Женщина-цыганка, представилась <span class="underline-wavy">Азой</span>,
+        бард. Вечно называет меня «красавчиком» и просит помочь с вещами, словно
+        носильщика. —
+        <span style="font-style: italic"
+          >богиня, за что ты послала мне это испытание?</span
+        >
+      </p>
+      <p>
+        Дроу — <span class="underline-wavy">Мальбрин</span>. Вскрывает замки,
+        смотрит с прищуром — но мой кошелёк никогда не пропадал. Уже плюс.
+      </p>
+      <p>
+        Первый раз я решил с ними на простое задание…
+        <span class="underline-wavy">я так думал.</span>
+      </p>
+    </div>
+
+    <div class="page">
+      <div class="entry">
+        <div class="entry-date">— Продолжение. —</div>
+        <div class="entry-title">Первый бой</div>
+      </div>
+      <p class="no-indent">
+        Аза нашла «лёгкие деньги» — поговорить с каким-то парнем и достать
+        шкатулку. Я должен был стоять на стреме. Я долго доказывал, что воровать
+        — грех, и богиня покарает их души… на что я рассчитывал?
+      </p>
+      <p>
+        Я решил пойти и поговорить напрямую. Головорезы даже не стали слушать.
+        <span class="shout">Но когда я услышал, что они торгуют детьми…</span>
+      </p>
+      <p>
+        Очнулся с четырьмя колотыми ранами. Вокруг лежало
+        <span class="underline-wavy">восемь тел</span>. Отводил детей по домам,
+        от меня жутко пахло кровью. Свою долю не взял.
+      </p>
+      <div class="margin-note">
+        Потом до меня дошло — основная цель была драгоценность. Аза читала
+        лекцию о типах камней… я ничего не запомнил.
+      </div>
+    </div>
+
+    <!-- ======================== СТРАНИЦА 10: Начало Проклятия Страда ======================== -->
+
+    <div class="page">
+      <div class="chapter-break">
+        <hr />
+        <div class="chapter-label">✧ ПРОКЛЯТИЕ СТРАДА ✧</div>
+        <hr />
+      </div>
+
+      <div class="entry">
+        <div class="entry-date">— Первый шаг в неизвестность. —</div>
+        <div class="entry-title">Дорога в туман</div>
+      </div>
+
+      <p class="no-indent">
+        После мы отправились в другой город, где встретились со знакомой знатной
+        дамой — Баронессой. Я старался молчать и слушать. Задание оказалось
+        простым — за скромную, но честную награду.
+      </p>
+
+      <p>
+        Мы прибыли к шатрам на окраине города — к
+        <span class="underline-wavy">вистани</span>. Первым делом я попытался
+        договориться по-старому — указать, что им тут не рады. Но Аза
+        остановила: «Договорюсь сама». Согласен, ряженые между собой сговорятся
+        быстрее.
+      </p>
+
+      <div class="sidebar-note">
+        Она пропадала с ними всю ночь. Песни, танцы, костёр. Я спал у дерева в
+        отдалении.
+      </div>
+
+      <img
+        class="diary-image"
+        src="08_повозка.jpeg"
+        alt="Повозка вистани"
+        style="--rot: 0.3deg; max-width: 65%"
+      />
+      <div class="image-caption">
+        Их повозки. Яркие, пёстрые — словно они сами.
+      </div>
+
+      <p>
+        Утром сообщили — Аза договорилась. Мы едем с ними в другие земли.
+        «Интересное приключение». Я отнёсся скептически. Но раз уж я с ними —
+        поехали.
+      </p>
+
+      <p>
+        Мы ехали несколько дней в повозках. На удивление ничего не происходило,
+        хотя тревожное чувство не покидало. Мы движемся к чему-то неизведанному.
+      </p>
+
+      <img
+        class="diary-image"
+        src="09_караван_в_тумане.jpeg"
+        alt="Караван в тумане"
+        style="--rot: -1deg; max-width: 80%"
+      />
+      <div class="image-caption">
+        Караван уходил в туман. Я смотрел на спины впереди идущих и чувствовал —
+        обратно мы вернёмся не все.
+      </div>
+    </div>
+
+    <!-- ======================== СТРАНИЦА 11: Прибытие в Баровию ======================== -->
+
+    <div class="page">
+      <div class="entry">
+        <div class="entry-date">— Прибытие. —</div>
+        <div class="entry-title">Деревня в тумане</div>
+      </div>
+      <p class="no-indent">
+        Мы прошли через магический туман. Моё чутьё вопило об опасности. Первое,
+        что увидели — ворота деревни. Грустная небольшая деревня со статуей
+        бургомистра.
+      </p>
+
+      <img
+        class="diary-image"
+        src="10_деревня_в_тумане.jpeg"
+        alt="Деревня в тумане"
+        style="--rot: 0.6deg; max-width: 80%"
+      />
+      <div class="image-caption">
+        Деревня, утонувшая в тумане. Солнце здесь — просто воспоминание.
+      </div>
+
+      <p>
+        Жители поникшие, словно смерть висит над ними и не отпускает. Письмо,
+        что мы везли, содержало призыв о помощи — спасти дочь бургомистра.
+      </p>
+
+      <img
+        class="diary-image"
+        src="11_письмо.jpeg"
+        alt="Письмо"
+        style="--rot: -0.3deg; max-width: 65%"
+      />
+      <div class="image-caption">
+        Чей-то крик о помощи, затерянный в проклятом месте.
+      </div>
+
+      <p>
+        На постоялом дворе хозяин отказал в ночлеге — отправил спать в хлев. Я
+        хотел разбить ему морду, но Аза его
+        <span class="strikethrough">окрутила</span>
+        <span class="insert-above">уговорила</span>.
+      </p>
+      <div class="margin-note">Сработало. Хозяин указал на дом Исмарка.</div>
+
+      <p>
+        <span class="underline-wavy">Исмарк Колян</span> — сын покойного
+        бургомистра. Несмотря на перепалку, предложил остановиться у него. В
+        доме — следы когтей, окна заколочены. Дом выглядел заброшенным, но в нём
+        жили.
+      </p>
+
+      <p>
+        Сверху спустилась его сестра —
+        <span class="underline-wavy">Ирина</span>. На шее следы укусов, но она
+        ещё человек. Первая просьба — помочь похоронить отца. Священник
+        отказывается выходить из церкви.
+      </p>
+
+      <div class="sidebar-note">
+        Жители считают во всём виноватой Ирину. А по мне — она такая же жертва.
+      </div>
+    </div>
+
+    <!-- ======================== СТРАНИЦА 12: Ночь мёртвых ======================== -->
+
+    <div class="page">
+      <div class="entry">
+        <div class="entry-date">— Та самая ночь. —</div>
+        <div class="entry-title">Ночь мёртвых</div>
+      </div>
+      <p class="no-indent">
+        Ближе к ночи восстали души мертвых и пошли на выход из деревни — куда-то
+        вглубь земель. Запомнился один — толстый дварф с повязкой на глазах.
+        Даже после смерти лицо было счастливым и верным идеалам.
+      </p>
+      <div class="margin-note">
+        Я обязательно найду его могилу. Спи спокойно, воин.
+      </div>
+
+      <p>
+        А утром… самое ужасное утро в жизни. Никогда не забуду этот сон — он был
+        наяву. Все видели одно и то же.
+      </p>
+
+      <div class="entry">
+        <div class="entry-date">— Утро после кошмара. —</div>
+        <div class="entry-title">Дети у порога</div>
+      </div>
+      <p class="no-indent">
+        Двое детей у входа в дом. Сказали, что потеряли сестру. Как только
+        переступили порог — дети исчезли. Дом оказался пуст.
+      </p>
+
+      <img
+        class="diary-image"
+        src="12_дети_у_порога.jpeg"
+        alt="Дети у порога"
+        style="--rot: 0.5deg; max-width: 75%"
+      />
+      <div class="image-caption">
+        Они смотрели так, будто видели сквозь нас.
+      </div>
+
+      <p>
+        Я чувствовал себя одновременно собой и не совсем. Дом выглядел так,
+        словно в нём жили только что — и одновременно давно. Первый враг — живой
+        доспех. Его было легко уронить.
+      </p>
+    </div>
+
+    <!-- ======================== СТРАНИЦА 13: Заброшенный дом ======================== -->
+
+    <div class="page">
+      <div class="entry">
+        <div class="entry-date">— Внутри. —</div>
+        <div class="entry-title">Склеп и алтарь</div>
+      </div>
+      <p class="no-indent">
+        Записки, письма, детские кости. Я решил похоронить детей — нельзя
+        обрекать мёртвых лежать без упокоения.
+      </p>
+
+      <p>
+        Первая серьёзная угроза — <span class="underline-wavy">Баньши</span>.
+        Ненавижу призраков — без магии их почти не убить. Повезло, нашли свитки.
+        Неупокоенная душа служанки — её сын умер при родах.
+      </p>
+
+      <div class="sidebar-note">
+        Дом словно хранил её боль и отчаяние. Я чувствовал это каждой клеткой.
+      </div>
+
+      <p>
+        Через тайные ходы вышли в подвал. Рука задрожала — я почуял мерзость.
+        Первым делом нашли склеп — я аккуратно сложил кости детей, закрыл крышку
+        и помолился за упокой их душ.
+      </p>
+
+      <img
+        class="diary-image"
+        src="13_каменный_гроб.jpeg"
+        alt="Каменный гроб с костями"
+        style="--rot: -0.8deg; max-width: 70%"
+      />
+      <div class="image-caption">
+        Упокой богиня их души. Они не заслужили такой участи.
+      </div>
+
+      <p>
+        Закончив с детьми, вышли к мусорной куче, которая оказалась монстром.
+        Еле закололи. А когда встали на постамент — услышали голоса. Это было
+        место ритуала — от нас требовали жертву.
+      </p>
+
+      <div class="margin-note">
+        Сойдя с постамента, дом взбесился. Ловушки посыпались со всех сторон.
+        Столько раз пожалел, что ношу тяжёлый доспех.
+      </div>
+    </div>
+
+    <!-- ======================== СТРАНИЦА 14: Встреча со Страдом ======================== -->
+
+    <div class="page">
+      <div class="entry">
+        <div class="entry-date">— Выход. —</div>
+        <div class="entry-title">Встреча</div>
+      </div>
+      <p class="no-indent">
+        Мои чувства опасности вопили — я понял, кто перед нами…
+        <span class="shout">ИСТИННОЕ ЗЛО.</span>
+      </p>
+      <p style="font-size: 1.1em; text-align: center; margin: 1.5em 0">
+        Впервые видел столь ужасного монстра.
+      </p>
+      <p style="font-size: 1.3em; text-align: center; letter-spacing: 2px">
+        <span class="underline-wavy">СТРАД ФОН ЗАРОВИЧ.</span>
+      </p>
+      <div class="sidebar-note">
+        Он смотрел на нас как на муравьёв. На букашек, случайно заползших в его
+        владения. И улыбался.
+      </div>
+      <p>
+        Утром остальные подтвердили, что видели тот же сон. Я чувствовал тепло
+        богини — она направляла меня.
+      </p>
+
+      <div class="entry">
+        <div class="entry-date">— Тот же день. —</div>
+        <div class="entry-title">Похороны</div>
+      </div>
+      <p class="no-indent">
+        Переговоры со священником прошли гладко. Не считая его сына — отродья из
+        подвала, которое вопило, чтобы отец отпустил его. Моя рука дрожала, воля
+        требовала отрубить ему голову, но группа уговорила меня…
+      </p>
+
+      <p>
+        Самое шокирующее было другое — маленькая дварфийка-друид у порога
+        церкви. <span class="strikethrough">Засранка</span>
+        <span class="insert-above">Особа</span> представилась ученицей
+        некроманта. Я хотел снести ей голову, а потом она заявила, что была
+        мужчиной. Я посчитал, что девочку одолел недуг разума. Я пощадил дитя.
+      </p>
+    </div>
+
+    <!-- ======================== СТРАНИЦА 15: Обряд и похороны ======================== -->
+
+    <div class="page">
+      <div class="entry">
+        <div class="entry-date">— Вечер. —</div>
+        <div class="entry-title">Обряд</div>
+      </div>
+      <p class="no-indent">
+        Мы взяли Кенну с собой. Выкопали могилу для Коляна Индировича. Я
+        разминал серебро, делал святую воду.
+      </p>
+
+      <p>
+        Пока работал — Кенна закричала:
+        <span class="shout">«ВАМПИР ВЫБРАЛСЯ!»</span> Священник уверял, что он
+        заперт надёжно. <span class="underline-wavy">КАК ОН ВЫБРАЛСЯ.</span>
+      </p>
+
+      <p>
+        Я достал клинок. Валькирия вспыхнула золотым пламенем. Рука налилась
+        божественным светом — но старик-священник помешал, клинок скользнул.
+        Голова упыря осталась на месте.
+      </p>
+
+      <div class="margin-note">
+        Старика случайно подстрелила Мальбрин. Я не могу её судить — он сам
+        попал под стрелу, защищая отродье.
+      </div>
+
+      <div class="entry">
+        <div class="entry-date">— Исход. —</div>
+        <div class="entry-title">Погребение</div>
+      </div>
+      <p class="no-indent">
+        В этот вечер я отпевал не только Отца и Бургомистра, но и Священника, и
+        Преданного отца. Похоронил их по традициям ордена — как воинов — чтобы
+        души вознеслись к богине, где их ждёт искупление.
+      </p>
+
+      <img
+        class="diary-image"
+        src="14_две_могилы.jpeg"
+        alt="Две могилы"
+        style="--rot: -0.7deg; max-width: 75%"
+      />
+      <div class="image-caption">
+        Упокой их души, богиня. Они заслужили покой.
+      </div>
+
+      <p>
+        Мы покидали деревню с тяжёлым сердцем. Я выразил соболезнования Исмарку
+        и Ирине.
+      </p>
+    </div>
+
+    <!-- ======================== СТРАНИЦА 16: Пророчество ======================== -->
+
+    <div class="page">
+      <div class="entry">
+        <div class="entry-date">— Встреча с Мадам Евой. —</div>
+        <div class="entry-title">Пророчество</div>
+      </div>
+      <p class="no-indent">
+        Мы встретили странную старую гадалку из Вистани —
+        <span class="underline-wavy">Мадам Еву</span>. Она сказала, что мы не
+        первые, кто попадает сюда, но в нас она видит потенциал. Карты не врут.
+      </p>
+      <div class="sidebar-note">
+        Я слышал о Священном символе Равенкинд в легендах. И о Солнечном мече.
+        Похоже, мы ввязались в нечто грандиозное.
+      </div>
+
+      <p class="no-indent" style="font-size: 0.95em; margin-top: 1.5em">
+        Я записал её гадания. Чтобы не забыть.
+      </p>
+
+      <div
+        style="
+          margin: 1em 0;
+          padding: 0.8em;
+          border: 1px dashed #c8b898;
+          font-size: 0.95em;
+        "
+      >
+        <p style="font-weight: bold; text-indent: 0">
+          Ⅰ. Узнать врага и его слабости
+        </p>
+        <p style="text-indent: 0">
+          Карта — <b>Гадалка</b>. «Смотрите на ту, кто видит всё. Сокровище
+          спрятано в её лагере»
+        </p>
+      </div>
+      <div
+        style="
+          margin: 1em 0;
+          padding: 0.8em;
+          border: 1px dashed #c8b898;
+          font-size: 0.95em;
+        "
+      >
+        <p style="font-weight: bold; text-indent: 0">
+          Ⅱ. Святой символ Равенкинд
+        </p>
+        <p style="text-indent: 0">
+          Карта — <b>Паладин</b>. «Я вижу спящего принца, слугу света и брата
+          тьмы. Сокровище покоится с ним»
+        </p>
+      </div>
+      <div
+        style="
+          margin: 1em 0;
+          padding: 0.8em;
+          border: 1px dashed #c8b898;
+          font-size: 0.95em;
+        "
+      >
+        <p style="font-weight: bold; text-indent: 0">Ⅲ. Солнечный меч</p>
+        <p style="text-indent: 0">
+          Карта — <b>Вор</b>. «Искомое лежит там, где пересекаются жизнь и
+          смерть, средь похороненных мертвых»
+        </p>
+      </div>
+      <div
+        style="
+          margin: 1em 0;
+          padding: 0.8em;
+          border: 1px dashed #c8b898;
+          font-size: 0.95em;
+        "
+      >
+        <p style="font-weight: bold; text-indent: 0">Ⅳ. Союзник</p>
+        <p style="text-indent: 0">
+          Карта — <b>Туманы</b>. «Вистанийка бродит одна в поисках ментора.
+          Ищите её у аббатства Святой Марковии»
+        </p>
+      </div>
+      <div
+        style="
+          margin: 1em 0;
+          padding: 0.8em;
+          border: 1px dashed #c8b898;
+          font-size: 0.95em;
+        "
+      >
+        <p style="font-weight: bold; text-indent: 0">Ⅴ. Исход</p>
+        <p style="text-indent: 0">
+          Карта — <b>Зверь</b>. «Зверь восседает на своём тёмном троне»
+        </p>
+      </div>
+    </div>
+
+    <!-- ======================== СТРАНИЦА 17: Самоцветы и финал ======================== -->
+
+    <div class="page">
+      <div class="entry">
+        <div class="entry-date">— Продолжение гадания. —</div>
+        <div class="entry-title">Самоцветы</div>
+      </div>
+      <p class="no-indent">
+        Мадам Ева гадала о трёх драгоценных камнях великих фей.
+      </p>
+      <div
+        style="
+          margin: 1em 0;
+          padding: 0.5em;
+          border-left: 2px solid #cc3333;
+          font-size: 0.95em;
+        "
+      >
+        <p style="text-indent: 0">
+          <span style="color: #cc3333">●</span> <b>Красный самоцвет</b> Горной
+          Феи — карта <b>Волшебник</b>
+        </p>
+        <p style="font-style: italic; text-indent: 0">
+          «Повелитель звёзд… Мудрецы не всегда мудры. Ищите одинокую башню»
+        </p>
+      </div>
+      <div
+        style="
+          margin: 1em 0;
+          padding: 0.5em;
+          border-left: 2px solid #339933;
+          font-size: 0.95em;
+        "
+      >
+        <p style="text-indent: 0">
+          <span style="color: #339933">●</span> <b>Зелёный самоцвет</b> Лесной
+          Феи — карта <b>Ворон</b>
+        </p>
+        <p style="font-style: italic; text-indent: 0">
+          «Ужасный, мрачный и древний ворон, блуждающий по Ночному берегу. Не
+          все существа таковы, какими кажутся»
+        </p>
+      </div>
+      <div
+        style="
+          margin: 1em 0;
+          padding: 0.5em;
+          border-left: 2px solid #3366cc;
+          font-size: 0.95em;
+        "
+      >
+        <p style="text-indent: 0">
+          <span style="color: #3366cc">●</span> <b>Голубой самоцвет</b> Болотной
+          Феи — карта <b>Лекарь</b>
+        </p>
+        <div class="sidebar-note">
+          Я мало что понял. Но записал. Кажется, нас ждёт долгий путь.
+        </div>
+        <p style="font-style: italic; text-indent: 0">
+          «Пройдите дорогой не для кротких. Лекарь печали покоится в снегу. Его
+          секреты с ним»
+        </p>
+      </div>
+    </div>
+    <div class="page">
+      <div class="entry">
+        <div class="entry-date">— Сейчас. —</div>
+        <div class="entry-title">Продолжение следует</div>
+      </div>
+      <p class="no-indent">
+        Мы в Баровии. Земле, затерянной в тумане, где правит тьма. У меня есть
+        меч, вера и странная группа товарищей. Я не знаю, выберемся ли мы.
+      </p>
+      <p>
+        Я, <span class="underline-wavy">Артур Могрейн</span>, бывший каратель,
+        ныне авантюрист, клянусь — я уничтожу зло в этих землях. Или умру,
+        пытаясь.
+      </p>
+      <div
+        style="
+          text-align: center;
+          margin-top: 2em;
+          color: #8a7a6a;
+          font-size: 0.85em;
+        "
+      >
+        <p style="text-indent: 0">
+          Запись обрывается. Продолжение следует, если я останусь жив.
+        </p>
+        <p
+          style="
+            text-indent: 0;
+            margin-top: 1em;
+            font-size: 1.5em;
+            font-family: &quot;Segoe Script&quot;, cursive;
+          "
+        >
+          — А.М.
+        </p>
+      </div>
+    </div>
+  </body>
+</html>
