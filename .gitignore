@@ -1,0 +1,9 @@
+# Qwen workspace
+.qwen/
+
+# Backups
+*.bak
+
+# OS files
+.DS_Store
+Thumbs.db
