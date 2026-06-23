@@ -1,1 +1,0 @@
-FINDSTR: Не удается открыть Aza\document.xml
