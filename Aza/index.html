@@ -227,9 +227,122 @@
     letter-spacing:15px;
   }
 
+  /* Фотокарточка */
+  .photo-attachment{
+    margin:30px auto;
+    text-align:center;
+    position:relative;
+    cursor:pointer;
+    max-width:200px;
+  }
+
+  .photo-attachment .photo-preview{
+    width:180px;
+    height:180px;
+    background:linear-gradient(135deg, #f5f0e8 0%, #e8dcc8 100%);
+    border:3px solid #fff;
+    box-shadow:
+      0 4px 8px rgba(0,0,0,0.4),
+      0 8px 20px rgba(0,0,0,0.3),
+      inset 0 0 20px rgba(139,109,71,0.1);
+    transform:rotate(-3deg);
+    transition:all 0.4s ease;
+    position:relative;
+    display:flex;
+    align-items:center;
+    justify-content:center;
+    font-family:'Corinthia', cursive;
+    font-size:16px;
+    color:var(--ash);
+    padding:20px;
+  }
+
+  .photo-attachment .photo-preview::before{
+    content:"📷";
+    position:absolute;
+    top:10px;
+    right:10px;
+    font-size:20px;
+    opacity:0.6;
+  }
+
+  .photo-attachment .photo-preview::after{
+    content:"нажми, чтобы посмотреть";
+    position:absolute;
+    bottom:-25px;
+    left:50%;
+    transform:translateX(-50%);
+    font-size:14px;
+    color:var(--gold);
+    white-space:nowrap;
+    opacity:0.7;
+  }
+
+  .photo-attachment:hover .photo-preview{
+    transform:rotate(0deg) scale(1.05);
+    box-shadow:
+      0 6px 12px rgba(0,0,0,0.5),
+      0 12px 30px rgba(0,0,0,0.4);
+  }
+
+  .photo-full{
+    display:none;
+    position:fixed;
+    top:50%;
+    left:50%;
+    transform:translate(-50%, -50%) scale(0.8);
+    background:#fff;
+    padding:20px 20px 60px;
+    box-shadow:
+      0 10px 40px rgba(0,0,0,0.8),
+      0 20px 80px rgba(0,0,0,0.6);
+    z-index:1001;
+    opacity:0;
+    transition:all 0.4s ease;
+    max-width:90vw;
+    max-height:90vh;
+  }
+
+  .photo-full.active{
+    display:block;
+    opacity:1;
+    transform:translate(-50%, -50%) scale(1);
+  }
+
+  .photo-full img{
+    max-width:100%;
+    max-height:70vh;
+    display:block;
+  }
+
+  .photo-full .close-hint{
+    position:absolute;
+    bottom:20px;
+    left:50%;
+    transform:translateX(-50%);
+    font-family:'Corinthia', cursive;
+    font-size:18px;
+    color:var(--ash);
+    white-space:nowrap;
+  }
+
+  .photo-overlay{
+    display:none;
+    position:fixed;
+    inset:0;
+    background:rgba(0,0,0,0.85);
+    z-index:1000;
+    cursor:pointer;
+  }
+
+  .photo-overlay.active{
+    display:block;
+  }
+
   @media (max-width:600px){
     .entry{ padding:30px 25px; font-size:17px; }
     .entry p:first-of-type::first-letter{ font-size:46px; }
+    .photo-attachment .photo-preview{ width:150px; height:150px; }
   }
 </style>
 </head>
@@ -400,6 +513,14 @@
     <p>Ирина, кажется, положила глаз на нашего твердолобого Артура. Да, он, конечно, недурён собой — особенно на фоне местных, — но я-то думала, его беспросветная тупость и прямолинейность должны отпугивать людей за версту. Надо бы провести с ним беседу о пестиках и тычинках...</p>
     <p>А вот брат Ирины выглядит весьма привлекательно. По крайней мере, он воспитан и вежлив. Ох, если бы не его одержимость сестрой и траур по отцу, мы бы уже как минимум мило беседовали за бокальчиком другим красного вина!</p>
     <p>Пока же мне остаётся лишь невзначай бросать на него заигрывающие взоры и соблазнительно перебирать струны лютни перед сном. Надеюсь, этой ночью все его сны будут посвящены моей исключительно соблазнительной красоте.</p>
+
+    <!-- Фотокарточка -->
+    <div class="photo-attachment" data-photo="image1.jpg">
+      <div class="photo-preview">
+        [ место для фото ]
+      </div>
+    </div>
+
     <div class="signature">— Азалия Корвара, Пепельная Роза ❦</div>
   </article>
 
@@ -411,5 +532,42 @@
   </footer>
 
 </div>
+
+<!-- Модальное окно для фотокарточки -->
+<div class="photo-overlay" id="photoOverlay"></div>
+<div class="photo-full" id="photoFull">
+  <img id="photoFullImg" src="" alt="Фото">
+  <div class="close-hint">нажми, чтобы закрыть</div>
+</div>
+
+<script>
+  // Фотокарточки
+  const photoFull = document.getElementById('photoFull');
+  const photoFullImg = document.getElementById('photoFullImg');
+  const overlay = document.getElementById('photoOverlay');
+
+  document.querySelectorAll('.photo-attachment').forEach(attachment => {
+    const preview = attachment.querySelector('.photo-preview');
+
+    preview.addEventListener('click', (e) => {
+      e.stopPropagation();
+      const photoSrc = attachment.getAttribute('data-photo');
+      photoFullImg.src = photoSrc;
+      photoFull.classList.add('active');
+      overlay.classList.add('active');
+    });
+  });
+
+  photoFull.addEventListener('click', (e) => {
+    e.stopPropagation();
+    photoFull.classList.remove('active');
+    overlay.classList.remove('active');
+  });
+
+  overlay.addEventListener('click', () => {
+    photoFull.classList.remove('active');
+    overlay.classList.remove('active');
+  });
+</script>
 </body>
 </html>
