@@ -361,23 +361,61 @@
 
       /* Записи дневника — листы бумаги */
       .entry {
-        background: linear-gradient(
-          135deg,
-          var(--paper) 0%,
-          var(--paper-dark) 100%
-        );
+        /* Сам контейнер — БЕЗ фильтра, БЕЗ фона, БЕЗ border-radius */
         padding: 45px 55px;
         margin: 40px 0;
         position: relative;
-        box-shadow:
-          0 2px 4px rgba(0, 0, 0, 0.5),
-          0 15px 40px rgba(0, 0, 0, 0.6),
-          inset 0 0 80px rgba(139, 30, 43, 0.08);
         font-size: 19px;
         line-height: 1.75;
         color: var(--ink);
         transform: rotate(-0.15deg);
+        z-index: 1;
+      }
+
+      /* СЛОЙ 1: Фон бумаги с рваными краями (применяется фильтр) */
+      .entry::before {
+        content: "";
+        position: absolute;
+        inset: 0;
+        background: 
+    /* Пятна на бумаге */
+          radial-gradient(
+            circle at 15% 20%,
+            rgba(139, 30, 43, 0.08) 0%,
+            transparent 8%
+          ),
+          radial-gradient(
+            circle at 85% 75%,
+            rgba(90, 60, 30, 0.1) 0%,
+            transparent 12%
+          ),
+          radial-gradient(
+            circle at 50% 50%,
+            rgba(139, 110, 70, 0.05) 0%,
+            transparent 40%
+          ),
+          /* Основной цвет бумаги */
+          linear-gradient(135deg, var(--paper) 0%, var(--paper-dark) 100%);
         filter: url(#torn-edge);
+        z-index: -2;
+        /* Небольшой запас, чтобы фильтр не обрезался */
+        margin: -4px;
+      }
+
+      /* СЛОЙ 2: Тень и объём (поверх рваного фона, но под текстом) */
+      .entry::after {
+        content: "";
+        position: absolute;
+        inset: 0;
+        box-shadow:
+          0 2px 4px rgba(0, 0, 0, 0.5),
+          0 15px 40px rgba(0, 0, 0, 0.6),
+          inset 0 0 80px rgba(139, 30, 43, 0.08);
+        /* Маскируем тень под рваную форму фона */
+        filter: url(#torn-edge);
+        z-index: -1;
+        margin: -4px;
+        pointer-events: none;
       }
 
       /* Разделитель глав внутри одного непрерывного листа */
@@ -394,36 +432,6 @@
         opacity: 0.7;
         margin-bottom: 14px;
         text-align: center;
-      }
-
-      /* Эффект "пятен" на бумаге */
-      .entry::before {
-        content: "";
-        position: absolute;
-        inset: 0;
-        background:
-          radial-gradient(
-            circle at 15% 20%,
-            rgba(139, 30, 43, 0.08) 0%,
-            transparent 8%
-          ),
-          radial-gradient(
-            circle at 85% 75%,
-            rgba(90, 60, 30, 0.1) 0%,
-            transparent 12%
-          ),
-          radial-gradient(
-            circle at 50% 50%,
-            rgba(139, 110, 70, 0.05) 0%,
-            transparent 40%
-          );
-        pointer-events: none;
-        border-radius: 3px;
-      }
-
-      /* Рваные края */
-      .entry::after {
-        display: none;
       }
 
       .entry h2 {
@@ -552,21 +560,24 @@
   </head>
   <body>
     <svg style="position: absolute; width: 0; height: 0">
-      <filter id="torn-edge">
-        <feTurbulence
-          type="fractalNoise"
-          baseFrequency="0.02"
-          numOctaves="5"
-          result="noise"
-        />
-        <feDisplacementMap
-          in="SourceGraphic"
-          in2="noise"
-          scale="6"
-          xChannelSelector="R"
-          yChannelSelector="G"
-        />
-      </filter>
+      <defs>
+        <filter id="torn-edge">
+          <feTurbulence
+            type="fractalNoise"
+            baseFrequency="0.025"
+            numOctaves="5"
+            seed="3"
+            result="noise"
+          />
+          <feDisplacementMap
+            in="SourceGraphic"
+            in2="noise"
+            scale="8"
+            xChannelSelector="R"
+            yChannelSelector="G"
+          />
+        </filter>
+      </defs>
     </svg>
     <div class="container">
       <header>

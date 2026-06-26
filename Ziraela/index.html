@@ -4,26 +4,190 @@
     <meta charset="UTF-8" />
     <title>Хроники Зираэллы Ларус — Серебряная Стрела</title>
     <style>
-      @font-face {
-        font-family: "Agretta";
-        src: url("Ira-Dvilyuk-Agretta-Hills-Cyrillic-Script.otf") format("opentype");
-        font-weight: normal;
-        font-style: normal;
+      @import url("https://fonts.googleapis.com/css2?family=Cinzel:wght@400;600;700&family=Cormorant+Garamond:ital,wght@0,400;0,500;1,400;1,500&family=MedievalSharp&display=swap");
+
+      /* ===== АНИМАЦИИ ===== */
+      @keyframes twinkle {
+        0%,
+        100% {
+          opacity: 0.3;
+          transform: scale(1);
+        }
+        50% {
+          opacity: 1;
+          transform: scale(1.3);
+        }
       }
 
+      @keyframes moonGlow {
+        0%,
+        100% {
+          opacity: 0.85;
+          filter: drop-shadow(0 0 40px rgba(220, 230, 255, 0.6));
+        }
+        50% {
+          opacity: 1;
+          filter: drop-shadow(0 0 60px rgba(220, 230, 255, 0.9));
+        }
+      }
+
+      @keyframes mistDrift {
+        0% {
+          transform: translateX(-5%) translateY(0);
+          opacity: 0.25;
+        }
+        50% {
+          transform: translateX(3%) translateY(-10px);
+          opacity: 0.4;
+        }
+        100% {
+          transform: translateX(-5%) translateY(0);
+          opacity: 0.25;
+        }
+      }
+
+      @keyframes sway {
+        0%,
+        100% {
+          transform: rotate(-0.5deg);
+        }
+        50% {
+          transform: rotate(0.5deg);
+        }
+      }
+
+      @keyframes shootingStar {
+        0% {
+          transform: translateX(0) translateY(0);
+          opacity: 0;
+        }
+        10% {
+          opacity: 1;
+        }
+        70% {
+          opacity: 1;
+        }
+        100% {
+          transform: translateX(300px) translateY(150px);
+          opacity: 0;
+        }
+      }
+
+      @keyframes parchmentShine {
+        0%,
+        100% {
+          opacity: 0.4;
+        }
+        50% {
+          opacity: 0.7;
+        }
+      }
+
+      /* ===== ИЛЛЮСТРАЦИИ — ЛУННЫЕ ФОТОГРАФИИ ===== */
+      .diary-image {
+        margin: 0.5em 0;
+        max-width: 45%;
+        background: var(--parchment);
+        border: 1px solid rgba(143, 168, 200, 0.5);
+        padding: 6px;
+        border-radius: 2px;
+        box-shadow:
+          0 0 0 1px rgba(107, 91, 149, 0.15),
+          0 2px 4px rgba(0, 0, 0, 0.4),
+          0 8px 20px rgba(0, 0, 0, 0.5),
+          0 0 30px rgba(184, 197, 214, 0.25),
+          inset 0 0 20px rgba(107, 91, 149, 0.08);
+        transform: rotate(var(--rot, 0deg));
+        display: block;
+        position: relative;
+        z-index: 1;
+        transition:
+          box-shadow 0.4s ease,
+          transform 0.4s ease;
+      }
+
+      /* Лёгкое усиление свечения при наведении */
+      .diary-image:hover {
+        box-shadow:
+          0 0 0 1px rgba(107, 91, 149, 0.25),
+          0 2px 4px rgba(0, 0, 0, 0.4),
+          0 8px 20px rgba(0, 0, 0, 0.5),
+          0 0 50px rgba(220, 230, 250, 0.4),
+          inset 0 0 20px rgba(107, 91, 149, 0.12);
+        transform: rotate(0deg) scale(1.01);
+      }
+
+      /* Обтекание слева */
+      .diary-image.left {
+        float: left;
+        margin: 0.4em 1.5em 0.8em 0;
+        --rot: -1deg;
+      }
+
+      /* Обтекание справа */
+      .diary-image.right {
+        float: right;
+        margin: 0.4em 0 0.8em 1.5em;
+        --rot: 1deg;
+      }
+
+      /* Сами картинки */
+      .diary-image img {
+        display: block;
+        width: 100%;
+        height: auto;
+        border-radius: 1px;
+        filter: saturate(0.85) brightness(0.95) contrast(1.05);
+      }
+
+      /* Подпись под картинкой */
+      .diary-image figcaption {
+        font-family: "Cormorant Garamond", serif;
+        font-style: italic;
+        font-size: 14px;
+        color: var(--violet);
+        text-align: center;
+        margin-top: 6px;
+        letter-spacing: 1px;
+        opacity: 0.85;
+      }
+
+      /* Декоративный уголок — "лунная печать" */
+      .diary-image::before {
+        content: "✦";
+        position: absolute;
+        top: -8px;
+        left: -8px;
+        width: 22px;
+        height: 22px;
+        background: var(--parchment);
+        border: 1px solid rgba(143, 168, 200, 0.6);
+        border-radius: 50%;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        font-size: 10px;
+        color: var(--silver-accent);
+        box-shadow: 0 0 10px rgba(184, 197, 214, 0.4);
+        z-index: 2;
+      }
+
+      /* ===== ПЕРЕМЕННЫЕ ===== */
       :root {
-        --bg-deep: #050a08;
-        --bg-mid: #0a1612;
-        --bg-soft: #112420;
-        --paper: #f3ead0;
-        --paper-dark: #e3d4ad;
-        --ink: #2a1e10;
-        --ink-soft: #4a3520;
-        --gold: #b89855;
-        --gold-bright: #d9b870;
-        --silver: #c2c7d4;
-        --violet: #8a5cb6;
-        --moss: #3a5e3a;
+        --night-deep: #0a0e1f;
+        --night-mid: #141a35;
+        --night-soft: #1e2548;
+        --moon-silver: #e8eef7;
+        --moon-pale: #c9d4e8;
+        --star-white: #f5f8ff;
+        --frost-blue: #8fa8c8;
+        --mist: #6b7a9e;
+        --moss: #4a5d4f;
+        --parchment: #e8e4d8;
+        --parchment-dark: #d4cdb8;
+        --ink: #2a2540;
+        --violet: #6b5b95;
+        --silver-accent: #b8c5d6;
       }
 
       * {
@@ -32,83 +196,227 @@
         padding: 0;
       }
 
+      /* ===== ФОН: НОЧНОЕ НЕБО ===== */
       body {
-        background: radial-gradient(
-            ellipse at top,
-            var(--bg-soft) 0%,
-            var(--bg-mid) 45%,
-            var(--bg-deep) 100%
-          );
+        font-family: "Cormorant Garamond", serif;
+        color: var(--moon-pale);
         min-height: 100vh;
-        font-family: "Agretta", "Cormorant Garamond", "Georgia", serif;
-        color: var(--ink);
         padding: 40px 20px 80px;
+        position: relative;
+        overflow-x: hidden;
+        background:
+      /* Луна */
+          radial-gradient(
+            circle at 85% 12%,
+            rgba(240, 245, 255, 0.95) 0%,
+            rgba(220, 230, 250, 0.6) 3%,
+            transparent 8%
+          ),
+          /* Свечение вокруг луны */
+          radial-gradient(
+              circle at 85% 12%,
+              rgba(180, 200, 240, 0.25) 0%,
+              transparent 18%
+            ),
+          /* Северное сияние — верх */
+          radial-gradient(
+              ellipse at 30% 0%,
+              rgba(107, 91, 149, 0.25) 0%,
+              transparent 50%
+            ),
+          /* Северное сияние — низ */
+          radial-gradient(
+              ellipse at 70% 100%,
+              rgba(74, 93, 79, 0.2) 0%,
+              transparent 50%
+            ),
+          /* Основной градиент неба */
+          linear-gradient(
+              180deg,
+              #0a0e1f 0%,
+              #141a35 40%,
+              #1e2548 75%,
+              #141a35 100%
+            );
         background-attachment: fixed;
       }
 
-      /* Звёздное небо / лунный свет */
+      /* ===== СЛОЙ 1: ЗВЁЗДЫ ===== */
       body::before {
         content: "";
         position: fixed;
         inset: 0;
         background-image:
+      /* Крупные яркие звёзды */
           radial-gradient(
-            1px 1px at 15% 25%,
-            rgba(217, 184, 112, 0.45),
+            1.5px 1.5px at 15% 20%,
+            var(--star-white),
+            transparent
+          ),
+          radial-gradient(2px 2px at 45% 35%, var(--star-white), transparent),
+          radial-gradient(
+            1.8px 1.8px at 72% 55%,
+            var(--star-white),
             transparent
           ),
           radial-gradient(
-            1.5px 1.5px at 78% 12%,
-            rgba(217, 184, 112, 0.55),
+            1.5px 1.5px at 28% 78%,
+            var(--star-white),
+            transparent
+          ),
+          radial-gradient(2px 2px at 88% 85%, var(--star-white), transparent),
+          radial-gradient(
+            1.6px 1.6px at 55% 15%,
+            var(--star-white),
+            transparent
+          ),
+          /* Средние звёзды */
+          radial-gradient(
+              1px 1px at 8% 45%,
+              rgba(245, 248, 255, 0.7),
+              transparent
+            ),
+          radial-gradient(
+            1px 1px at 35% 62%,
+            rgba(245, 248, 255, 0.6),
             transparent
           ),
           radial-gradient(
-            1px 1px at 38% 65%,
-            rgba(194, 199, 212, 0.4),
+            1px 1px at 62% 28%,
+            rgba(245, 248, 255, 0.7),
             transparent
           ),
           radial-gradient(
-            1px 1px at 92% 78%,
-            rgba(217, 184, 112, 0.35),
+            1px 1px at 78% 72%,
+            rgba(245, 248, 255, 0.65),
             transparent
           ),
           radial-gradient(
-            1.5px 1.5px at 22% 88%,
-            rgba(194, 199, 212, 0.5),
+            1px 1px at 92% 38%,
+            rgba(245, 248, 255, 0.6),
             transparent
           ),
           radial-gradient(
-            1px 1px at 58% 38%,
-            rgba(138, 92, 182, 0.4),
+            1px 1px at 22% 92%,
+            rgba(245, 248, 255, 0.7),
             transparent
           ),
           radial-gradient(
-            2px 2px at 8% 50%,
-            rgba(217, 184, 112, 0.6),
+            1px 1px at 48% 88%,
+            rgba(245, 248, 255, 0.6),
+            transparent
+          ),
+          radial-gradient(
+            1px 1px at 68% 8%,
+            rgba(245, 248, 255, 0.65),
+            transparent
+          ),
+          /* Мелкие звёзды — много */
+          radial-gradient(
+              0.8px 0.8px at 5% 12%,
+              rgba(245, 248, 255, 0.5),
+              transparent
+            ),
+          radial-gradient(
+            0.8px 0.8px at 18% 58%,
+            rgba(245, 248, 255, 0.45),
+            transparent
+          ),
+          radial-gradient(
+            0.8px 0.8px at 32% 42%,
+            rgba(245, 248, 255, 0.5),
+            transparent
+          ),
+          radial-gradient(
+            0.8px 0.8px at 42% 72%,
+            rgba(245, 248, 255, 0.4),
+            transparent
+          ),
+          radial-gradient(
+            0.8px 0.8px at 58% 48%,
+            rgba(245, 248, 255, 0.5),
+            transparent
+          ),
+          radial-gradient(
+            0.8px 0.8px at 75% 18%,
+            rgba(245, 248, 255, 0.45),
+            transparent
+          ),
+          radial-gradient(
+            0.8px 0.8px at 82% 62%,
+            rgba(245, 248, 255, 0.5),
+            transparent
+          ),
+          radial-gradient(
+            0.8px 0.8px at 95% 28%,
+            rgba(245, 248, 255, 0.4),
+            transparent
+          ),
+          radial-gradient(
+            0.8px 0.8px at 12% 82%,
+            rgba(245, 248, 255, 0.5),
+            transparent
+          ),
+          radial-gradient(
+            0.8px 0.8px at 38% 22%,
+            rgba(245, 248, 255, 0.45),
+            transparent
+          ),
+          radial-gradient(
+            0.8px 0.8px at 65% 92%,
+            rgba(245, 248, 255, 0.5),
+            transparent
+          ),
+          radial-gradient(
+            0.8px 0.8px at 88% 48%,
+            rgba(245, 248, 255, 0.4),
             transparent
           );
-        background-size: 500px 500px;
+        background-size: 100% 100%;
+        animation: twinkle 6s ease-in-out infinite;
         pointer-events: none;
         z-index: 0;
       }
 
-      /* Лёгкая лунная дымка */
+      /* ===== СЛОЙ 2: ТУМАН ===== */
       body::after {
         content: "";
         position: fixed;
-        top: -10%;
-        right: -10%;
-        width: 50%;
-        height: 50%;
-        background: radial-gradient(
-          circle,
-          rgba(217, 184, 112, 0.08) 0%,
-          transparent 60%
-        );
+        inset: 0;
+        background:
+          radial-gradient(
+            ellipse 80% 30% at 20% 70%,
+            rgba(143, 168, 200, 0.15) 0%,
+            transparent 70%
+          ),
+          radial-gradient(
+            ellipse 90% 25% at 80% 85%,
+            rgba(107, 122, 158, 0.12) 0%,
+            transparent 70%
+          ),
+          radial-gradient(
+            ellipse 70% 20% at 50% 95%,
+            rgba(143, 168, 200, 0.18) 0%,
+            transparent 70%
+          );
+        animation: mistDrift 25s ease-in-out infinite;
         pointer-events: none;
         z-index: 0;
       }
 
+      /* ===== СИЛУЭТЫ ДЕРЕВЬЕВ ===== */
+      .forest-silhouette {
+        position: fixed;
+        bottom: 0;
+        left: 0;
+        right: 0;
+        height: 35vh;
+        pointer-events: none;
+        z-index: 0;
+        opacity: 0.85;
+      }
+
+      /* ===== КОНТЕЙНЕР ===== */
       .container {
         max-width: 820px;
         margin: 0 auto;
@@ -116,247 +424,371 @@
         z-index: 1;
       }
 
+      /* ===== ЗАГОЛОВОК ===== */
       header {
         text-align: center;
-        padding: 60px 20px 40px;
-        color: var(--gold);
+        padding: 80px 20px 50px;
         position: relative;
       }
-      header::before,
-      header::after {
-        content: "❦";
+
+      /* Полумесяц над заголовком */
+      header::before {
+        content: "☾";
         display: block;
-        font-size: 30px;
-        color: var(--gold);
-        margin: 10px 0;
-        letter-spacing: 24px;
-        opacity: 0.85;
+        font-size: 52px;
+        color: var(--moon-silver);
+        margin-bottom: 20px;
+        text-shadow: 0 0 30px rgba(220, 230, 255, 0.8);
+        animation: moonGlow 5s ease-in-out infinite;
       }
+
       header h1 {
-        font-family: "Agretta", serif;
-        font-size: clamp(34px, 5vw, 54px);
-        font-weight: normal;
-        letter-spacing: 3px;
+        font-family: "Cinzel", serif;
+        font-size: clamp(28px, 4.5vw, 48px);
+        font-weight: 600;
+        letter-spacing: 6px;
+        text-transform: uppercase;
         background: linear-gradient(
           180deg,
-          var(--gold-bright) 0%,
-          var(--gold) 60%,
-          #8a6f3d 100%
+          #ffffff 0%,
+          #e8eef7 40%,
+          #b8c5d6 70%,
+          #8fa8c8 100%
         );
         -webkit-background-clip: text;
         background-clip: text;
         -webkit-text-fill-color: transparent;
-        text-shadow: 0 0 30px rgba(184, 152, 85, 0.35);
-        line-height: 1.1;
+        text-shadow: 0 0 40px rgba(184, 197, 214, 0.4);
+        margin-bottom: 10px;
       }
+
       header .subtitle {
-        font-family: "Agretta", serif;
-        font-size: clamp(20px, 2.6vw, 28px);
-        color: var(--silver);
-        margin-top: 14px;
+        font-family: "Cormorant Garamond", serif;
+        font-size: clamp(18px, 2.5vw, 24px);
+        color: var(--frost-blue);
         font-style: italic;
-        letter-spacing: 1px;
-      }
-      header .epigraph {
-        margin: 35px auto 0;
-        font-style: italic;
-        font-size: 18px;
-        color: #b8a880;
-        max-width: 580px;
-        line-height: 1.7;
-        font-family: "Agretta", serif;
+        letter-spacing: 3px;
+        margin-top: 8px;
       }
 
-      /* Записи дневника — листы пергамента */
-      .entry {
-        background: linear-gradient(
-          135deg,
-          var(--paper) 0%,
-          var(--paper-dark) 100%
-        );
-        padding: 50px 60px;
-        margin: 45px 0;
-        border-radius: 3px;
-        position: relative;
-        box-shadow:
-          0 2px 4px rgba(0, 0, 0, 0.5),
-          0 15px 40px rgba(0, 0, 0, 0.6),
-          inset 0 0 80px rgba(58, 94, 58, 0.08);
-        font-size: 21px;
-        line-height: 1.75;
-        color: var(--ink);
-        transform: rotate(-0.25deg);
-      }
-      .entry:nth-child(even) {
-        transform: rotate(0.25deg);
-      }
-      .entry:nth-child(3n) {
-        transform: rotate(-0.15deg);
-      }
-
-      /* Пятна / тени на старом пергаменте */
-      .entry::before {
-        content: "";
-        position: absolute;
-        inset: 0;
-        background:
-          radial-gradient(
-            circle at 12% 18%,
-            rgba(58, 94, 58, 0.1) 0%,
-            transparent 10%
-          ),
-          radial-gradient(
-            circle at 88% 78%,
-            rgba(138, 92, 182, 0.06) 0%,
-            transparent 14%
-          ),
-          radial-gradient(
-            circle at 50% 50%,
-            rgba(184, 152, 85, 0.06) 0%,
-            transparent 45%
-          );
-        pointer-events: none;
-        border-radius: 3px;
-      }
-      .entry::after {
-        content: "";
-        position: absolute;
-        inset: 0;
-        box-shadow:
-          inset 2px 2px 0 rgba(255, 255, 255, 0.35),
-          inset -2px -2px 0 rgba(90, 60, 30, 0.18);
-        border-radius: 3px;
-        pointer-events: none;
-      }
-
-      .entry h2 {
-        font-family: "Agretta", serif;
-        font-size: 28px;
-        color: var(--moss);
-        text-align: center;
-        margin-bottom: 28px;
-        letter-spacing: 2px;
-        position: relative;
-        padding-bottom: 18px;
-        font-weight: normal;
-      }
-      .entry h2::after {
-        content: "❦ ✦ ❦";
-        position: absolute;
-        bottom: 0;
-        left: 50%;
-        transform: translateX(-50%);
-        color: var(--gold);
-        font-size: 14px;
-        letter-spacing: 8px;
-      }
-
-      .entry p {
-        text-align: justify;
-        text-indent: 1.5em;
-        margin-bottom: 14px;
-        font-family: "Agretta", serif;
-      }
-      .entry p:first-of-type::first-letter {
-        font-family: "Agretta", serif;
-        font-size: 60px;
-        float: left;
-        line-height: 0.9;
-        padding: 6px 10px 0 0;
-        color: var(--moss);
-        font-weight: bold;
-      }
-
-      /* Разделитель глав */
-      .divider {
-        text-align: center;
-        color: var(--gold);
-        font-size: 22px;
-        letter-spacing: 18px;
-        margin: 25px 0;
+      /* Звёздный разделитель под заголовком */
+      header .stars-divider {
+        display: block;
+        margin: 25px auto;
+        color: var(--silver-accent);
+        font-size: 16px;
+        letter-spacing: 12px;
         opacity: 0.7;
       }
 
-      .signature {
-        text-align: right;
-        font-family: "Agretta", serif;
-        font-size: 28px;
-        color: var(--moss);
-        margin-top: 25px;
-      }
-
-      footer {
-        text-align: center;
-        color: #8a8878;
-        padding: 45px 20px;
+      header .epigraph {
+        max-width: 600px;
+        margin: 30px auto 0;
+        font-family: "Cormorant Garamond", serif;
         font-style: italic;
-        font-size: 16px;
-        letter-spacing: 2px;
-        font-family: "Agretta", serif;
-      }
-      footer::before {
-        content: "❦ ❦ ❦";
-        display: block;
-        color: var(--gold);
-        margin-bottom: 22px;
-        letter-spacing: 16px;
+        font-size: 19px;
+        line-height: 1.7;
+        color: var(--moon-pale);
+        padding: 20px 30px;
+        position: relative;
+        border-left: 1px solid rgba(184, 197, 214, 0.3);
+        border-right: 1px solid rgba(184, 197, 214, 0.3);
       }
 
-      /* Иллюстрации с обтеканием */
-      .diary-image {
-        margin: 0.5em 0;
-        max-width: 45%;
-        background: var(--paper);
-        border: 1px solid rgba(184, 152, 85, 0.5);
-        padding: 5px;
+      header .epigraph::before,
+      header .epigraph::after {
+        content: "✦";
+        position: absolute;
+        color: var(--silver-accent);
+        font-size: 14px;
+        font-style: normal;
+      }
+      header .epigraph::before {
+        top: -8px;
+        left: 50%;
+        transform: translateX(-50%);
+      }
+      header .epigraph::after {
+        bottom: -8px;
+        left: 50%;
+        transform: translateX(-50%);
+      }
+
+      /* ===== ЛИСТЫ-ПЕРГАМЕНТЫ ===== */
+      .entry {
+        position: relative;
+        padding: 55px 65px;
+        margin: 50px 0;
+        font-size: 19px;
+        line-height: 1.85;
+        color: var(--ink);
+        background:
+      /* Лунный блик в углу */
+          radial-gradient(
+            ellipse at 90% 10%,
+            rgba(220, 230, 250, 0.4) 0%,
+            transparent 40%
+          ),
+          /* Лёгкая текстура пергамента */
+          radial-gradient(
+              ellipse at 20% 80%,
+              rgba(107, 91, 149, 0.06) 0%,
+              transparent 50%
+            ),
+          /* Основной цвет */
+          linear-gradient(135deg, #ece7d8 0%, #e0d9c4 50%, #d8cfb8 100%);
         border-radius: 2px;
         box-shadow:
-          0 2px 5px rgba(0, 0, 0, 0.5),
-          0 6px 18px rgba(0, 0, 0, 0.45),
-          inset 0 0 25px rgba(58, 94, 58, 0.1);
-        transform: rotate(var(--rot, 0deg));
-        display: block;
-        position: relative;
-        z-index: 1;
-      }
-      .diary-image.left {
-        float: left;
-        margin: 0.4em 1.2em 0.6em 0;
-        --rot: -0.7deg;
-      }
-      .diary-image.right {
-        float: right;
-        margin: 0.4em 0 0.6em 1.2em;
-        --rot: 0.7deg;
+          0 0 0 1px rgba(184, 197, 214, 0.3),
+          0 0 40px rgba(184, 197, 214, 0.15),
+          0 10px 40px rgba(0, 0, 0, 0.5),
+          inset 0 0 60px rgba(107, 91, 149, 0.05);
+        transform: rotate(-0.2deg);
       }
 
+      /* Серебряное свечение по краям пергамента */
+      .entry::before {
+        content: "";
+        position: absolute;
+        inset: -2px;
+        background: linear-gradient(
+          135deg,
+          rgba(232, 238, 247, 0.4) 0%,
+          rgba(184, 197, 214, 0.2) 25%,
+          transparent 50%,
+          rgba(184, 197, 214, 0.2) 75%,
+          rgba(232, 238, 247, 0.4) 100%
+        );
+        border-radius: 2px;
+        z-index: -1;
+        animation: parchmentShine 8s ease-in-out infinite;
+        pointer-events: none;
+      }
+
+      /* Тонкая декоративная рамка внутри */
+      .entry::after {
+        content: "";
+        position: absolute;
+        inset: 15px;
+        border: 1px solid rgba(107, 91, 149, 0.15);
+        border-radius: 1px;
+        pointer-events: none;
+      }
+
+      /* ===== ЗАГОЛОВКИ ГЛАВ ===== */
+      .entry h2 {
+        font-family: "Cinzel", serif;
+        font-size: 22px;
+        font-weight: 600;
+        color: var(--violet);
+        text-align: center;
+        margin-bottom: 30px;
+        letter-spacing: 4px;
+        text-transform: uppercase;
+        position: relative;
+        padding-bottom: 15px;
+      }
+
+      /* Линия с луной под заголовком */
+      .entry h2::after {
+        content: "✦ ☾ ✦";
+        display: block;
+        position: absolute;
+        bottom: -5px;
+        left: 50%;
+        transform: translateX(-50%);
+        color: var(--silver-accent);
+        font-size: 14px;
+        letter-spacing: 10px;
+        font-family: serif;
+      }
+
+      /* Разделитель между главами */
+      .entry h2:not(:first-of-type) {
+        margin-top: 60px;
+        padding-top: 40px;
+      }
+
+      .entry h2:not(:first-of-type)::before {
+        content: "——— ✧ ———";
+        display: block;
+        text-align: center;
+        color: var(--mist);
+        font-size: 16px;
+        letter-spacing: 8px;
+        margin-bottom: 25px;
+        opacity: 0.6;
+      }
+
+      /* ===== АБЗАЦЫ ===== */
+      .entry p {
+        text-align: justify;
+        text-indent: 2em;
+        margin-bottom: 14px;
+        font-family: "Cormorant Garamond", serif;
+        font-size: 19px;
+      }
+
+      /* Первый абзац — без отступа, так как есть буквица */
+      .entry p:first-of-type {
+        text-indent: 0;
+      }
+
+      /* Буквица — лунно-фиолетовая */
+      .entry p:first-of-type::first-letter {
+        font-family: "MedievalSharp", "Cinzel", serif;
+        font-size: 64px;
+        float: left;
+        line-height: 0.85;
+        padding: 6px 20px 0 0;
+        background: linear-gradient(
+          180deg,
+          #8a7ab5 0%,
+          #6b5b95 50%,
+          #4a3d6b 100%
+        );
+        -webkit-background-clip: text;
+        background-clip: text;
+        -webkit-text-fill-color: transparent;
+        font-weight: 400;
+        text-shadow: 0 0 20px rgba(107, 91, 149, 0.3);
+      }
+
+      /* ===== ПОДПИСЬ ===== */
+      .signature {
+        text-align: right;
+        font-family: "Cormorant Garamond", serif;
+        font-style: italic;
+        font-size: 22px;
+        color: var(--violet);
+        margin-top: 30px;
+        letter-spacing: 1px;
+      }
+
+      /* ===== РАЗДЕЛИТЕЛЬ ===== */
+      .divider {
+        text-align: center;
+        color: var(--silver-accent);
+        font-size: 18px;
+        letter-spacing: 18px;
+        margin: 25px 0;
+        opacity: 0.6;
+      }
+
+      /* ===== ПОДВАЛ ===== */
+      footer {
+        text-align: center;
+        padding: 50px 20px 30px;
+        position: relative;
+      }
+
+      footer::before {
+        content: "☾ ✦ ☾";
+        display: block;
+        color: var(--moon-silver);
+        font-size: 24px;
+        letter-spacing: 20px;
+        margin-bottom: 25px;
+        text-shadow: 0 0 20px rgba(220, 230, 255, 0.6);
+      }
+
+      footer .closing-quote {
+        font-family: "Cormorant Garamond", serif;
+        font-style: italic;
+        font-size: 18px;
+        color: var(--moon-pale);
+        max-width: 500px;
+        margin: 0 auto 20px;
+        line-height: 1.6;
+        opacity: 0.85;
+      }
+
+      footer a {
+        display: inline-block;
+        margin-top: 20px;
+        color: var(--frost-blue);
+        text-decoration: none;
+        font-family: "Cinzel", serif;
+        font-size: 14px;
+        letter-spacing: 3px;
+        text-transform: uppercase;
+        padding: 10px 25px;
+        border: 1px solid rgba(184, 197, 214, 0.4);
+        border-radius: 2px;
+        transition: all 0.3s ease;
+      }
+
+      footer a:hover {
+        background: rgba(184, 197, 214, 0.15);
+        border-color: var(--moon-silver);
+        box-shadow: 0 0 20px rgba(220, 230, 255, 0.3);
+      }
+
+      /* ===== АДАПТИВ ===== */
       @media (max-width: 600px) {
         .entry {
-          padding: 32px 26px;
-          font-size: 18px;
+          padding: 35px 25px;
+          font-size: 17px;
+        }
+        .entry p {
+          font-size: 17px;
         }
         .entry p:first-of-type::first-letter {
           font-size: 48px;
+        }
+        header {
+          padding: 50px 15px 30px;
         }
         .diary-image {
           max-width: 100%;
           float: none;
           margin: 1.2em auto;
+          --rot: 0deg;
         }
       }
     </style>
   </head>
   <body>
+    <!-- Силуэт леса внизу -->
+    <svg
+      class="forest-silhouette"
+      viewBox="0 0 1200 400"
+      preserveAspectRatio="none"
+      xmlns="http://www.w3.org/2000/svg"
+    >
+      <defs>
+        <linearGradient id="forestGrad" x1="0%" y1="0%" x2="0%" y2="100%">
+          <stop offset="0%" stop-color="#0a0e1f" stop-opacity="0" />
+          <stop offset="40%" stop-color="#0a0e1f" stop-opacity="0.6" />
+          <stop offset="100%" stop-color="#050810" stop-opacity="1" />
+        </linearGradient>
+      </defs>
+      <path
+        fill="url(#forestGrad)"
+        d="M0,400 L0,280 L40,260 L60,290 L90,240 L120,270 L150,220 L180,260 L210,230 L240,270 L270,210 L300,250 L330,220 L360,260 L390,200 L420,240 L450,210 L480,250 L510,220 L540,260 L570,230 L600,270 L630,240 L660,280 L690,250 L720,290 L750,260 L780,300 L810,270 L840,310 L870,280 L900,320 L930,290 L960,330 L990,300 L1020,340 L1050,310 L1080,350 L1110,320 L1140,360 L1170,330 L1200,370 L1200,400 Z"
+      />
+      <!-- Отдельные ёлки -->
+      <g fill="#050810" opacity="0.9">
+        <polygon points="100,400 120,280 140,400" />
+        <polygon points="250,400 275,260 300,400" />
+        <polygon points="420,400 445,240 470,400" />
+        <polygon points="600,400 625,270 650,400" />
+        <polygon points="780,400 805,250 830,400" />
+        <polygon points="950,400 975,280 1000,400" />
+        <polygon points="1100,400 1125,260 1150,400" />
+      </g>
+    </svg>
+
     <div class="container">
       <header>
         <h1>Хроники Зираэллы Ларус</h1>
         <div class="subtitle">— той, что идёт по следу луны —</div>
         <div class="epigraph">
-          «Моя история начинается с предательства. Моя история начинается
-          с насмешки судьбы. Моя история начинается в тёмном эльфийском
-          лесу, у ствола вековой ели, с маленькой плетёной корзинки и
-          обрывка книжного листа, на котором нетвердой рукой написано одно
-          лишь имя — Зираэлла Ларус.»
+          «Моя история начинается с предательства. Моя история начинается с
+          насмешки судьбы. Моя история начинается в тёмном эльфийском лесу, у
+          ствола вековой ели, с маленькой плетёной корзинки и обрывка книжного
+          листа, на котором нетвердой рукой написано одно лишь имя — Зираэлла
+          Ларус.»
         </div>
       </header>
 
@@ -366,47 +798,44 @@
       <article class="entry">
         <h2>Пролог. Корзинка у ели</h2>
         <p>
-          Наверняка, моя история похожа на сотни, если не тысячи других.
-          Моя история не заканчивается счастливым моментом. Как и не
-          начинается со слёз радости родителей, впервые увидевших своё
-          долгожданное дитя. Моя история начинается даже не с
-          всхлипывающего вдоха новорождённого или сладостного стона
-          влюблённых, зачавших дитя.
+          Наверняка, моя история похожа на сотни, если не тысячи других. Моя
+          история не заканчивается счастливым моментом. Как и не начинается со
+          слёз радости родителей, впервые увидевших своё долгожданное дитя. Моя
+          история начинается даже не с всхлипывающего вдоха новорождённого или
+          сладостного стона влюблённых, зачавших дитя.
         </p>
         <p>
-          Моя история начинается с предательства. Моя история начинается
-          с насмешки судьбы. Моя история начинается в тёмном эльфийском
-          лесу, с небольшой плетённой корзинки, стоящей у ствола вековой
-          ели. В корзинке небольшое лоскутное одеяло, в которое завернут
-          спящий младенец. В крохотном кулачке младенца зажат обрывок
-          книжного листа, на полях которого нетвердой рукой сделана одна
-          единственная запись — «Зираэлла Ларус».
+          Моя история начинается с предательства. Моя история начинается с
+          насмешки судьбы. Моя история начинается в тёмном эльфийском лесу, с
+          небольшой плетённой корзинки, стоящей у ствола вековой ели. В корзинке
+          небольшое лоскутное одеяло, в которое завернут спящий младенец. В
+          крохотном кулачке младенца зажат обрывок книжного листа, на полях
+          которого нетвердой рукой сделана одна единственная запись — «Зираэлла
+          Ларус».
         </p>
         <p>
-          «Кто этот младенец? Откуда она взялась посреди тёмного ночного
-          леса? Как долго она находится здесь одна? Кто принёс её и
-          оставил одну на волю судьбы?». Именно такими вопросами задавался
-          мой названный отец, нашедший меня у ели, в окружении белок,
-          ранним осенним утром.
+          «Кто этот младенец? Откуда она взялась посреди тёмного ночного леса?
+          Как долго она находится здесь одна? Кто принёс её и оставил одну на
+          волю судьбы?». Именно такими вопросами задавался мой названный отец,
+          нашедший меня у ели, в окружении белок, ранним осенним утром.
         </p>
 
-        <!-- Иллюстрация -->
-        <img class="diary-image left" src="files/1.png" alt="Корзинка у ели" />
-
+        <figure class="diary-image left">
+          <img src="files/1.png" alt="Корзинка у ели" />
+        </figure>
         <p>
-          Естественно, Сильварис не бросил младенца посреди леса умирать,
-          а забрал к себе в семью. Своих детей у него не было — так его
+          Естественно, Сильварис не бросил младенца посреди леса умирать, а
+          забрал к себе в семью. Своих детей у него не было — так его
           единственный сын погиб при защите города от волны нежити, будучи
-          совсем молодым. Торвальд, так звали его сына, был высоким,
-          красивым эльфом с лицом героя. Я видела его изображения — Джана
-          показывала мне их тайком, так как родителям слишком больно о
-          нём вспоминать. Он был прекрасен, его характер был твёрд как
-          сталь, он всегда держал своё слово и стремился к торжеству
-          справедливости. Он не был трусом, а бой для него был словно
-          танец. Таким описывала его Джана, его несостоявшаяся невеста.
-          В её сердце навсегда осталась незаживающая рана. Но когда она
-          рассказывала мне о нём, её лицо лучилось такой любовью и
-          счастьем, что становилось неловко.
+          совсем молодым. Торвальд, так звали его сына, был высоким, красивым
+          эльфом с лицом героя. Я видела его изображения — Джана показывала мне
+          их тайком, так как родителям слишком больно о нём вспоминать. Он был
+          прекрасен, его характер был твёрд как сталь, он всегда держал своё
+          слово и стремился к торжеству справедливости. Он не был трусом, а бой
+          для него был словно танец. Таким описывала его Джана, его
+          несостоявшаяся невеста. В её сердце навсегда осталась незаживающая
+          рана. Но когда она рассказывала мне о нём, её лицо лучилось такой
+          любовью и счастьем, что становилось неловко.
         </p>
       </article>
 
@@ -414,47 +843,46 @@
       <article class="entry">
         <h2>Глава I. Сильварис и Касандра</h2>
         <p>
-          Когда Сильварис пришёл домой ранним туманным утром с корзинкой,
-          в которой лежала малышка с фиолетовыми глазами и длинными
-          ушами, его жена, Касандра, была обескуражена. Сперва она
-          предлагала отнести девочку к жрецу и пусть он решает её судьбу.
-          Но Сильварис уже принял решение оставить девочку и воспитать её
-          как родную дочь. Со временем сердце Касандры смягчилось, но
-          никогда она не воспринимала девочку как дочь. Она не обижала
-          её, но полюбить так и не смогла.
+          Когда Сильварис пришёл домой ранним туманным утром с корзинкой, в
+          которой лежала малышка с фиолетовыми глазами и длинными ушами, его
+          жена, Касандра, была обескуражена. Сперва она предлагала отнести
+          девочку к жрецу и пусть он решает её судьбу. Но Сильварис уже принял
+          решение оставить девочку и воспитать её как родную дочь. Со временем
+          сердце Касандры смягчилось, но никогда она не воспринимала девочку как
+          дочь. Она не обижала её, но полюбить так и не смогла.
         </p>
 
         <!-- Иллюстрация -->
-        <img class="diary-image left" src="files/2.png" alt="Сильварис с корзинкой" />
+        <figure class="diary-image right">
+          <img src="files/2.png" alt="Сильварис с корзинкой" />
+        </figure>
 
         <p>
-          Сильварис был эльфом в возрасте, седина уже коснулась его
-          висков, но своей красоты он не утратил. Его волевой подбородок
-          напоминал людской. Его голубые глаза светились теплом, но умели
-          в мгновение затянуться льдом. Он был наидобрейшим эльфом, но
-          всегда с капелькой грусти. Как бы ни любил он эту жизнь,
-          засыпал и просыпался он с мыслями о Торвальде…
+          Сильварис был эльфом в возрасте, седина уже коснулась его висков, но
+          своей красоты он не утратил. Его волевой подбородок напоминал людской.
+          Его голубые глаза светились теплом, но умели в мгновение затянуться
+          льдом. Он был наидобрейшим эльфом, но всегда с капелькой грусти. Как
+          бы ни любил он эту жизнь, засыпал и просыпался он с мыслями о
+          Торвальде…
         </p>
         <p>
-          По роду деятельности Сильварис был целителем. Он многое знал о
-          травах и их полезных свойствах, мог вылечить разную хворь.
-          Множество ранних утренних прогулок по лесу мы провели с ним за
-          сбором ягод, трав, жуков для пополнения его запасов. Иногда он
-          позволял мне помогать ему во время приготовления зелий или мазей,
-          объясняя смысл своих действий и какой эффект они произведут. Я
-          смотрела на него горящими глазами, и моей мечтой было стать
-          великой целительницей. Я представляла себя всемогущей,
-          сражающейся с хворью и даже бросившей вызов самой смерти! Как
-          жаль, что ничему из этого не суждено было сбыться…
+          По роду деятельности Сильварис был целителем. Он многое знал о травах
+          и их полезных свойствах, мог вылечить разную хворь. Множество ранних
+          утренних прогулок по лесу мы провели с ним за сбором ягод, трав, жуков
+          для пополнения его запасов. Иногда он позволял мне помогать ему во
+          время приготовления зелий или мазей, объясняя смысл своих действий и
+          какой эффект они произведут. Я смотрела на него горящими глазами, и
+          моей мечтой было стать великой целительницей. Я представляла себя
+          всемогущей, сражающейся с хворью и даже бросившей вызов самой смерти!
+          Как жаль, что ничему из этого не суждено было сбыться…
         </p>
         <p>
           Сильварис решил, что до вступления во взрослую жизнь он будет
-          оберегать маленькую эльфийку и хранить тайну её происхождения.
-          Никто в городке Эларнодор не знал до конца, откуда она взялась.
-          Сильварис говорил всем вокруг, что Зираэлла была дочерью его
-          дальнего знакомого, который внезапно погиб. Но время шло,
-          Зираэлла взрослела, и различия между ней и лесными эльфами
-          становились всё отчётливее.
+          оберегать маленькую эльфийку и хранить тайну её происхождения. Никто в
+          городке Эларнодор не знал до конца, откуда она взялась. Сильварис
+          говорил всем вокруг, что Зираэлла была дочерью его дальнего знакомого,
+          который внезапно погиб. Но время шло, Зираэлла взрослела, и различия
+          между ней и лесными эльфами становились всё отчётливее.
         </p>
       </article>
 
@@ -462,75 +890,71 @@
       <article class="entry">
         <h2>Глава II. Школа и библиотека</h2>
         <p>
-          Моё детство было наполнено радостью. Я считала Сильвариса и
-          Касандру родителями и вовсе не замечала многих несостыковок и
-          грустных взглядов мамы. Я старалась быть прилежной и не
-          доставлять родителям хлопот. Впервые я столкнулась с
-          несправедливостью этого мира в эльфийской школе. Мама, то есть
-          Касандра, была учителем в школе. Она преподавала молодым эльфам
-          основы грамоты. Терпеливо учила нас буквам и правильному
-          произношению, а также красивому письму. Сначала я обучалась
-          наравне со всеми. Всем основам наук мира я научилась. Но при
-          дальнейшем обучении я заметила, что мне дают однотипные задания,
-          а вместо учебника у меня сборник мифов и сказок.
+          Моё детство было наполнено радостью. Я считала Сильвариса и Касандру
+          родителями и вовсе не замечала многих несостыковок и грустных взглядов
+          мамы. Я старалась быть прилежной и не доставлять родителям хлопот.
+          Впервые я столкнулась с несправедливостью этого мира в эльфийской
+          школе. Мама, то есть Касандра, была учителем в школе. Она преподавала
+          молодым эльфам основы грамоты. Терпеливо учила нас буквам и
+          правильному произношению, а также красивому письму. Сначала я
+          обучалась наравне со всеми. Всем основам наук мира я научилась. Но при
+          дальнейшем обучении я заметила, что мне дают однотипные задания, а
+          вместо учебника у меня сборник мифов и сказок.
         </p>
         <p>
-          Конечно, Касандра старалась давать мне новые книги, чтобы мне
-          было интересно, но однажды мне это надоело, и я потребовала
-          учебник как у всех. Прямо на уроке, задав вопрос на весь класс
-          (я думала, что так застану Касандру врасплох и ей ничего не
-          останется, как выдать мне учебник), я получила вместо заветного
-          учебника испепеляющий взгляд мамы и фразу: «Твоё обучение на
-          этом окончено».
+          Конечно, Касандра старалась давать мне новые книги, чтобы мне было
+          интересно, но однажды мне это надоело, и я потребовала учебник как у
+          всех. Прямо на уроке, задав вопрос на весь класс (я думала, что так
+          застану Касандру врасплох и ей ничего не останется, как выдать мне
+          учебник), я получила вместо заветного учебника испепеляющий взгляд
+          мамы и фразу: «Твоё обучение на этом окончено».
         </p>
         <p>
-          Домой я шла в слезах. Я не понимала, что я сделала не так, ведь
-          мне так нравилось учиться. Я рыдала на крылечке нашего дома и
-          мечтала повернуть время вспять. Я так жалела, что попросила этот
-          учебник! В тот момент мне казалось, что обрывков фраз учителя и
-          других ребят было бы достаточно… Но время вспять не повернуть.
+          Домой я шла в слезах. Я не понимала, что я сделала не так, ведь мне
+          так нравилось учиться. Я рыдала на крылечке нашего дома и мечтала
+          повернуть время вспять. Я так жалела, что попросила этот учебник! В
+          тот момент мне казалось, что обрывков фраз учителя и других ребят было
+          бы достаточно… Но время вспять не повернуть.
         </p>
         <p>
-          Проплакав довольно долго, я решила, что раз я больше не хожу в
-          школу, то пойду в библиотеку и сама научусь всем наукам мира!
-          Стану великой учёной и утру нос всем в школе!
+          Проплакав довольно долго, я решила, что раз я больше не хожу в школу,
+          то пойду в библиотеку и сама научусь всем наукам мира! Стану великой
+          учёной и утру нос всем в школе!
         </p>
         <p>
-          Хах, как же глупа и самонадеяна я была! Все книги, которые я
-          читала, брала моя мама или папа. А сама я никогда не была внутри
-          библиотеки. И почему-то меня это не смущало.
+          Хах, как же глупа и самонадеяна я была! Все книги, которые я читала,
+          брала моя мама или папа. А сама я никогда не была внутри библиотеки. И
+          почему-то меня это не смущало.
         </p>
         <p>
           Подойдя к башне библиотеки, я испытала волнение и восторг,
-          представляя, как буду днями напролёт осваивать сложнейшие
-          трактаты и постигая тайны мироздания… Только представьте: ты
-          один среди огромного множества древних фолиантов и свитков,
-          миллионы трудов в твоих руках, карты неба и далёких земель…
-          Вековая пыль щекочет нос и кружится в лучах света, проникающих
-          сквозь окна башни… На столе горит свеча, воздух спёртый и
-          тяжёлый, а ты увлечена новой главой истории этого мира…
+          представляя, как буду днями напролёт осваивать сложнейшие трактаты и
+          постигая тайны мироздания… Только представьте: ты один среди огромного
+          множества древних фолиантов и свитков, миллионы трудов в твоих руках,
+          карты неба и далёких земель… Вековая пыль щекочет нос и кружится в
+          лучах света, проникающих сквозь окна башни… На столе горит свеча,
+          воздух спёртый и тяжёлый, а ты увлечена новой главой истории этого
+          мира…
         </p>
         <p>
-          Такие мысли витали в моей голове, пока я поднималась по
-          ступеням башни к хранителю библиотеки. Я слегка даже
-          подпрыгивала от предвкушения! И вот он, заветный стол
-          хранителя… Приблизившись к нему и открыв было рот, чтобы
-          получить разрешение на изучение книг, — я услышала: «Зираэлла?!
-          Что ты здесь делаешь?! Тебе нельзя здесь находиться, немедленно
-          вернись домой или в школу!». Я видела взволнованный и
+          Такие мысли витали в моей голове, пока я поднималась по ступеням башни
+          к хранителю библиотеки. Я слегка даже подпрыгивала от предвкушения! И
+          вот он, заветный стол хранителя… Приблизившись к нему и открыв было
+          рот, чтобы получить разрешение на изучение книг, — я услышала:
+          «Зираэлла?! Что ты здесь делаешь?! Тебе нельзя здесь находиться,
+          немедленно вернись домой или в школу!». Я видела взволнованный и
           растерянный взгляд Эльвара, и множество вопросов остались
-          невысказанными, но… я почувствовала себя настолько уставшей,
-          что просто ушла из библиотеки. Это было похоже на удар всем
-          телом о гладь воды озера, когда прыгаешь с отвесной скалы. Мне
-          казалось, что из меня вышибли не только дух, но и разум. Не
-          было мыслей, не было вопросов, не было ничего, кроме жуткой
-          пустоты внутри…
+          невысказанными, но… я почувствовала себя настолько уставшей, что
+          просто ушла из библиотеки. Это было похоже на удар всем телом о гладь
+          воды озера, когда прыгаешь с отвесной скалы. Мне казалось, что из меня
+          вышибли не только дух, но и разум. Не было мыслей, не было вопросов,
+          не было ничего, кроме жуткой пустоты внутри…
         </p>
         <p>
-          Вечером, лёжа в своей кровати и смотря немигающим взглядом в
-          потолок, я слышала, как внизу ругались родители. У меня не было
-          даже желания прислушаться. Я хотела лишь одного — спасительного
-          забытия сна. И вскоре я уснула.
+          Вечером, лёжа в своей кровати и смотря немигающим взглядом в потолок,
+          я слышала, как внизу ругались родители. У меня не было даже желания
+          прислушаться. Я хотела лишь одного — спасительного забытия сна. И
+          вскоре я уснула.
         </p>
       </article>
 
@@ -538,22 +962,21 @@
       <article class="entry">
         <h2>Глава III. Серебряный дракон</h2>
         <p>
-          В ту ночь мне снился тёмный лес. Я шла по нему, и дорожку
-          освещал лунный свет. Мне не было страшно, хоть место и было
-          незнакомым. Меня будто что-то влекло вперёд. Я вышла на край
-          утёса. Передо мной раскинулся бескрайний зимний лес, а вдалеке
-          были видны шпили башен великолепного замка. Меня посетило
-          чувство, что моё место там, в замке. Там мой дом… Надо мной
-          закружил серебряный дракон. Но я испытала такое счастье, будто
-          встретилась с близким другом после длительной разлуки! Это был
-          МОЙ дракон!!! Дракон приземлился недалеко от меня и пригнулся —
-          то ли приветствуя, то ли приглашая взобраться на него.
+          В ту ночь мне снился тёмный лес. Я шла по нему, и дорожку освещал
+          лунный свет. Мне не было страшно, хоть место и было незнакомым. Меня
+          будто что-то влекло вперёд. Я вышла на край утёса. Передо мной
+          раскинулся бескрайний зимний лес, а вдалеке были видны шпили башен
+          великолепного замка. Меня посетило чувство, что моё место там, в
+          замке. Там мой дом… Надо мной закружил серебряный дракон. Но я
+          испытала такое счастье, будто встретилась с близким другом после
+          длительной разлуки! Это был МОЙ дракон!!! Дракон приземлился недалеко
+          от меня и пригнулся — то ли приветствуя, то ли приглашая взобраться на
+          него.
         </p>
         <p>
           Серебряный дракон стал частым гостем моих снов. На протяжении
-          множества лет, в моменты сильных душевных переживаний, он был
-          рядом. Я всегда думала, что он существует, и очень надеялась
-          на встречу.
+          множества лет, в моменты сильных душевных переживаний, он был рядом. Я
+          всегда думала, что он существует, и очень надеялась на встречу.
         </p>
       </article>
 
@@ -561,100 +984,93 @@
       <article class="entry">
         <h2>Глава IV. Годы в тени</h2>
         <p>
-          Время шло, я взрослела. Меня всё больше отдаляли от всего, что
-          могло быть тайной лесных эльфов. Всё чаще я замечала в свою
-          сторону взгляды, полные презрения и сочувствия. Я не понимала
-          природы этих взглядов и старалась не обращать на них внимания.
+          Время шло, я взрослела. Меня всё больше отдаляли от всего, что могло
+          быть тайной лесных эльфов. Всё чаще я замечала в свою сторону взгляды,
+          полные презрения и сочувствия. Я не понимала природы этих взглядов и
+          старалась не обращать на них внимания.
         </p>
         <p>
-          Отец всё реже позволял мне помогать ему и всё реже делился со
-          мной знанием. В школу путь мне был закрыт, в библиотеке меня
-          прогоняли, поэтому времени у меня было предостаточно. Я бродила
-          по нашему городку, уходила за его пределы — исследовать лес и
-          ближайшие окрестности. Оттачивала своё мастерство владения
-          луком и мечами, но некому было меня наставить и подсказать…
-          Иногда я мечтала, что Торвальд был моим старшим братом и
-          тренировал меня… А ночами я ждала возвращения моего дракона.
+          Отец всё реже позволял мне помогать ему и всё реже делился со мной
+          знанием. В школу путь мне был закрыт, в библиотеке меня прогоняли,
+          поэтому времени у меня было предостаточно. Я бродила по нашему
+          городку, уходила за его пределы — исследовать лес и ближайшие
+          окрестности. Оттачивала своё мастерство владения луком и мечами, но
+          некому было меня наставить и подсказать… Иногда я мечтала, что
+          Торвальд был моим старшим братом и тренировал меня… А ночами я ждала
+          возвращения моего дракона.
         </p>
-        <p>
-          Так я проводила день за днём, месяц за месяцем, год за
-          годом…
-        </p>
+        <p>Так я проводила день за днём, месяц за месяцем, год за годом…</p>
       </article>
 
       <!-- ============ ГЛАВА V ============ -->
       <article class="entry">
         <h2>Глава V. День совершеннолетия</h2>
         <p>
-          Сидя в ветвях дуба, я наблюдала за паданием листа. Когда дул
-          ветер, листья дружно кружились в причудливом танце, словно в
-          предсмертной агонии. Мой разум был пуст. Это был день моего
-          совершеннолетия. Мне нужно было подготовить платье и решить, чьей
-          ученицей я хочу стать, а я сидела и смотрела на опадающие
-          листья.
+          Сидя в ветвях дуба, я наблюдала за паданием листа. Когда дул ветер,
+          листья дружно кружились в причудливом танце, словно в предсмертной
+          агонии. Мой разум был пуст. Это был день моего совершеннолетия. Мне
+          нужно было подготовить платье и решить, чьей ученицей я хочу стать, а
+          я сидела и смотрела на опадающие листья.
         </p>
         <p>
           Снизу меня окликнула Лира. Моя единственная подруга. Пора было
           готовиться к ритуалу инициации. Я спустилась с дерева и нехотя
-          поплелась за ней. Лира была единственной, кто относился ко мне
-          без скрытых мыслей. Она была моей лучшей и самой близкой
-          подругой.
+          поплелась за ней. Лира была единственной, кто относился ко мне без
+          скрытых мыслей. Она была моей лучшей и самой близкой подругой.
         </p>
         <p>
-          Мы вернулись домой. Платье подготовила мама. И оно было
-          прекрасно, действительно. По правилам, это было белое платье
-          длиной до пола, с длинными рукавами. Украшено оно должно было
-          быть лишь золотистой вышивкой листьев. Но Лира вышила на нём
-          ещё и ласточек. Ласточка — это моё имя. И это ещё одна
-          насмешка судьбы. Ведь ласточка так прекрасна, она свободна и
-          может летать…
+          Мы вернулись домой. Платье подготовила мама. И оно было прекрасно,
+          действительно. По правилам, это было белое платье длиной до пола, с
+          длинными рукавами. Украшено оно должно было быть лишь золотистой
+          вышивкой листьев. Но Лира вышила на нём ещё и ласточек. Ласточка — это
+          моё имя. И это ещё одна насмешка судьбы. Ведь ласточка так прекрасна,
+          она свободна и может летать…
         </p>
         <p>
-          Лира усадила меня на стул и начала заплетать мне косы.
-          Расчёсывая мои длинные серебряные волосы, она болтала и
-          болтала о предстоящем ритуале и о том, как мне повезло, что я
-          получу свободу взрослого эльфа, а ей ждать ещё целый год.
+          Лира усадила меня на стул и начала заплетать мне косы. Расчёсывая мои
+          длинные серебряные волосы, она болтала и болтала о предстоящем ритуале
+          и о том, как мне повезло, что я получу свободу взрослого эльфа, а ей
+          ждать ещё целый год.
         </p>
 
         <!-- Иллюстрация -->
-        <img class="diary-image right" src="files/3.jpeg" alt="Серебряные косы" />
+        <figure class="diary-image left">
+          <img src="files/3.jpeg" alt="Серебряные косы" />
+        </figure>
 
         <p>
-          В комнату вошли отец и жрец нашего племени. Пора идти на
-          инициацию. Отец остался дома, а я пошла следом за молчаливым
-          жрецом.
+          В комнату вошли отец и жрец нашего племени. Пора идти на инициацию.
+          Отец остался дома, а я пошла следом за молчаливым жрецом.
         </p>
         <p>
-          Я была совсем рассеяна и не особо воодушевлена предстоящим
-          действом, поэтому даже не сразу заметила, что мы идём не на
-          главную площадь, а совсем в противоположную сторону — к
-          воротам. Когда я задала вопрос жрецу, он лишь грустно взглянул
-          на меня и произнёс: «Скоро ты всё узнаешь».
+          Я была совсем рассеяна и не особо воодушевлена предстоящим действом,
+          поэтому даже не сразу заметила, что мы идём не на главную площадь, а
+          совсем в противоположную сторону — к воротам. Когда я задала вопрос
+          жрецу, он лишь грустно взглянул на меня и произнёс: «Скоро ты всё
+          узнаешь».
         </p>
         <p>
-          Мы подошли к вратам, где он развернулся и грустно взглянул на
-          меня. «Пришла пора открыть тебе правду, Зираэлла Ларус. Как ты
-          понимаешь, никакой инициации ты проходить не будешь. Поскольку
-          ты не лесной эльф. Наверняка ты видишь в себе отличия. И да,
-          предупреждая твои вопросы — твои родители в курсе. Сильварис
-          нашёл тебя в лесу с единственным листом из книги, на котором
-          было написано твоё имя. Это всё, что нам известно о тебе. Твоя
-          раса — высший эльф. Это видно по твоему цвету кожи и волос.
-          Цвет твоих глаз намекает, что один из твоих родителей владел
-          магией. К сожалению, это всё, что я могу тебе рассказать».
+          Мы подошли к вратам, где он развернулся и грустно взглянул на меня.
+          «Пришла пора открыть тебе правду, Зираэлла Ларус. Как ты понимаешь,
+          никакой инициации ты проходить не будешь. Поскольку ты не лесной эльф.
+          Наверняка ты видишь в себе отличия. И да, предупреждая твои вопросы —
+          твои родители в курсе. Сильварис нашёл тебя в лесу с единственным
+          листом из книги, на котором было написано твоё имя. Это всё, что нам
+          известно о тебе. Твоя раса — высший эльф. Это видно по твоему цвету
+          кожи и волос. Цвет твоих глаз намекает, что один из твоих родителей
+          владел магией. К сожалению, это всё, что я могу тебе рассказать».
         </p>
         <p>
-          Краем глаза я заметила, что кто-то приблизился к нам. Жрец
-          говорил и говорил, объясняя, почему я была изгоем всю свою
-          жизнь и почему ко мне так относились всё время. Но я,
-          кажется, не слушала его, так как моё внимание привлекло
-          существо, стоящее справа от меня. Оно было удивительным: тело
-          его было человечьим, голова напоминала зайца. А крылья и лапы
-          были драконьи.
+          Краем глаза я заметила, что кто-то приблизился к нам. Жрец говорил и
+          говорил, объясняя, почему я была изгоем всю свою жизнь и почему ко мне
+          так относились всё время. Но я, кажется, не слушала его, так как моё
+          внимание привлекло существо, стоящее справа от меня. Оно было
+          удивительным: тело его было человечьим, голова напоминала зайца. А
+          крылья и лапы были драконьи.
         </p>
         <p>
-          Оно протянуло мне подвеску в виде головы зайца. Ласково
-          улыбнулось и растворилось в воздухе.
+          Оно протянуло мне подвеску в виде головы зайца. Ласково улыбнулось и
+          растворилось в воздухе.
         </p>
       </article>
 
@@ -662,57 +1078,54 @@
       <article class="entry">
         <h2>Глава VI. Годы скитаний</h2>
         <p>
-          Мне разрешили остаться в городе и жить столько, сколько
-          захочу. Но я не могла обучаться никакому ремеслу, не могла
-          стать ученицей мага или целителя, не могла выйти замуж.
+          Мне разрешили остаться в городе и жить столько, сколько захочу. Но я
+          не могла обучаться никакому ремеслу, не могла стать ученицей мага или
+          целителя, не могла выйти замуж.
         </p>
         <p>
-          Пару лет я всё же провела в городе, в доме родителей. Отец
-          рассказал мне всё, что помнил о том, как нашёл меня. Во мне
-          копилось множество вопросов. Однажды я приняла решение покинуть
-          эльфов и пойти искать ответы.
+          Пару лет я всё же провела в городе, в доме родителей. Отец рассказал
+          мне всё, что помнил о том, как нашёл меня. Во мне копилось множество
+          вопросов. Однажды я приняла решение покинуть эльфов и пойти искать
+          ответы.
         </p>
         <p>
-          Я странствовала по городам, посёлкам, деревням. Люди, эльфы,
-          дварфы, орки и другие встречались на моём пути. Сотни миль я
-          прошагала в поисках ответов. Прочла тысячи книг и свитков.
-          Задала миллионы вопросов. Но нигде, никто не слышал фамилию
-          Ларус.
+          Я странствовала по городам, посёлкам, деревням. Люди, эльфы, дварфы,
+          орки и другие встречались на моём пути. Сотни миль я прошагала в
+          поисках ответов. Прочла тысячи книг и свитков. Задала миллионы
+          вопросов. Но нигде, никто не слышал фамилию Ларус.
         </p>
         <p>
-          Когда мне казалось, что я утратила надежду, я забрела в
-          небольшой людской городок под названием Линдом. В таверне, сидя
-          вечером за угловым столиком, я обратила внимание на странную
-          компанию. За одним столом сидели дварф, полуорк и молодая дроу.
-          Я бы даже назвала её ребёнком. Они выпивали и общались между
-          собой так, будто были знакомы целую вечность. Моё сердце заныло
-          от одиночества, и я никак не могла отвести взгляда от них.
-          В глазах стояли слёзы, а губы растянулись в улыбке. Наверно,
-          именно моё странное выражение лица и заставило дварфа
+          Когда мне казалось, что я утратила надежду, я забрела в небольшой
+          людской городок под названием Линдом. В таверне, сидя вечером за
+          угловым столиком, я обратила внимание на странную компанию. За одним
+          столом сидели дварф, полуорк и молодая дроу. Я бы даже назвала её
+          ребёнком. Они выпивали и общались между собой так, будто были знакомы
+          целую вечность. Моё сердце заныло от одиночества, и я никак не могла
+          отвести взгляда от них. В глазах стояли слёзы, а губы растянулись в
+          улыбке. Наверно, именно моё странное выражение лица и заставило дварфа
           подняться из-за стола и подойти ко мне.
         </p>
         <p>
-          Сперва я решила, что случится потасовка. А поскольку мне совсем
-          не хотелось снова ночевать под открытым небом — я решила встать
-          и уйти. Но дварф, наоборот, был вежлив и учтив. Попросил не
-          пугаться его и продолжить свой ужин.
+          Сперва я решила, что случится потасовка. А поскольку мне совсем не
+          хотелось снова ночевать под открытым небом — я решила встать и уйти.
+          Но дварф, наоборот, был вежлив и учтив. Попросил не пугаться его и
+          продолжить свой ужин.
         </p>
         <p>
-          «Барундур.» — представился он. Было невежливо молчать, и я,
-          немного осиплым от долгого молчания голосом, ответила:
-          «Зираэлла». Он улыбнулся и предложил подсесть к ним за стол,
-          ведь я наверняка много путешествую, а значит, нам будет о чём
-          поговорить. Я колебалась. Какая-то незримая сила так тянула
-          меня к ним, будто кто-то прописал нашу встречу в книге судеб.
-          Я наблюдала за полуорком и молодой дроу одним глазом, стараясь
-          не прерывать беседу с дварфом. И тут я заметила нечто, что
-          позволило принять молниеносное решение присоединиться к ним —
-          подвеску в виде головы зайца.
+          «Барундур.» — представился он. Было невежливо молчать, и я, немного
+          осиплым от долгого молчания голосом, ответила: «Зираэлла». Он
+          улыбнулся и предложил подсесть к ним за стол, ведь я наверняка много
+          путешествую, а значит, нам будет о чём поговорить. Я колебалась.
+          Какая-то незримая сила так тянула меня к ним, будто кто-то прописал
+          нашу встречу в книге судеб. Я наблюдала за полуорком и молодой дроу
+          одним глазом, стараясь не прерывать беседу с дварфом. И тут я заметила
+          нечто, что позволило принять молниеносное решение присоединиться к ним
+          — подвеску в виде головы зайца.
         </p>
         <p>
-          Так я встретила своих товарищей — дварфа Барундура, полуорка
-          Шкрека и причудливую дроу Эларайн. А дальше нас ждали
-          множество приключений и неизведанных земель…
+          Так я встретила своих товарищей — дварфа Барундура, полуорка Шкрека и
+          причудливую дроу Эларайн. А дальше нас ждали множество приключений и
+          неизведанных земель…
         </p>
       </article>
 
@@ -720,64 +1133,59 @@
       <article class="entry">
         <h2>Глава VII. Дом у костра</h2>
         <p>
-          Дом… Мудрые говорят, что дом — это не место, а состояние. Что
-          дом — это чувство защищённости и уюта рядом с людьми. Дом — это
-          твои близкие. Получается, у меня никогда ещё не было дома.
-          Дома как места.
+          Дом… Мудрые говорят, что дом — это не место, а состояние. Что дом —
+          это чувство защищённости и уюта рядом с людьми. Дом — это твои
+          близкие. Получается, у меня никогда ещё не было дома. Дома как места.
         </p>
         <p>
-          Когда я жила у Сильвариса, я думала, что там мой дом. Мне
-          хотелось возвращаться в этот небольшой двухэтажный домик,
-          увитый плющом. Мне было уютно и спокойно в моей небольшой
-          светлой комнате на втором этаже, окно которой выходило на обрыв
-          утёса, с которого просматривалась бескрайняя даль неизведанных
-          миров. Я чувствовала удивительное счастье, спускаясь по утрам
-          на кухню, взбираясь с ногами за стол и жуя завтрак. Мне
-          казалось, что мастерская папы, где он готовил снадобья и мази,
-          имеет аромат, который я могла бы назвать родным.
+          Когда я жила у Сильвариса, я думала, что там мой дом. Мне хотелось
+          возвращаться в этот небольшой двухэтажный домик, увитый плющом. Мне
+          было уютно и спокойно в моей небольшой светлой комнате на втором
+          этаже, окно которой выходило на обрыв утёса, с которого
+          просматривалась бескрайняя даль неизведанных миров. Я чувствовала
+          удивительное счастье, спускаясь по утрам на кухню, взбираясь с ногами
+          за стол и жуя завтрак. Мне казалось, что мастерская папы, где он
+          готовил снадобья и мази, имеет аромат, который я могла бы назвать
+          родным.
         </p>
         <p>
-          Но, спустя много месяцев странствий, я осознала, что это был
-          скорее временный приют. Место, где моя душа и тело достаточно
-          окрепли для поиска настоящего дома.
+          Но, спустя много месяцев странствий, я осознала, что это был скорее
+          временный приют. Место, где моя душа и тело достаточно окрепли для
+          поиска настоящего дома.
         </p>
         <p>
           Я лежу у костра и пишу эти строки. Справа от меня, чуть поодаль,
           Барундур возносит молитвы своему странному богу и поминает своих
-          павших товарищей. Интересно, как же так устроена его слепая
-          вера, что она не пошатнулась после всего, что с ним произошло?
-          Спросить напрямую я не решаюсь, а сам он редко когда говорит о
-          минувших днях, своих братьях или наставнике и о том, что
-          случилось.
+          павших товарищей. Интересно, как же так устроена его слепая вера, что
+          она не пошатнулась после всего, что с ним произошло? Спросить напрямую
+          я не решаюсь, а сам он редко когда говорит о минувших днях, своих
+          братьях или наставнике и о том, что случилось.
         </p>
         <p>
-          Слева, в тени дерева, Эл играет со своими кубиками. Иногда она
-          совсем как ребёнок. Часто я вижу в ней молодого львёнка,
-          который злится на весь мир и пытается напугать всех своим
-          сильным рыком, но мне слышится лишь мяукание. Её история
-          наполнена болью, ненавистью и затаённой злобой. Дроу, бежавшая
-          из своего мира на поверхность. Хотя я могу смело сказать, что
-          она точно перегрызёт глотку любому, кто посягнёт на кого-то из
-          нашей компании. Хоть она по факту ещё подросток, она уже
+          Слева, в тени дерева, Эл играет со своими кубиками. Иногда она совсем
+          как ребёнок. Часто я вижу в ней молодого львёнка, который злится на
+          весь мир и пытается напугать всех своим сильным рыком, но мне слышится
+          лишь мяукание. Её история наполнена болью, ненавистью и затаённой
+          злобой. Дроу, бежавшая из своего мира на поверхность. Хотя я могу
+          смело сказать, что она точно перегрызёт глотку любому, кто посягнёт на
+          кого-то из нашей компании. Хоть она по факту ещё подросток, она уже
           поняла этот мир куда лучше многих.
         </p>
         <p>
-          Через танцующие языки пламени я вижу задумчивый профиль
-          Шкрека. Его не часто увидишь серьёзным или, тем более,
-          задумчивым. Почему-то мне кажется, что сейчас он размышляет о
-          своей семье. Он ничего не знает о том, где и как его родные:
-          мама, папа и брат. Я вижу в нём глубокую привязанность к ним и
-          его тоску по ним. Надеюсь, с ними всё в порядке, и однажды
-          Шкрек вновь обнимет маму, поспорит с братом и смело встретит
+          Через танцующие языки пламени я вижу задумчивый профиль Шкрека. Его не
+          часто увидишь серьёзным или, тем более, задумчивым. Почему-то мне
+          кажется, что сейчас он размышляет о своей семье. Он ничего не знает о
+          том, где и как его родные: мама, папа и брат. Я вижу в нём глубокую
+          привязанность к ним и его тоску по ним. Надеюсь, с ними всё в порядке,
+          и однажды Шкрек вновь обнимет маму, поспорит с братом и смело встретит
           взгляд отца.
         </p>
         <p>
-          Сейчас, именно здесь, в нашем ночном лагере, лёжа у костра и
-          делая записи в дневнике, я ощущаю это неописуемое чувство.
-          Чувство уюта и покоя. Ощущение дома. Мой дом — это мои
-          товарищи. И вовсе не важно, где мы находимся — посреди ночного
-          леса, в бегах от городской стражи или на берегу океана.
-          Главное, что мы вместе.
+          Сейчас, именно здесь, в нашем ночном лагере, лёжа у костра и делая
+          записи в дневнике, я ощущаю это неописуемое чувство. Чувство уюта и
+          покоя. Ощущение дома. Мой дом — это мои товарищи. И вовсе не важно,
+          где мы находимся — посреди ночного леса, в бегах от городской стражи
+          или на берегу океана. Главное, что мы вместе.
         </p>
         <p>Наконец-то я обрела чувство дома.</p>
       </article>
@@ -786,151 +1194,140 @@
       <article class="entry">
         <h2>Глава VIII. Туман Баровии</h2>
         <p>
-          Очередной тяжёлый день нашего пути подходит к концу. Мы
-          остановились на ночлег в пролеске около дороги. Барундур
-          разводит костёр, Шкрек носит ему хворост, Эл немного
-          привередничает, а я осматривала местность. После мы со Шкреком
-          удачно поохотились, Барундур приготовил рагу, и мы все вместе
-          с аппетитом поели незамысловатое варево. Готовимся к отдыху.
-          Завтра мы продолжим путь в город, где, по слухам, происходит
-          нечто странное. Надеемся разузнать и по возможности помочь.
+          Очередной тяжёлый день нашего пути подходит к концу. Мы остановились
+          на ночлег в пролеске около дороги. Барундур разводит костёр, Шкрек
+          носит ему хворост, Эл немного привередничает, а я осматривала
+          местность. После мы со Шкреком удачно поохотились, Барундур приготовил
+          рагу, и мы все вместе с аппетитом поели незамысловатое варево.
+          Готовимся к отдыху. Завтра мы продолжим путь в город, где, по слухам,
+          происходит нечто странное. Надеемся разузнать и по возможности помочь.
         </p>
         <p>
-          Странный туман образовался вокруг нашего лагеря. Такое чувство,
-          будто он взялся из ниоткуда и заполонил собой всё пространство.
-          Лес кажется чужим и незнакомым. Мы все проснулись от странного
-          чувства. Как будто сквозь туман за нами кто-то наблюдал.
+          Странный туман образовался вокруг нашего лагеря. Такое чувство, будто
+          он взялся из ниоткуда и заполонил собой всё пространство. Лес кажется
+          чужим и незнакомым. Мы все проснулись от странного чувства. Как будто
+          сквозь туман за нами кто-то наблюдал.
         </p>
         <p>
-          Мы немного осмотрелись и пришли к выводу, что это другое место,
-          не то, в котором мы остановились на ночлег. Лес выглядит иначе,
-          дорога намного ближе. И ещё этот вездесущий туман…
+          Мы немного осмотрелись и пришли к выводу, что это другое место, не то,
+          в котором мы остановились на ночлег. Лес выглядит иначе, дорога
+          намного ближе. И ещё этот вездесущий туман…
         </p>
         <p>
-          Приняли решение сняться со стоянки и двинуться по дороге.
-          Возможно, что-то прояснится.
+          Приняли решение сняться со стоянки и двинуться по дороге. Возможно,
+          что-то прояснится.
         </p>
         <p>
-          Навстречу нам из тумана скачет всадник на лошади. Решив не
-          рисковать, мы отошли с дороги немного в лес и наблюдали за
-          приближающимся всадником. Интересно, что это оказался скелет
-          рыцаря, верхом на скелете лошади. На нём самом и его лошади
-          сохранились остатки боевого облачения. В руке скелет держал
-          фонарь. Интересно, он пытался освещать себе путь? Он не был
-          враждебным и даже оказался весьма разумным для беседы. Тем не
-          менее, ничего важного от него мы не смогли узнать. Видимо,
-          после смерти он сохранил лишь долю разума и даже не помнил
+          Навстречу нам из тумана скачет всадник на лошади. Решив не рисковать,
+          мы отошли с дороги немного в лес и наблюдали за приближающимся
+          всадником. Интересно, что это оказался скелет рыцаря, верхом на
+          скелете лошади. На нём самом и его лошади сохранились остатки боевого
+          облачения. В руке скелет держал фонарь. Интересно, он пытался освещать
+          себе путь? Он не был враждебным и даже оказался весьма разумным для
+          беседы. Тем не менее, ничего важного от него мы не смогли узнать.
+          Видимо, после смерти он сохранил лишь долю разума и даже не помнил
           своего имени.
         </p>
         <p>
           Продолжаем путь по дороге. Внезапно учуяли запах гнилого мяса.
-          Барундур уверял, что воняет какой-нибудь сдохший олень. Решила
-          скрытно углубиться в лес и посмотреть. Нашла два трупа. У
-          одного из них, выглядевшего как посыльный, было письмо.
-          Вернувшись, рассказала об этом ребятам. Барундур возмущался,
-          что я неблагоразумна, тайком уходить в ночной лес в неизвестном
-          странном месте. В чём-то он прав. Но чувствую удовлетворение,
-          найдя письмо. Я не упустила что-то важное.
+          Барундур уверял, что воняет какой-нибудь сдохший олень. Решила скрытно
+          углубиться в лес и посмотреть. Нашла два трупа. У одного из них,
+          выглядевшего как посыльный, было письмо. Вернувшись, рассказала об
+          этом ребятам. Барундур возмущался, что я неблагоразумна, тайком
+          уходить в ночной лес в неизвестном странном месте. В чём-то он прав.
+          Но чувствую удовлетворение, найдя письмо. Я не упустила что-то важное.
         </p>
 
         <!-- Иллюстрация -->
-        <img class="diary-image right" src="files/4.png" alt="Туман Баровии" />
+        <figure class="diary-image right">
+          <img src="files/4.png" alt="Туман Баровии" />
+        </figure>
 
         <p>
-          Столкнулись с людьми на тележке, которые согласились нас
-          подвезти до ближайшей деревушки. От них мы узнали, что
-          находимся в Баровии. Правитель данных земель — Страд фон
-          Зарович. Парни, что везли нас в тележке, были ярко разодеты и
-          причудливо выглядели, словно скоморохи на ярмарке.
-          Представились народом вистани. Говорят, что у них имеется
-          зелье, которое позволит нам выбраться из этих земель. Но,
-          кажется, врут.
+          Столкнулись с людьми на тележке, которые согласились нас подвезти до
+          ближайшей деревушки. От них мы узнали, что находимся в Баровии.
+          Правитель данных земель — Страд фон Зарович. Парни, что везли нас в
+          тележке, были ярко разодеты и причудливо выглядели, словно скоморохи
+          на ярмарке. Представились народом вистани. Говорят, что у них имеется
+          зелье, которое позволит нам выбраться из этих земель. Но, кажется,
+          врут.
         </p>
         <p>
           С их слов, периодически сюда попадают люди, а выбраться отсюда
-          возможно только с согласия правителя этих земель, либо при
-          помощи их зелья. Как утверждают, сами они беспрепятственно
-          входят и выходят.
+          возможно только с согласия правителя этих земель, либо при помощи их
+          зелья. Как утверждают, сами они беспрепятственно входят и выходят.
         </p>
         <p>
-          По дороге распевали похабные частушки. Шкрек пытался запомнить
-          и подпевать. Выглядело это комично.
+          По дороге распевали похабные частушки. Шкрек пытался запомнить и
+          подпевать. Выглядело это комично.
         </p>
         <p>
-          Пока добирались, успели сразиться с волками. Одного из вистани
-          сильно ранили. За помощь нам предложили взять себе что-нибудь
-          из фургона. Взяли зелье лечения. Эл, как обычно, не
-          удержалась и стащила у них пять бутыльков с неизвестной
-          жижей.
+          Пока добирались, успели сразиться с волками. Одного из вистани сильно
+          ранили. За помощь нам предложили взять себе что-нибудь из фургона.
+          Взяли зелье лечения. Эл, как обычно, не удержалась и стащила у них
+          пять бутыльков с неизвестной жижей.
         </p>
         <p>
-          Добрались до ворот деревни мы ранним утром, можно сказать ещё
-          ночью. Стражники не хотели нас пускать, боялись, что мы
-          окажемся нежитью или вампирами. Что тут происходит, в этом
-          мире?
+          Добрались до ворот деревни мы ранним утром, можно сказать ещё ночью.
+          Стражники не хотели нас пускать, боялись, что мы окажемся нежитью или
+          вампирами. Что тут происходит, в этом мире?
         </p>
         <p>
-          На воротах стоял мужчина в развивающемся плаще. Сначала молча
-          за нами наблюдал, затем произнёс: «Добро пожаловать» — и,
-          взмахнув плащом, обратился в летучую мышь. Эл бросила в него
-          одну из украденных бутылочек. Кажется, в ней была обычная
-          вода.
+          На воротах стоял мужчина в развивающемся плаще. Сначала молча за нами
+          наблюдал, затем произнёс: «Добро пожаловать» — и, взмахнув плащом,
+          обратился в летучую мышь. Эл бросила в него одну из украденных
+          бутылочек. Кажется, в ней была обычная вода.
         </p>
         <p>
-          Войдя в деревню, нашли таверну, чтобы переночевать. Вообще
-          выглядит здесь всё довольно странно. Как будто пропитано
-          страхом.
+          Войдя в деревню, нашли таверну, чтобы переночевать. Вообще выглядит
+          здесь всё довольно странно. Как будто пропитано страхом.
         </p>
         <p>
-          В таверне познакомились с молодым мужчиной, Исмарком. Точнее,
-          как познакомились… Сидел он себе угрюмо в углу, выпивал в
-          одиночестве. Мы же стояли у стойки трактирщика, узнавали про
-          еду и комнаты. В центре за столом сидели три девушки, судя
-          по их цветастой одежде — вистани. Наша неугомонная Эл решила
-          разговорить парня и узнать, чего он такой хмурый. Подсела к
-          нему за стол и начала разговор. Предлагала познакомить его с
-          вистани, на что получила ответ, что он их буквально ненавидит,
-          так как они «Шпионы Страда».
+          В таверне познакомились с молодым мужчиной, Исмарком. Точнее, как
+          познакомились… Сидел он себе угрюмо в углу, выпивал в одиночестве. Мы
+          же стояли у стойки трактирщика, узнавали про еду и комнаты. В центре
+          за столом сидели три девушки, судя по их цветастой одежде — вистани.
+          Наша неугомонная Эл решила разговорить парня и узнать, чего он такой
+          хмурый. Подсела к нему за стол и начала разговор. Предлагала
+          познакомить его с вистани, на что получила ответ, что он их буквально
+          ненавидит, так как они «Шпионы Страда».
         </p>
         <p>
-          Узнав, что мы искатели приключений, он пригласил нас в свой
-          дом и поведал, что нуждается в помощи. В письме, которое я
-          нашла, говорилось о его сестре — Ирине. Её действительно
-          укусил вампир. А вот его отец-бургомистр умер несколько дней
-          назад. И им нужна помощь в организации его похорон.
+          Узнав, что мы искатели приключений, он пригласил нас в свой дом и
+          поведал, что нуждается в помощи. В письме, которое я нашла, говорилось
+          о его сестре — Ирине. Её действительно укусил вампир. А вот его
+          отец-бургомистр умер несколько дней назад. И им нужна помощь в
+          организации его похорон.
         </p>
         <p>
-          Познакомились с Ириной. Приятная молодая девушка, с красивыми
-          красными волосами. Рассказывает, что не так давно к их дому
-          стала стекаться всякая нежить, а после она была дважды
-          укушена Страдом, но плохо помнит детали. Их отец не выдержал
-          такого напряжения и умер пару дней назад. Но, поскольку
-          из-за интереса Страда к Ирине в деревне их боятся и не
-          долюбливают, у них имеются трудности с похоронами.
+          Познакомились с Ириной. Приятная молодая девушка, с красивыми красными
+          волосами. Рассказывает, что не так давно к их дому стала стекаться
+          всякая нежить, а после она была дважды укушена Страдом, но плохо
+          помнит детали. Их отец не выдержал такого напряжения и умер пару дней
+          назад. Но, поскольку из-за интереса Страда к Ирине в деревне их боятся
+          и не долюбливают, у них имеются трудности с похоронами.
         </p>
         <p>
-          Исмарк просит нас о помощи — проводить Ирину в безопасное
-          место, где Страд не сможет ей навредить. Но Ирина упёрто
-          отказывается уходить, пока не будет похоронен отец.
+          Исмарк просит нас о помощи — проводить Ирину в безопасное место, где
+          Страд не сможет ей навредить. Но Ирина упёрто отказывается уходить,
+          пока не будет похоронен отец.
         </p>
         <p>
-          Посовещавшись, решили помочь ребятам. Заодно разузнаем
-          побольше о месте, куда мы попали, и о том, как отсюда
-          выбраться.
+          Посовещавшись, решили помочь ребятам. Заодно разузнаем побольше о
+          месте, куда мы попали, и о том, как отсюда выбраться.
         </p>
 
-        <div class="signature">— Зираэлла Ларус, та, что идёт по следу луны ❦</div>
+        <div class="signature">
+          — Зираэлла Ларус, та, что идёт по следу луны ❦
+        </div>
       </article>
 
       <footer>
-        «Серебряный дракон стал частым гостем моих снов.<br />
-        Я всегда думала, что он существует, и очень надеялась на встречу.»
-        <br /><br />
-        <a
-          href="../"
-          style="color: var(--gold); text-decoration: none; font-size: 18px"
-          >← Вернуться к меню</a
-        >
+        <div class="closing-quote">
+          «Серебряный дракон стал частым гостем моих снов.<br />
+          Я всегда думала, что он существует, и очень надеялась на встречу.»
+        </div>
+        <a href="../">← Вернуться к меню</a>
       </footer>
     </div>
   </body>
