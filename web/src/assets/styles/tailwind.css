@@ -30,9 +30,10 @@
   }
 
   .diary-page-ziraela {
-    @apply mx-auto px-8 py-12;
-    background: linear-gradient(180deg, #050a08 0%, #112420 100%);
-    color: #f3ead0;
+    @apply mx-auto px-4 py-12;
+    position: relative;
+    z-index: 1;
+    max-width: 820px;
   }
 
   .diary-page-minimal {
