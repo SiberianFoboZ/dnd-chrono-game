@@ -5,6 +5,14 @@ on:
     branches: [master]
   workflow_dispatch:
 
+# Node 20 на раннерах депрекейтнут (по умолчанию уже Node 24 с 16 июня 2026).
+# Эта переменная заставляет ВСЕ JS-actions в workflow работать на Node 24 —
+# иначе часть из них может по-прежнему цепляться за Node 20 из образа раннера
+# и в GitHub Actions UI висит deprecation-варнинг.
+# См. https://github.blog/changelog/2025-09-19-deprecation-of-node-20-on-github-actions-runners/
+env:
+  FORCE_JAVASCRIPT_ACTIONS_TO_NODE24: "true"
+
 permissions:
   contents: read
   pages: write
