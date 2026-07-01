@@ -1,13 +1,16 @@
 <script setup lang="ts">
 import { RouterLink } from 'vue-router'
+import DiaryLayout from '@/components/DiaryLayout.vue'
 </script>
 
 <template>
-  <main class="placeholder">
-    <p class="title">Малбрин</p>
-    <p class="message">Эти страницы ещё не написаны...</p>
-    <RouterLink to="/" class="back">← Вернуться к меню</RouterLink>
-  </main>
+  <DiaryLayout theme-key="malbrin">
+    <main class="placeholder">
+      <p class="title">Малбрин</p>
+      <p class="message">Эти страницы ещё не написаны...</p>
+      <RouterLink to="/" class="back">← Вернуться к меню</RouterLink>
+    </main>
+  </DiaryLayout>
 </template>
 
 <style scoped>
@@ -19,15 +22,15 @@ import { RouterLink } from 'vue-router'
 }
 
 .title {
-  font-size: 2rem;
+  font-size: 2.2rem;
   margin: 0 0 1rem;
 }
 
 .message {
-  font-size: 1.1rem;
-  color: #4a4a4a;
+  font-size: 1.15rem;
   font-style: italic;
   margin-bottom: 3rem;
+  opacity: 0.8;
 }
 
 .back {
