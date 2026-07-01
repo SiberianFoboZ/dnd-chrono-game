@@ -1,0 +1,64 @@
+/* Поворот страницы (эффект рукописи) */
+.diary-page-rotate {
+  transform: rotate(var(--rot, 0deg));
+}
+
+/* Параграф с книжным отступом первой строки */
+.text-indent-paragraph {
+  text-indent: 1.5em;
+  text-align: justify;
+}
+
+/* Буквица (drop-cap) */
+.drop-cap::first-letter {
+  font-size: 3.2em;
+  float: left;
+  line-height: 0.9;
+  color: var(--drop-cap, #2c2c2c);
+  padding: 0 0.15em 0 0;
+  font-weight: 600;
+}
+
+/* Изображения с обтеканием текстом */
+.diary-image {
+  position: relative;
+  z-index: 1;
+  max-width: 100%;
+  margin: 0.5em 0;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.15);
+}
+
+.diary-image.left {
+  float: left;
+  margin: 0 1em 1em 0;
+  transform: rotate(var(--rot, -0.8deg));
+}
+
+.diary-image.right {
+  float: right;
+  margin: 0 0 1em 1em;
+  transform: rotate(var(--rot, 0.8deg));
+}
+
+/* Подпись под изображением */
+.image-caption {
+  font-style: italic;
+  font-size: 0.9em;
+  opacity: 0.8;
+  text-align: center;
+  margin: 0.5em 0 1.5em;
+  clear: both;
+}
+
+/* Зачёркнутая ошибка */
+.typo {
+  text-decoration: line-through;
+  opacity: 0.6;
+}
+
+/* Зачёркнутая мысль */
+.strikethrough {
+  text-decoration: line-through;
+  opacity: 0.5;
+  font-style: italic;
+}
