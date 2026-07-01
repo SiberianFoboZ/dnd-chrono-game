@@ -2,6 +2,14 @@ import type { Config } from 'tailwindcss'
 
 export default {
   content: ['./index.html', './src/**/*.{vue,js,ts,jsx,tsx}'],
+  safelist: [
+    // Динамические классы DiaryLayout (через :class="pageClass")
+    'diary-page-artur',
+    'diary-page-aza',
+    'diary-page-el',
+    'diary-page-ziraela',
+    'diary-page-minimal',
+  ],
   theme: {
     extend: {
       colors: {

@@ -47,5 +47,9 @@ const pageClass = computed(() => {
 .diary-layout__main {
   position: relative;
   z-index: 1;
+  margin-left: auto;
+  margin-right: auto;
+  max-width: 794px; /* A4 safety net — на случай если Tailwind класс diary-page-* не подхватится */
+  width: 100%;
 }
 </style>
