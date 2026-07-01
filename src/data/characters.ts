@@ -1,0 +1,58 @@
+import type { Character } from '@/types/character'
+
+export const characters: Character[] = [
+  {
+    id: 'artur',
+    name: 'Артур Могрейн',
+    slug: 'artur',
+    title: 'Паладин, бывший каратель',
+    role: 'paladin',
+    status: 'active',
+    themeKey: 'artur',
+  },
+  {
+    id: 'aza',
+    name: 'Аза',
+    slug: 'aza',
+    title: 'Бард, цыганка, рассказчица',
+    role: 'bard',
+    status: 'active',
+    themeKey: 'aza',
+  },
+  {
+    id: 'el',
+    name: 'Эл',
+    slug: 'el',
+    title: 'Дроу, покинувшая подземье',
+    role: 'drow',
+    status: 'active',
+    themeKey: 'el',
+  },
+  {
+    id: 'ziraela',
+    name: 'Зираэлла Ларус',
+    slug: 'ziraela',
+    title: 'Высший эльф, охотница',
+    role: 'high-elf',
+    status: 'active',
+    themeKey: 'ziraela',
+  },
+  {
+    id: 'barandur',
+    name: 'Барандур',
+    slug: 'barandur',
+    title: 'Дварф',
+    role: 'dwarf',
+    status: 'wip',
+    themeKey: 'barandur',
+  },
+  {
+    id: 'malbrin',
+    name: 'Малбрин',
+    slug: 'malbrin',
+    title: 'Дроу (светлая)',
+    role: 'drow',
+    status: 'wip',
+    themeKey: 'malbrin',
+  },
+]

@@ -1,0 +1,183 @@
+/* ============================================================
+   Общие эффекты дневников (переиспользуются во всех персонажах)
+   ============================================================ */
+
+/* Поворот страницы (эффект рукописи) */
+.diary-page-rotate {
+  transform: rotate(var(--rot, 0deg));
+}
+
+/* Параграф с книжным отступом первой строки */
+.text-indent-paragraph {
+  text-indent: 1.5em;
+  text-align: justify;
+}
+
+/* Параграф без отступа */
+.no-indent {
+  text-indent: 0;
+}
+
+/* Буквица (drop-cap) */
+.drop-cap::first-letter {
+  font-size: 3.2em;
+  float: left;
+  line-height: 0.9;
+  color: var(--drop-cap, #2c2c2c);
+  padding: 0 0.15em 0 0;
+  font-weight: 600;
+}
+
+/* Изображения с обтеканием текстом */
+.diary-image {
+  position: relative;
+  z-index: 1;
+  max-width: 100%;
+  margin: 0.5em 0;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.15);
+}
+
+.diary-image.left {
+  float: left;
+  margin: 0 1em 1em 0;
+  transform: rotate(var(--rot, -0.8deg));
+}
+
+.diary-image.right {
+  float: right;
+  margin: 0 0 1em 1em;
+  transform: rotate(var(--rot, 0.8deg));
+}
+
+/* Подпись под изображением */
+.image-caption {
+  font-style: italic;
+  font-size: 0.9em;
+  opacity: 0.8;
+  text-align: center;
+  margin: 0.5em 0 1.5em;
+  clear: both;
+}
+
+/* Зачёркнутая ошибка */
+.typo {
+  text-decoration: line-through;
+  opacity: 0.6;
+}
+
+/* Зачёркнутая мысль */
+.strikethrough {
+  text-decoration: line-through;
+  opacity: 0.5;
+  font-style: italic;
+}
+
+/* Зачёркнутое красным (выделение) */
+.strikethrough-red {
+  text-decoration: line-through;
+  text-decoration-color: #aa3333;
+  color: #aa5555;
+}
+
+/* Заметка на полях */
+.margin-note {
+  margin: 0.5em 0 0.5em 2em;
+  padding: 0.3em 0.8em;
+  border-left: 2px solid #8a7a6a;
+  font-size: 0.9em;
+  color: #6a5a4a;
+  font-style: italic;
+  background: rgba(200, 190, 170, 0.15);
+  transform: rotate(-0.5deg);
+}
+
+.margin-note::before {
+  content: "※ ";
+  color: #8a7a6a;
+}
+
+/* Боковая заметка (плавающая справа) */
+.sidebar-note {
+  float: right;
+  width: 30%;
+  margin: 0.3em 0 0.3em 0.8em;
+  padding: 0.4em 0.7em;
+  font-size: 0.82em;
+  color: #6a5a4a;
+  border: 1px dashed #c8b898;
+  background: rgba(220, 210, 190, 0.3);
+  transform: rotate(1deg);
+  shape-margin: 0.3em;
+}
+
+/* Крик/выделение */
+.shout {
+  font-size: 1.3em;
+  font-weight: bold;
+  letter-spacing: 1px;
+}
+
+/* Волнистое подчёркивание */
+.underline-wavy {
+  text-decoration: underline wavy #aa6633;
+  text-underline-offset: 2px;
+}
+
+/* Вставка над словом */
+.insert-above {
+  font-size: 0.8em;
+  color: #2a6a3a;
+  vertical-align: super;
+  position: relative;
+  top: -0.1em;
+}
+
+/* Раздел-разрыв (центрированный ряд символов) */
+.section-break {
+  text-align: center;
+  margin: 1.5em 0;
+  color: #b8a88a;
+  font-size: 1.2em;
+  letter-spacing: 0.5em;
+}
+
+/* Глава-разрыв */
+.chapter-break {
+  text-align: center;
+  margin: 2em 0 1.5em;
+}
+.chapter-break hr {
+  border: none;
+  border-top: 1px solid #b8a88a;
+  margin: 0.5em 3em;
+}
+.chapter-label {
+  font-size: 9pt;
+  color: #a09080;
+  letter-spacing: 3px;
+  text-transform: uppercase;
+}
+
+/* Рамка пророчества */
+.prophecy-box {
+  margin: 1em 0;
+  padding: 0.8em;
+  border: 1px dashed #c8b898;
+  font-size: 0.95em;
+}
+
+/* Рамка сундучка (gem box) */
+.gem-box {
+  margin: 1em 0;
+  padding: 0.5em;
+  font-size: 0.95em;
+}
+.gem-red {
+  border-left: 2px solid #cc3333;
+}
+.gem-green {
+  border-left: 2px solid #339933;
+}
+.gem-blue {
+  border-left: 2px solid #3366cc;
+}
