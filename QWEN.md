@@ -2,157 +2,263 @@
 
 ## Обзор проекта
 
-Статический HTML-сайт — **летопись D&D-кампании** в виде дневников шести персонажей отряда, входящего в туман Баровии. Каждый персонаж ведёт свой собственный дневник с уникальным стилем оформления, отражающим его характер и сеттинг. Главная страница `index.html` служит меню-указателем с актуальным статусом каждого дневника.
+**Летопись D&D-кампании** в виде дневников шести персонажей отряда, входящего в туман Баровии. Каждый персонаж ведёт свой собственный дневник с уникальным визуальным стилем (шрифт, палитра, орнаменты, эффекты бумаги).
 
-- **Тип:** Контентный (творческий писательский проект). Чистый HTML/CSS, без сборки и зависимостей.
+- **Тип:** Контентный (творческий писательский проект). **Vue 3 + Vite + TypeScript + Tailwind CSS**, деплой как статика на GitHub Pages.
 - **Язык:** Русский (`<html lang="ru">` на всех страницах, включая имена файлов, комментарии в CSS и текст).
 - **Хостинг:** **GitHub Pages** (репозиторий `SiberianFoboZ/dnd-chrono-game`, ветка `master`).
 - **Repo URL:** `github.com:SiberianFoboZ/dnd-chrono-game.git`
 - **Путь в файловой системе:** `C:\Users\vk241\.github\dnd-chrono-game\`
 
+## Состояние миграции (Vue 3)
+
+Проект мигрирует с inline-HTML (по одному `.html` на персонажа) на Vue SPA. План зафиксирован в `MIGRATION_PLAN_V1.MD`.
+
+| Фаза | Содержание | Статус |
+|---|---|---|
+| 1 | Инициализация `web/` (Vite + Vue + TS + Tailwind) | ✅ |
+| 2 | Базовая инфраструктура (router, types, characters) | ✅ |
+| 3 | Дизайн-система (themes, `useTheme`, CSS-эффекты) | ✅ |
+| 4 | Переиспользуемые компоненты (DiaryLayout, Chapter, Paragraph, Image, Backgrounds) | ✅ |
+| 5.1 | Миграция Артура | ✅ |
+| 5.2 | Миграция Азы | ✅ |
+| 5.3 | Миграция Эла | 🟡 заглушка (финал отдельно) |
+| 5.4 | Миграция Зираэллы | ✅ |
+| 5.5 | Минимальные заглушки Барандура + Малбрина | ✅ |
+| 5.6 | HomePage (главное меню) | ✅ |
+| 7 | GitHub Actions + 404.html | ✅ |
+| 8 | Удаление старой статики + перенос `web/*` в корень + push | ⏸ отложено |
+
+**Переходный период:** старая статика в корне (`Artur/`, `Aza/`, `El/`, `Ziraela/`, `Barandur/`, `Malbrin/`, `index.html`) продолжает обслуживаться gh-pages до завершения Фазы 8. Новый билд в `web/dist/` существует параллельно.
+
 ## Структура каталога
 
 ```
 C:\Users\vk241\.github\dnd-chrono-game\
-├── index.html              # Главное меню со ссылками на дневники
-├── QWEN.md                 # Этот файл — документация проекта
-├── .gitignore              # Игнорирует .qwen/, *.bak, .DS_Store, Thumbs.db
-├── Artur/                  # Артур Могрейн — Паладин
-│   ├── index.html          # 1213 строк, формат A5, печатный
-│   └── 01_деревня.jpeg … 14_две_могилы.jpeg   # 14 иллюстраций
-├── Aza/                    # Аза (Азалия Корвара / Пепельная Роза) — Бард
-│   ├── index.html          # ~965 строк, единый непрерывный лист
-│   ├── GreatVibes-Regular.ttf
-│   ├── ofont_ru_Corinthia.ttf (резервный, не используется в активном CSS)
-│   ├── placeholder.svg
-│   └── files/              # 16 изображений (1.jpg … 16.jpg)
-├── El/                     # Эл — Дроу
-│   ├── index.html          # 524 строки, дизайн старой книги
-│   ├── ofont_ru_Comforter.ttf
-│   └── hdphoto*.wdp, image1-63.*   # ~63 фотоматериала
-├── Barandur/               # Заглушка (placeholder)
+├── index.html              # Главное меню (СТАРОЕ, прод пока на нём)
+├── MIGRATION_PLAN_V1.MD    # План миграции (источник истины)
+├── QWEN.md                 # Этот файл
+├── .gitignore              # Игнорирует .qwen/, *.bak, web/{node_modules,dist}/
+│
+├── .github/
+│   └── workflows/
+│       └── deploy.yml      # GitHub Actions → Pages
+│
+│   ─────── Старая статика (до Фазы 8) ───────
+├── Artur/                  # Артур — Паладин (статический HTML)
+├── Aza/                    # Аза — Бард (статический HTML)
+├── El/                     # Эл — Дроу (статический HTML)
+├── Ziraela/                # Зираэлла — Высший эльф (статический HTML)
+├── Barandur/               # Заглушка
 ├── Malbrin/                # Заглушка
-└── Ziraela/                # Зираэлла Ларус — Высший эльф, охотница
-    ├── index.html          # ~935 строк, единый непрерывный лист, лесной дизайн
-    ├── Ira-Dvilyuk-Agretta-Hills-Cyrillic-Script.otf   # Шрифт Agretta
-    └── files/              # 4 изображения (1.png, 2.png, 3.jpeg, 4.png)
+│
+│   ─────── Новый Vue-проект (миграция) ───────
+└── web/                    # Vue 3 + Vite + TS + Tailwind
+    ├── package.json        # type: module, build генерирует 404.html
+    ├── package-lock.json
+    ├── vite.config.ts      # base: '/dnd-chrono-game/', outDir: dist
+    ├── tailwind.config.ts  # Палитры для 6 персонажей
+    ├── postcss.config.js   # Tailwind + Autoprefixer
+    ├── tsconfig.json       # References → app + node
+    ├── tsconfig.app.json   # strict, paths @/* → src/*
+    ├── tsconfig.node.json
+    ├── index.html          # Vite-шаблон (<div id="app"></div>)
+    │
+    ├── scripts/
+    │   └── copy-404.cjs    # Постбилд: dist/index.html → dist/404.html
+    │
+    ├── public/             # Статика, копируется 1:1 в dist/
+    │   ├── fonts/          # 4 шрифта (GreatVibes, Comforter, Agretta, ofont_ru_Corinthia)
+    │   └── images/
+    │       ├── artur/      # 14 jpeg (русские имена с подчёркиваниями)
+    │       ├── aza/        # 17 jpg (1.jpg … 16.jpg + UUID-артефакт)
+    │       ├── el/         # 63 файла (image1.jpeg … image63.jpeg)
+    │       └── ziraela/    # 4 файла (1.png, 2.png, 3.jpeg, 4.png)
+    │
+    └── src/
+        ├── main.ts         # createApp + router + mount
+        ├── App.vue         # <router-view />
+        │
+        ├── router/index.ts # 7 маршрутов + redirect 404
+        │
+        ├── types/
+        │   └── character.ts  # Character, Status, ThemeKey
+        ├── data/
+        │   └── characters.ts # Реестр 6 персонажей
+        │
+        ├── themes/
+        │   ├── index.ts       # Theme type + getTheme(slug)
+        │   ├── artur.ts       # parchment, "Ink Free..."
+        │   ├── aza.ts         # gothic, "Corinthia"
+        │   ├── el.ts          # book, "Comforter"
+        │   ├── ziraela.ts     # forest, "Agretta"
+        │   ├── barandur.ts    # minimal
+        │   └── malbrin.ts     # minimal
+        │
+        ├── composables/
+        │   └── useTheme.ts    # CSS-переменные на <html>: --font-display, --drop-cap, --color-*
+        │
+        ├── components/
+        │   ├── DiaryLayout.vue     # themeKey + Background-компонент + слот
+        │   ├── DiaryChapter.vue    # <h2> + ::before/::after орнаменты
+        │   ├── DiaryParagraph.vue  # text-indent + drop-cap
+        │   ├── DiaryImage.vue      # img + caption (left/right/none)
+        │   ├── ImageCaption.vue    # <p class="image-caption">
+        │   ├── DiaryFooter.vue     # «Запись обрывается...»
+        │   └── backgrounds/
+        │       ├── ParchmentBackground.vue  # светлая бумага
+        │       ├── GothicBackground.vue     # тёмная готика + звёздная пыль
+        │       ├── BookBackground.vue       # старая книга + пожелтение
+        │       ├── ForestBackground.vue     # лес + луна + звёзды
+        │       └── MinimalBackground.vue    # для заглушек
+        │
+        ├── pages/
+        │   ├── HomePage.vue       # Список из characters.ts + статусы + цитата
+        │   ├── ArturPage.vue      # 21 страница + 14 иллюстраций
+        │   ├── AzaPage.vue        # Один <article class="entry"> с rotate(-0.15deg) + SVG torn-edge
+        │   ├── ElPage.vue         # Заглушка «мигрируется»
+        │   ├── ZiraelaPage.vue    # 9 <article class="entry"> + forest-silhouette SVG
+        │   ├── BarandurPage.vue   # «Эти страницы ещё не написаны...»
+        │   └── MalbrinPage.vue    # «Эти страницы ещё не написаны...»
+        │
+        └── assets/styles/
+            ├── tailwind.css       # @tailwind + @layer components (.diary-page-artur/-aza/...)
+            ├── diary-effects.css  # .drop-cap, .diary-image.left/.right, .typo, .margin-note, ...
+            └── fonts.css          # @font-face Corinthia, Comforter, Agretta
 ```
 
 ## Персонажи и состояние дневников
 
-| Персонаж              | Класс / роль               | Статус        | Шрифт / тема |
-|-----------------------|----------------------------|---------------|--------------|
-| **Артур Могрейн**     | Паладин, бывший каратель   | ✅ Доступен   | `Ink Free / Segoe Print` — A5 печать, светлая бумага |
-| **Аза** (Пепельная Роза) | Бард, цыганка, рассказчица | ✅ Доступен | `Corinthia` — тёмная готика, единый непрерывный лист, 16 фото с обтеканием |
-| **Эл**                | Дроу, покинувшая подземье  | ✅ Доступен   | `Comforter` — дизайн старой книги, тёмный фон, пожелтевшие края |
-| **Барандур**          | Дварф                      | ⚪ В процессе | — (заглушка) |
-| **Малбрин**           | Дроу (светлая)             | ⚪ В процессе | — (заглушка) |
-| **Зираэлла Ларус**    | Высший эльф, охотница      | ✅ Доступен   | `Agretta Hills` — лесной дизайн, единый непрерывный лист, 4 фото с обтеканием |
+| Персонаж              | Класс / роль               | Статус        | Шрифт / тема (Vue) |
+|-----------------------|----------------------------|---------------|--------------------|
+| **Артур Могрейн**     | Паладин, бывший каратель   | ✅ мигрирован  | `artur` — `"Ink Free", "Segoe Print"...` · `parchment` · drop-cap `#2c2c2c` |
+| **Аза** (Пепельная Роза) | Бард, цыганка, рассказчица | ✅ мигрирован  | `aza` — `"Corinthia"` · `gothic` · drop-cap `#8b1e2b` · ♥ ♥ ♥ |
+| **Эл**                | Дроу, покинувшая подземье  | 🟡 заглушка  | `el` — `'Comforter'` · `book` · drop-cap `#2a1f14` |
+| **Барандур**          | Дварф                      | ✅ minimal    | `barandur` — `"Ink Free"...` · `minimal` |
+| **Малбрин**           | Дроу (светлая)             | ✅ minimal    | `malbrin` — `"Ink Free"...` · `minimal` |
+| **Зираэлла Ларус**    | Высший эльф, охотница      | ✅ мигрирован  | `ziraela` — `"Agretta"` · `forest` · drop-cap `#3a5e3a` · ❦ ✦ ❦ |
 
-Статусы отображаются в главном меню (`index.html`) — `.status.active` (● доступен, зелёный) для готовых, без класса (○ в процессе, серый) для заглушек.
+Источник истины: `web/src/data/characters.ts` (реестр) и `web/src/themes/*.ts` (темы).
 
-## Стилистические конвенции
+## Стилистические конвенции (Vue)
 
-Каждый дневник имеет уникальный стиль, отражающий характер персонажа:
+В Vue-проекте конвенции вынесены в:
 
-### Артур (`Artur/index.html`)
-- Шрифт: `"Ink Free", "Segoe Print", "Caveat", "Bad Script"` (рукописные)
-- Формат: **A5 print-ready** с правилами `@page`, `page-break-before`, `page-break-inside`
-- Палитра: светлая (`#f5f0e8` фон, `#2c2c2c` текст) — реалистичная старая бумага
-- Иллюстрации: `.diary-image` с рандомным `--rot`, обтекание текстом (`.left`, `.right`)
-- Подписи под изображениями: `.image-caption` (курсив)
-- Спецэффекты: `.typo` (зачёркнутые ошибки), `.strikethrough` (зачёркнутые мысли)
-- Ширина страницы: `14.8cm`
-- Каждая запись (`<article class="entry">`) — отдельная страница с собственным поворотом
+### CSS-переменные темы (устанавливаются `useTheme` на `<html>`)
+- `--font-display` — основной шрифт персонажа
+- `--drop-cap` — цвет буквицы
+- `--color-{paletteKey}` — цвета палитры (paper, ink, accent, gold, bg, moss, violet, …)
+- `--ornament-top`, `--ornament-bottom` — строки орнаментов (`♥ ♥ ♥`, `❦ ✦ ❦`, ``)
 
-### Аза (`Aza/index.html`)
-- Шрифт: **`"Corinthia"`** (из `GreatVibes-Regular.ttf`, семейство в CSS названо Corinthia)
-- Палитра: **тёмная готика** — фон `#0e0a0a`, бумага `#efe4d0`/`#d9c9a8`, акцент `#8b1e2b` (тёмно-бордовый), золото `#b89968`
-- Структура: **один непрерывный `<article class="entry">`** с лёгким поворотом `rotate(-0.15deg)` (вместо отдельных страниц)
-- Заголовки глав: `<h2>` с орнаментом `♥ ♥ ♥` сверху (через `::before` для не-первых глав) и `♥ ♥ ♥` снизу (через `::after`)
-- Буквица: `p:first-of-type::first-letter` — крупная, в цвет акцента
-- Звёздная пыль на фоне через `body::before` (radial-gradients)
-- Декор: `❦` (флёр-де-лис) как разделители в заголовке и подвале
-- **Иллюстрации:** 16 фото с обтеканием по паттерну **L L R R L L R R L L R R L L R R**:
-  - Класс `.diary-image` с `position: relative; z-index: 1` (важно — иначе псевдоэлементы `.entry::before/::after` закрывают картинку)
-  - Модификаторы `.left` (`float: left`, `--rot: -0.8deg`) и `.right` (`float: right`, `--rot: 0.8deg`)
+### Общие классы (в `assets/styles/diary-effects.css`)
+- `.text-indent-paragraph` — параграф с книжным отступом
+- `.drop-cap::first-letter` — буквица
+- `.diary-image` — изображение с `position: relative; z-index: 1` (важно — иначе перекроется фоном `.entry::before/::after`)
+- `.diary-image.left` / `.right` — обтекание с `--rot`
+- `.image-caption` — подпись
+- `.typo`, `.strikethrough`, `.strikethrough-red` — зачёркивания
+- `.margin-note`, `.sidebar-note` — заметки
+- `.shout`, `.underline-wavy`, `.insert-above` — эффекты текста
+- `.section-break`, `.chapter-break`, `.chapter-label` — разрывы
+- `.prophecy-box`, `.gem-box` (`.red/.green/.blue`) — рамки
 
-### Эл (`El/index.html`)
-- Шрифт: **`'Comforter'`** (из `ofont_ru_Comforter.ttf`)
-- Палитра: очень тёмный фон `#2a1f14`, старая бумага `#f4e8d0`
-- Структура: `.book-container` с эффектом объёмной старой книги (двойной box-shadow)
-- Текстура: повторяющиеся линии через `repeating-linear-gradient` (имитация волокон бумаги)
-- Пожелтение по краям через два `linear-gradient` в `.book-container::after`
-- Размер: `max-width: 1200px` (книжный разворот)
+### Tailwind `@layer components` (в `assets/styles/tailwind.css`)
+- `.diary-page-artur` — светлая бумага, max-width 14.8cm
+- `.diary-page-aza` — без фона (фон даёт GothicBackground), max-width 820px
+- `.diary-page-el` — тёмный фон, max-width 1200px
+- `.diary-page-ziraela` — без фона (фон даёт ForestBackground), max-width 820px
+- `.diary-page-minimal` — для заглушек Барандура/Малбрина
 
-### Зираэлла (`Ziraela/index.html`)
-- Шрифт: **`"Agretta"`** (из `Ira-Dvilyuk-Agretta-Hills-Cyrillic-Script.otf`)
-- Палитра: **лесная, лунная** — фон `#050a08 → #112420` (deep forest), пергамент `#f3ead0 / #e3d4ad`, лесной мох `#3a5e3a`, золото `#b89968`, серебро `#c2c7d4`, фиолетовый `#8a5cb6` (намёк на фиолетовые глаза)
-- Структура: **один непрерывный `<article class="entry">`** с `rotate(-0.25deg)`, чередующимся `0.25deg` и `-0.15deg` для разнообразия
-- Заголовки: `<h2>` в цвете лесного мха, орнамент `❦ ✦ ❦` снизу через `::after`
-- Звёздное небо / лунный свет на фоне через `body::before` (radial-gradients с золотыми, серебряными и фиолетовыми бликами)
-- Лунная дымка через `body::after` (radial-gradient в правом верхнем углу)
-- Буквица `p:first-of-type::first-letter` — крупная, цвет лесного мха
-- **Иллюстрации:** 4 фото с обтеканием по паттерну **L L R R**:
-  - Тот же класс `.diary-image` с `position: relative; z-index: 1`
-  - Золотая рамка `border: 1px solid rgba(184, 152, 85, 0.5)`
-- 9 разделов: Пролог. Корзинка у ели, Главы I–VIII
+### Соглашения по написанию Vue-страниц дневника
 
-### Заглушки (Barandur, Malbrin)
-- Единый минималистичный шаблон с фразой «Эти страницы ещё не написаны...»
-- Шрифт как у Артура, светлая палитра
-- Ссылка «← Вернуться к меню» с `href="../"`
-
-### Главное меню (`index.html`)
-- Шрифт `"Ink Free", "Segoe Print", ...` (как у Артура), светлая палитра `#f5f0e8`
-- Список `.diary-link` со статусом: `.status.active` (● доступен, зелёный) и обычный (○ в процессе, серый)
-- Цитата в подвале: «Запись обрывается. Продолжение следует, если я останусь жив.»
-
-## Соглашения по написанию дневников
-
-1. **HTML doctype:** `<!doctype html>` + `<html lang="ru">`.
-2. **Заголовок страницы (`<title>`):** «Дневник {Имя}» или полное имя персонажа с эпитетом.
-3. **Все стили — inline** в `<style>` теге (никаких внешних CSS-файлов).
-4. **Структура:** один `<article class="entry">` с вложенными `<h2>` для глав (паттерн «непрерывный лист»); допускаются отдельные `<article>` для печатных форматов (Артур).
-5. **Параграфы:** `text-align: justify`, `text-indent: 1.5em`.
-6. **Иллюстрации:** `<img class="diary-image left|right">` в `<character>/files/` с числовыми именами (`1.jpg`, `2.png`, …).
-7. **Изображения:** хранятся локально (не использовать внешние CDN — GitHub Pages не любит абсолютные ссылки на чужие домены).
-8. **Имена файлов изображений:** на русском с подчёркиваниями (`01_деревня.jpeg`, `image1.jpeg`) или просто числовые (`1.jpg`, `2.png`).
-9. **Шрифты:** кастомные `.ttf`/`.otf` кладутся рядом с `index.html`; объявление через `@font-face`. На GitHub Pages работают относительные пути.
-10. **Псевдоэлементы и обтекание:** если `.entry` имеет абсолютно позиционированные `::before`/`::after` (пятна, тени), то плавающие иллюстрации внутри ОБЯЗАНЫ иметь `position: relative; z-index: 1` — иначе их перекроет фоновая текстура листа.
-11. **Псевдоним хоста:** репозиторий находится в `C:\Users\vk241\.github\dnd-chrono-game` — это типичный путь для GitHub Pages.
+1. **`<template>` оборачивает контент в `<DiaryLayout theme-key="<slug>">`** — он подставляет фон и тему.
+2. **Все стили — `<style scoped>`** в `.vue`-файле (никаких внешних CSS-файлов на страницу).
+3. **Шрифты** подключены глобально через `assets/styles/fonts.css` (`@font-face`); семейство доступно по CSS-переменной `--font-display`.
+4. **Изображения:** `<img src="/images/<slug>/<file>">` (абсолютные пути от корня сайта).
+5. **Буквица:** `.entry p:first-of-type::first-letter` — крупная, цвет через `var(--drop-cap)`.
+6. **Drop-cap и псевдоэлементы:** иллюстрации внутри `.entry` ОБЯЗАНЫ иметь `position: relative; z-index: 1` (см. `assets/styles/diary-effects.css`), иначе их перекроет фоновая текстура листа.
+7. **Имена файлов изображений:** на русском с подчёркиваниями (`01_деревня.jpeg`) или просто числовые (`1.jpg`, `2.png`).
+8. **Параграфы:** `text-align: justify`, `text-indent: 1.5em`.
+9. **Языковая конвенция:** контент полностью на русском. Не переводить без явного запроса.
 
 ## Команды для запуска
 
-Это **чисто статический проект без сборки**. GitHub Pages раздаёт его автоматически из `master`. Для локального просмотра:
+### Локальная разработка
 
 ```bash
-# Вариант 1: открыть index.html напрямую
-start index.html           # Windows
-open index.html            # macOS
-
-# Вариант 2: локальный HTTP-сервер (для корректных путей к шрифтам/изображениям)
-python -m http.server 8000
-# открыть http://localhost:8000
+cd web
+npm install          # один раз (или npm ci после обновления lock)
+npm run dev          # запускает Vite dev-сервер на http://localhost:5173
 ```
 
-**Деплой:** push в `master` → GitHub Pages автоматически обновит сайт.
+Пути к шрифтам/изображениям работают корректно, потому что Vite резолвит `/fonts/*` и `/images/*` из `public/`.
+
+### Сборка production-бандла
+
+```bash
+cd web
+npm run build        # vue-tsc -b && vite build && node scripts/copy-404.cjs
+```
+
+Результат:
+- `web/dist/index.html` — точка входа SPA
+- `web/dist/404.html` — копия для GitHub Pages SPA fallback (history mode)
+- `web/dist/assets/*.{js,css}` — lazy-loaded чанки страниц
+- `web/dist/fonts/`, `web/dist/images/` — статика из `public/`
+
+### Локальный preview собранного билда
+
+```bash
+cd web
+npm run preview      # локальный сервер для dist/
+```
+
+### Тип-чек без сборки
+
+```bash
+cd web
+npm run type-check   # vue-tsc --noEmit
+```
+
 **Тестирование:** отсутствует (проект контентный).
-**Сборка:** отсутствует.
 **Линтеры:** не используются.
+
+## Деплой
+
+### Текущий способ — GitHub Actions
+
+`.github/workflows/deploy.yml`:
+1. Триггер: `push` в `master` или `workflow_dispatch`.
+2. `actions/setup-node@v4` (Node 20) → `npm ci` в `web/` → `npm run build`.
+3. `actions/upload-pages-artifact@v3` загружает `web/dist/` как артефакт.
+4. `actions/deploy-pages@v4` деплоит артефакт на GitHub Pages (GitHub-native, не требует ветки `gh-pages`).
+
+**Требования к репозиторию** (настраивается один раз через GitHub UI):
+- Settings → Pages → Source: **GitHub Actions** (не branch).
+- Settings → Actions → General → Workflow permissions: **Read and write permissions** + **Allow GitHub Actions to create and approve pull requests**.
+
+### Сайт
+
+`https://siberianfoboz.github.io/dnd-chrono-game/`
 
 ## Рабочий процесс с git
 
-- Сообщения коммитов — на русском, краткие, формат «{Объект}: {действие}».
 - Ветка: `master`.
 - Remote: `origin` → `github.com:SiberianFoboZ/dnd-chrono-game.git`.
+- Сообщения коммитов — на русском, формат «{Объект}: {действие}» (например, `artur: перенос в Vue-страницу и theme`).
+- **НЕ коммитить** `web/dist/` и `web/node_modules/` (в `.gitignore` внутри `web/`).
+- **НЕ коммитить** рабочий прогресс в старых файлах (`Aza/index.html`, `Aza/new_text.txt`) без явного запроса.
+- **Push:** по явному запросу пользователя. Никогда не пушить автоматически.
 
 ## Заметки и ограничения
 
-- **Длина файлов:** дневники большие (Артур — 1213 строк, Аза — ~965, Зираэлла — ~935). При редактировании использовать `offset`/`limit` в read_file и точечные правки через edit.
-- **Шрифты:** все `.ttf`/`.otf` коммитятся в репозиторий (на GitHub Pages нет CDN; относительные пути `url("file.ttf")` работают).
-- **Файлы `hdphoto*.wdp` в El:** формат Windows HD Photo, могут быть сырыми заготовками для конвертации в `.jpeg`/`.png`. Не все они задействованы в `index.html`. Размер велик — рассмотреть удаление, если не нужны.
-- **Git-ignored:** каталог `.qwen/` (рабочая область Qwen Code), `*.bak`.
-- **Языковая конвенция:** контент полностью на русском, включая имена файлов и комментарии в CSS. Не переводить без явного запроса.
-- **Связь персонажей:** Артур и Аза встретились первыми. Эл, Барандур, Малбрин и Зираэлла — часть того же отряда. В дневниках упоминаются друг друга (Эл упоминает Зираэллу, Аза упоминает Артура и Малбрин и т.д.).
-- **Извлечение иллюстраций из .docx:** при работе с docx-исходниками использовать skill `extract-docx`. Изображения хранятся в `word/media/` внутри docx. Извлекать в `<character>/files/` с числовыми именами.
+- **Vue 3.5 + TypeScript strict** — код в `web/src/**` типизирован; `vue-tsc -b` запускается на каждом билде.
+- **Vite 5** с `base: '/dnd-chrono-game/'` — все ассеты подставляются с префиксом репозитория.
+- **Vue Router history mode** + `404.html` fallback — refresh на `/artur`, `/aza`, … корректно работает на GitHub Pages.
+- **Шрифты:** все `.ttf`/`.otf` лежат в `web/public/fonts/`; `ofont_ru_Corinthia.ttf` — резервный (не подключается в активном CSS, но скопирован для архива).
+- **Изображения:** все скопированы из старых `<character>/files/` (или из корня для Артура/Эла) в `web/public/images/<slug>/`. Исходники в корне не тронуты до Фазы 8.
+- **`hdphoto*.wdp` в El** — формат Windows HD Photo, могут быть сырыми заготовками для конвертации. Не задействованы в `index.html`. Размер велик — рассмотреть удаление, если не нужны.
+- **UUID-файл `Aza/files/2DD617AE-5435-...jpg`** — случ. артефакт, скопирован в `web/public/images/aza/` как есть.
+- **Git-ignored:** `.qwen/` (рабочая область Qwen Code), `*.bak`, `web/node_modules/`, `web/dist/`, `*.tsbuildinfo`.
+- **Связь персонажей:** Артур и Аза встретились первыми. Эл, Барандур, Малбрин и Зираэлла — часть того же отряда. В дневниках упоминаются друг друга.
+- **Извлечение иллюстраций из .docx:** skill `extract-docx`. Изображения хранятся в `word/media/` внутри docx. Извлекать в `<character>/files/` с числовыми именами.
