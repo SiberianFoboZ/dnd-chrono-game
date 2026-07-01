@@ -16,9 +16,10 @@
   }
 
   .diary-page-aza {
-    @apply mx-auto px-8 py-12;
-    background-color: #0e0a0a;
-    color: #efe4d0;
+    @apply mx-auto px-4 py-12;
+    position: relative;
+    z-index: 1;
+    max-width: 820px;
   }
 
   .diary-page-el {
