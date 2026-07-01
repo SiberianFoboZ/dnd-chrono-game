@@ -1,5 +1,7 @@
 <script setup lang="ts">
 import { RouterLink } from 'vue-router'
+import DiaryLayout from '@/components/DiaryLayout.vue'
+import DiaryFooter from '@/components/DiaryFooter.vue'
 import { characters } from '@/data/characters'
 
 const statusLabel = (status: 'active' | 'wip'): string =>
@@ -7,26 +9,26 @@ const statusLabel = (status: 'active' | 'wip'): string =>
 </script>
 
 <template>
-  <main class="home">
-    <h1>Хроники отряда</h1>
-    <p class="lead">Летопись шести путников, вошедших в туман Баровии.</p>
+  <DiaryLayout theme-key="artur">
+    <main class="home">
+      <h1>Хроники отряда</h1>
+      <p class="lead">Летопись шести путников, вошедших в туман Баровии.</p>
 
-    <ul class="diary-list">
-      <li v-for="c in characters" :key="c.id">
-        <RouterLink :to="`/${c.slug}`" class="diary-link">
-          <span class="name">{{ c.name }}</span>
-          <span class="role">{{ c.title }}</span>
-          <span class="status" :class="{ active: c.status === 'active' }">
-            {{ statusLabel(c.status) }}
-          </span>
-        </RouterLink>
-      </li>
-    </ul>
+      <ul class="diary-list">
+        <li v-for="c in characters" :key="c.id">
+          <RouterLink :to="`/${c.slug}`" class="diary-link">
+            <span class="name">{{ c.name }}</span>
+            <span class="role">{{ c.title }}</span>
+            <span class="status" :class="{ active: c.status === 'active' }">
+              {{ statusLabel(c.status) }}
+            </span>
+          </RouterLink>
+        </li>
+      </ul>
 
-    <footer class="quote">
-      «Запись обрывается. Продолжение следует, если я останусь жив.»
-    </footer>
-  </main>
+      <DiaryFooter />
+    </main>
+  </DiaryLayout>
 </template>
 
 <style scoped>
@@ -39,12 +41,14 @@ const statusLabel = (status: 'active' | 'wip'): string =>
 h1 {
   font-size: 2.4rem;
   margin: 0 0 0.5rem;
+  color: var(--color-ink, #2c2c2c);
 }
 
 .lead {
   font-style: italic;
-  color: #4a4a4a;
+  color: var(--color-accent, #5a4a2c);
   margin-bottom: 3rem;
+  opacity: 0.85;
 }
 
 .diary-list {
@@ -62,7 +66,7 @@ h1 {
   gap: 0.25rem;
   padding: 1rem 1.25rem;
   background: #fff8eb;
-  border: 1px solid #d9c9a8;
+  border: 1px solid var(--color-accent, #d9c9a8);
   border-radius: 4px;
   text-decoration: none;
   color: inherit;
@@ -71,17 +75,18 @@ h1 {
 
 .diary-link:hover {
   transform: translateY(-1px);
-  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.15);
 }
 
 .name {
   font-size: 1.25rem;
   font-weight: 600;
+  color: var(--color-ink, #2c2c2c);
 }
 
 .role {
   font-size: 0.95rem;
-  color: #4a4a4a;
+  color: #5a5a5a;
   font-style: italic;
 }
 
@@ -93,13 +98,5 @@ h1 {
 
 .status.active {
   color: #2d7a3f;
-}
-
-.quote {
-  text-align: center;
-  font-style: italic;
-  color: #666;
-  padding-top: 2rem;
-  border-top: 1px solid #d9c9a8;
 }
 </style>
