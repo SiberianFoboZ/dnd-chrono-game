@@ -1,4 +1,5 @@
 <script setup lang="ts">
+import { RouterLink } from 'vue-router'
 import DiaryLayout from '@/components/DiaryLayout.vue'
 </script>
 
@@ -724,11 +725,7 @@ import DiaryLayout from '@/components/DiaryLayout.vue'
         И я намерена гореть так, чтобы этот свет увидели все — и запомнили
         навсегда.»
         <br /><br />
-        <a
-          href="../"
-          style="color: var(--color-gold); text-decoration: none; font-size: 18px"
-          >← Вернуться к меню</a
-        >
+        <RouterLink to="/" class="back">← Вернуться к меню</RouterLink>
       </footer>
     </article>
   </DiaryLayout>
@@ -938,6 +935,18 @@ footer::before {
   color: var(--color-accent);
   margin-bottom: 20px;
   letter-spacing: 15px;
+}
+
+/* === Ссылка назад === */
+.back {
+  display: inline-block;
+  color: var(--color-gold);
+  text-decoration: none;
+  font-size: 18px;
+  font-weight: 500;
+}
+.back:hover {
+  text-decoration: underline;
 }
 
 /* === Адаптив === */

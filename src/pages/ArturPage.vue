@@ -1,4 +1,5 @@
 <script setup lang="ts">
+import { RouterLink } from 'vue-router'
 import DiaryLayout from '@/components/DiaryLayout.vue'
 </script>
 
@@ -1011,6 +1012,8 @@ import DiaryLayout from '@/components/DiaryLayout.vue'
       </div>
     </div>
     </article>
+
+    <RouterLink to="/" class="back">← Вернуться к меню</RouterLink>
   </DiaryLayout>
 </template>
 
@@ -1091,6 +1094,19 @@ p {
     margin: 1em auto !important;
     display: block;
   }
+}
+
+/* === Ссылка назад === */
+.back {
+  display: block;
+  text-align: center;
+  margin: 2rem auto;
+  color: var(--color-accent, #5a4a2c);
+  text-decoration: none;
+  font-weight: 500;
+}
+.back:hover {
+  text-decoration: underline;
 }
 
 /* Печать A5 */
