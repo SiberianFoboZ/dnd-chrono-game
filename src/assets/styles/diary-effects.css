@@ -65,11 +65,12 @@
   opacity: 0.6;
 }
 
-/* Зачёркнутая мысль */
+/* Зачёркнутая мысль (стиль Артура) */
 .strikethrough {
   text-decoration: line-through;
   opacity: 0.5;
-  font-style: italic;
+  font-family: "Ink Free", "Segoe Print", "Caveat", "Bad Script", cursive;
+  color: #2c2c2c;
 }
 
 /* Зачёркнутое красным (выделение) */
@@ -123,10 +124,11 @@
   text-underline-offset: 2px;
 }
 
-/* Вставка над словом */
+/* Вставка над словом (стиль Азы) */
 .insert-above {
+  font-family: "Corinthia", "Great Vibes", cursive;
+  color: #991007;
   font-size: 0.8em;
-  color: #2a6a3a;
   vertical-align: super;
   position: relative;
   top: -0.1em;
