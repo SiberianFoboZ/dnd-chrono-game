@@ -1,5 +1,9 @@
 import type { Character } from '@/types/character'
 
+export const HIDDEN_SLUGS: readonly string[] = ['el', 'ziraela', 'barandur']
+export const SECRET_CODE = 'barovia'
+export const STORAGE_KEY = 'dnd-chrono:hidden-unlocked'
+
 export const characters: Character[] = [
   {
     id: 'artur',
