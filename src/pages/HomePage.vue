@@ -17,7 +17,6 @@ const hiddenChars = computed(() =>
 
 const unlocked = ref(false)
 const typedBuffer = ref('')
-const showHint = ref(false)
 
 function persist(value: boolean) {
   try {
@@ -110,19 +109,6 @@ onUnmounted(() => {
           </li>
         </ul>
       </section>
-
-      <button
-        v-else
-        type="button"
-        class="lock-hint"
-        :aria-expanded="unlocked"
-        @click="showHint = !showHint"
-      >
-        [ запечатано ] скрытые страницы
-      </button>
-      <p v-if="showHint && !unlocked" class="hint-text">
-        Введите на клавиатуре слово «barovia», чтобы открыть их.
-      </p>
 
       <DiaryFooter />
     </main>
@@ -244,32 +230,6 @@ h2 {
 
 .lock-toggle:hover {
   background: rgba(138, 122, 90, 0.1);
-}
-
-.lock-hint {
-  display: block;
-  margin: 0 auto 3rem;
-  background: transparent;
-  border: none;
-  color: #888;
-  font-size: 0.85rem;
-  font-style: italic;
-  cursor: pointer;
-  font-family: inherit;
-  padding: 0.5rem 1rem;
-}
-
-.lock-hint:hover {
-  color: var(--color-ink, #2c2c2c);
-}
-
-.hint-text {
-  text-align: center;
-  font-size: 0.85rem;
-  color: #8a7a5a;
-  font-style: italic;
-  margin: -2rem 0 3rem;
-  animation: fade-in 0.3s ease-out;
 }
 
 @keyframes fade-in {
