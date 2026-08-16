@@ -24,3 +24,9 @@ dist/
 .env
 .env.local
 .env.*.local
+
+# Markdown — документация ведётся локально, в репо не трекается
+*.md
+
+# Черновики рукописи
+new_add_text/
