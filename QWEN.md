@@ -1,157 +1,162 @@
 # QWEN.md — Хроники отряда (dnd-chrono-game)
 
+> **Актуально по состоянию на 2026-08-17.** Миграция на Vue 3 + Vite + TypeScript + Tailwind **завершена** (включая Фазу 8 — перенос в корень). Все Vite-файлы теперь в корне репозитория; каталог `web/` опустел до `node_modules/`.
+
 ## Обзор проекта
 
 **Летопись D&D-кампании** в виде дневников шести персонажей отряда, входящего в туман Баровии. Каждый персонаж ведёт свой собственный дневник с уникальным визуальным стилем (шрифт, палитра, орнаменты, эффекты бумаги).
 
-- **Тип:** Контентный (творческий писательский проект). **Vue 3 + Vite + TypeScript + Tailwind CSS**, деплой как статика на GitHub Pages.
+- **Тип:** Контентный (творческий писательский проект).
+- **Стек:** **Vue 3 + Vite + TypeScript (strict) + Tailwind v3.4**, деплой как статика на GitHub Pages.
 - **Язык:** Русский (`<html lang="ru">` на всех страницах, включая имена файлов, комментарии в CSS и текст).
 - **Хостинг:** **GitHub Pages** (репозиторий `SiberianFoboZ/dnd-chrono-game`, ветка `master`).
 - **Repo URL:** `github.com:SiberianFoboZ/dnd-chrono-game.git`
 - **Путь в файловой системе:** `C:\Users\vk241\.github\dnd-chrono-game\`
+- **Сайт:** `https://siberianfoboz.github.io/dnd-chrono-game/`
 
-## Состояние миграции (Vue 3)
+## Состояние миграции
 
-Проект мигрирует с inline-HTML (по одному `.html` на персонажа) на Vue SPA. План зафиксирован в `MIGRATION_PLAN_V1.MD`.
+Миграция с inline-HTML (по одному `.html` на персонажа) на Vue SPA **полностью завершена**. Детальный план — в `MIGRATION_PLAN_V1.MD` (источник истины по архитектурным решениям).
 
 | Фаза | Содержание | Статус |
 |---|---|---|
-| 1 | Инициализация `web/` (Vite + Vue + TS + Tailwind) | ✅ |
+| 1 | Инициализация Vite-проекта | ✅ |
 | 2 | Базовая инфраструктура (router, types, characters) | ✅ |
 | 3 | Дизайн-система (themes, `useTheme`, CSS-эффекты) | ✅ |
 | 4 | Переиспользуемые компоненты (DiaryLayout, Chapter, Paragraph, Image, Backgrounds) | ✅ |
 | 5.1 | Миграция Артура | ✅ |
-| 5.2 | Миграция Азы | ✅ |
-| 5.3 | Миграция Эла | 🟡 заглушка (финал отдельно) |
+| 5.2 | Миграция Азы | ✅ (в работе — см. uncommitted diff) |
+| 5.3 | Миграция Эла | ⚠️ статус `active`, но `ElPage.vue` пока **placeholder** |
 | 5.4 | Миграция Зираэллы | ✅ |
-| 5.5 | Минимальные заглушки Барандура + Малбрина | ✅ |
+| 5.5 | Заглушки Барандура + Малбрина | ✅ |
 | 5.6 | HomePage (главное меню) | ✅ |
 | 7 | GitHub Actions + 404.html | ✅ |
-| 8 | Удаление старой статики + перенос `web/*` в корень + push | ⏸ отложено |
+| 8 | Удаление старой статики + перенос в корень | ✅ (192b2cd) |
 
-**Переходный период:** старая статика в корне (`Artur/`, `Aza/`, `El/`, `Ziraela/`, `Barandur/`, `Malbrin/`, `index.html`) продолжает обслуживаться gh-pages до завершения Фазы 8. Новый билд в `web/dist/` существует параллельно.
+**Известное расхождение:** `src/data/characters.ts` помечает Эла как `status: 'active'`, но `src/pages/ElPage.vue` всё ещё содержит заглушку «Дневник мигрируется на новую платформу…». Это нужно синхронизировать (либо доделать Эла, либо вернуть ему `'wip'`).
 
 ## Структура каталога
 
 ```
 C:\Users\vk241\.github\dnd-chrono-game\
-├── index.html              # Главное меню (СТАРОЕ, прод пока на нём)
-├── MIGRATION_PLAN_V1.MD    # План миграции (источник истины)
+├── .gitignore              # Qwen workspace, *.bak, node_modules/, dist/, *.tsbuildinfo
+├── index.html              # Vite-шаблон (<div id="app"></div>) + SPA restoration script
+├── package.json            # name: "dnd-chrono-game-web"
+├── package-lock.json
+├── vite.config.ts          # base: '/dnd-chrono-game/', outDir: dist, alias @ → src/
+├── tailwind.config.ts      # Палитры 4 персонажей + safelist diary-page-*
+├── postcss.config.js       # Tailwind + Autoprefixer
+├── tsconfig.json           # References → app + node
+├── tsconfig.app.json       # strict, paths @/* → src/*
+├── tsconfig.node.json
+├── MIGRATION_PLAN_V1.MD    # План миграции (источник истины по архитектуре)
 ├── QWEN.md                 # Этот файл
-├── .gitignore              # Игнорирует .qwen/, *.bak, web/{node_modules,dist}/
 │
 ├── .github/
 │   └── workflows/
-│       └── deploy.yml      # GitHub Actions → Pages
+│       └── deploy.yml      # GitHub Actions → Pages (Node 24, FORCE_JAVASCRIPT_ACTIONS_TO_NODE24)
 │
-│   ─────── Старая статика (до Фазы 8) ───────
-├── Artur/                  # Артур — Паладин (статический HTML)
-├── Aza/                    # Аза — Бард (статический HTML)
-├── El/                     # Эл — Дроу (статический HTML)
-├── Ziraela/                # Зираэлла — Высший эльф (статический HTML)
-├── Barandur/               # Заглушка
-├── Malbrin/                # Заглушка
+├── scripts/
+│   └── copy-404.cjs        # Постбилд: генерирует dist/404.html (SPA fallback)
 │
-│   ─────── Новый Vue-проект (миграция) ───────
-└── web/                    # Vue 3 + Vite + TS + Tailwind
-    ├── package.json        # type: module, build генерирует 404.html
-    ├── package-lock.json
-    ├── vite.config.ts      # base: '/dnd-chrono-game/', outDir: dist
-    ├── tailwind.config.ts  # Палитры для 6 персонажей
-    ├── postcss.config.js   # Tailwind + Autoprefixer
-    ├── tsconfig.json       # References → app + node
-    ├── tsconfig.app.json   # strict, paths @/* → src/*
-    ├── tsconfig.node.json
-    ├── index.html          # Vite-шаблон (<div id="app"></div>)
-    │
-    ├── scripts/
-    │   └── copy-404.cjs    # Постбилд: dist/index.html → dist/404.html
-    │
-    ├── public/             # Статика, копируется 1:1 в dist/
-    │   ├── fonts/          # 4 шрифта (GreatVibes, Comforter, Agretta, ofont_ru_Corinthia)
-    │   └── images/
-    │       ├── artur/      # 14 jpeg (русские имена с подчёркиваниями)
-    │       ├── aza/        # 17 jpg (1.jpg … 16.jpg + UUID-артефакт)
-    │       ├── el/         # 63 файла (image1.jpeg … image63.jpeg)
-    │       └── ziraela/    # 4 файла (1.png, 2.png, 3.jpeg, 4.png)
-    │
-    └── src/
-        ├── main.ts         # createApp + router + mount
-        ├── App.vue         # <router-view />
-        │
-        ├── router/index.ts # 7 маршрутов + redirect 404
-        │
-        ├── types/
-        │   └── character.ts  # Character, Status, ThemeKey
-        ├── data/
-        │   └── characters.ts # Реестр 6 персонажей
-        │
-        ├── themes/
-        │   ├── index.ts       # Theme type + getTheme(slug)
-        │   ├── artur.ts       # parchment, "Ink Free..."
-        │   ├── aza.ts         # gothic, "Corinthia"
-        │   ├── el.ts          # book, "Comforter"
-        │   ├── ziraela.ts     # forest, "Agretta"
-        │   ├── barandur.ts    # minimal
-        │   └── malbrin.ts     # minimal
-        │
-        ├── composables/
-        │   └── useTheme.ts    # CSS-переменные на <html>: --font-display, --drop-cap, --color-*
-        │
-        ├── components/
-        │   ├── DiaryLayout.vue     # themeKey + Background-компонент + слот
-        │   ├── DiaryChapter.vue    # <h2> + ::before/::after орнаменты
-        │   ├── DiaryParagraph.vue  # text-indent + drop-cap
-        │   ├── DiaryImage.vue      # img + caption (left/right/none)
-        │   ├── ImageCaption.vue    # <p class="image-caption">
-        │   ├── DiaryFooter.vue     # «Запись обрывается...»
-        │   └── backgrounds/
-        │       ├── ParchmentBackground.vue  # светлая бумага
-        │       ├── GothicBackground.vue     # тёмная готика + звёздная пыль
-        │       ├── BookBackground.vue       # старая книга + пожелтение
-        │       ├── ForestBackground.vue     # лес + луна + звёзды
-        │       └── MinimalBackground.vue    # для заглушек
-        │
-        ├── pages/
-        │   ├── HomePage.vue       # Список из characters.ts + статусы + цитата
-        │   ├── ArturPage.vue      # 21 страница + 14 иллюстраций
-        │   ├── AzaPage.vue        # Один <article class="entry"> с rotate(-0.15deg) + SVG torn-edge
-        │   ├── ElPage.vue         # Заглушка «мигрируется»
-        │   ├── ZiraelaPage.vue    # 9 <article class="entry"> + forest-silhouette SVG
-        │   ├── BarandurPage.vue   # «Эти страницы ещё не написаны...»
-        │   └── MalbrinPage.vue    # «Эти страницы ещё не написаны...»
-        │
-        └── assets/styles/
-            ├── tailwind.css       # @tailwind + @layer components (.diary-page-artur/-aza/...)
-            ├── diary-effects.css  # .drop-cap, .diary-image.left/.right, .typo, .margin-note, ...
-            └── fonts.css          # @font-face Corinthia, Comforter, Agretta
+├── public/                 # Копируется 1:1 в dist/
+│   ├── fonts/              # 4 шрифта (GreatVibes, Comforter, Agretta, ofont_ru_Corinthia)
+│   └── images/
+│       ├── artur/          # 14 jpeg (русские имена с подчёркиваниями: 01_деревня.jpeg …)
+│       ├── aza/            # 16 jpg (1.jpg … 16.jpg) + UUID-артефакт 2DD617AE-…jpg
+│       ├── el/             # 63 файла (image1.jpeg … image63.jpeg, mix jpeg/png)
+│       └── ziraela/        # 4 файла
+│
+├── src/
+│   ├── main.ts             # createApp + router + mount('#app')
+│   ├── App.vue             # <router-view />
+│   │
+│   ├── router/index.ts     # 7 маршрутов + redirect 404
+│   │
+│   ├── types/character.ts  # Character, Status, ThemeKey
+│   ├── data/characters.ts  # Реестр 6 персонажей
+│   │
+│   ├── themes/
+│   │   ├── index.ts        # Theme type + getTheme(slug)
+│   │   ├── artur.ts        # parchment, "Ink Free..."
+│   │   ├── aza.ts          # gothic, "Corinthia"
+│   │   ├── el.ts           # book, "Comforter"
+│   │   ├── ziraela.ts      # forest, "Agretta"
+│   │   ├── barandur.ts     # minimal
+│   │   └── malbrin.ts      # minimal
+│   │
+│   ├── composables/useTheme.ts   # CSS-переменные на <html>
+│   │
+│   ├── components/
+│   │   ├── DiaryLayout.vue        # themeKey + Background-компонент + слот
+│   │   ├── DiaryChapter.vue       # <h2> + ::before/::after орнаменты
+│   │   ├── DiaryParagraph.vue     # text-indent + drop-cap
+│   │   ├── DiaryImage.vue         # img + caption (left/right/none)
+│   │   ├── ImageCaption.vue       # <p class="image-caption">
+│   │   ├── DiaryFooter.vue        # «Запись обрывается...»
+│   │   └── backgrounds/
+│   │       ├── ParchmentBackground.vue   # светлая бумага
+│   │       ├── GothicBackground.vue      # тёмная готика + звёздная пыль
+│   │       ├── BookBackground.vue        # старая книга + пожелтение
+│   │       ├── ForestBackground.vue      # лес + луна + звёзды
+│   │       └── MinimalBackground.vue     # для заглушек
+│   │
+│   ├── pages/
+│   │   ├── HomePage.vue       # Список из characters.ts + статусы + цитата
+│   │   ├── ArturPage.vue      # 21 страница + 14 иллюстраций (~1422 строк)
+│   │   ├── AzaPage.vue        # Один <article class="entry"> + SVG torn-edge (~1024 строк)
+│   │   ├── ElPage.vue         # Заглушка (нужно доделать миграцию)
+│   │   ├── ZiraelaPage.vue    # 9 <article class="entry"> + forest-silhouette SVG
+│   │   ├── BarandurPage.vue   # «Эти страницы ещё не написаны...»
+│   │   └── MalbrinPage.vue    # «Эти страницы ещё не написаны...»
+│   │
+│   └── assets/styles/
+│       ├── tailwind.css       # @tailwind + @layer components (.diary-page-*)
+│       ├── diary-effects.css  # .drop-cap, .diary-image.left/.right, .typo, ...
+│       └── fonts.css          # @font-face Corinthia, Comforter, Agretta
+│
+└── dist/                     # Билд (gitignored)
 ```
+
+**Замечание:** каталог `web/` (наследие до Фазы 8) содержит только `node_modules/` и больше не используется. Новые команды выполняются из корня репо.
 
 ## Персонажи и состояние дневников
 
-| Персонаж              | Класс / роль               | Статус        | Шрифт / тема (Vue) |
-|-----------------------|----------------------------|---------------|--------------------|
-| **Артур Могрейн**     | Паладин, бывший каратель   | ✅ мигрирован  | `artur` — `"Ink Free", "Segoe Print"...` · `parchment` · drop-cap `#2c2c2c` |
-| **Аза** (Пепельная Роза) | Бард, цыганка, рассказчица | ✅ мигрирован  | `aza` — `"Corinthia"` · `gothic` · drop-cap `#8b1e2b` · ♥ ♥ ♥ |
-| **Эл**                | Дроу, покинувшая подземье  | 🟡 заглушка  | `el` — `'Comforter'` · `book` · drop-cap `#2a1f14` |
-| **Барандур**          | Дварф                      | ✅ minimal    | `barandur` — `"Ink Free"...` · `minimal` |
-| **Малбрин**           | Дроу (светлая)             | ✅ minimal    | `malbrin` — `"Ink Free"...` · `minimal` |
-| **Зираэлла Ларус**    | Высший эльф, охотница      | ✅ мигрирован  | `ziraela` — `"Agretta"` · `forest` · drop-cap `#3a5e3a` · ❦ ✦ ❦ |
+| Персонаж              | Класс / роль               | Status     | Шрифт / тема (Vue) | Состояние страницы |
+|-----------------------|----------------------------|------------|--------------------|--------------------|
+| **Артур Могрейн**     | Паладин, бывший каратель   | `active`   | `artur` — `"Ink Free", "Segoe Print"...` · `parchment` · drop-cap `#2c2c2c` | `ArturPage.vue` (~1422 строк, в работе) |
+| **Аза** (Пепельная Роза) | Бард, цыганка, рассказчица | `active`   | `aza` — `"Corinthia"` · `gothic` · drop-cap `#8b1e2b` · ♥ ♥ ♥ | `AzaPage.vue` (~1024 строки, в работе) |
+| **Эл**                | Дроу, покинувшая подземье  | `active` (но **placeholder**) | `el` — `'Comforter'` · `book` · drop-cap `#2a1f14` | `ElPage.vue` — заглушка |
+| **Барандур**          | Дварф                      | `wip`      | `barandur` — `"Ink Free"...` · `minimal` | `BarandurPage.vue` |
+| **Малбрин**           | Дроу (светлая)             | `wip`      | `malbrin` — `"Ink Free"...` · `minimal` | `MalbrinPage.vue` |
+| **Зираэлла Ларус**    | Высший эльф, охотница      | `active`   | `ziraela` — `"Agretta"` · `forest` · drop-cap `#3a5e3a` · ❦ ✦ ❦ | `ZiraelaPage.vue` |
 
-Источник истины: `web/src/data/characters.ts` (реестр) и `web/src/themes/*.ts` (темы).
+Источник истины: `src/data/characters.ts` (реестр) и `src/themes/*.ts` (темы).
 
-## Стилистические конвенции (Vue)
-
-В Vue-проекте конвенции вынесены в:
+## Стилистические конвенции
 
 ### CSS-переменные темы (устанавливаются `useTheme` на `<html>`)
+
 - `--font-display` — основной шрифт персонажа
 - `--drop-cap` — цвет буквицы
 - `--color-{paletteKey}` — цвета палитры (paper, ink, accent, gold, bg, moss, violet, …)
-- `--ornament-top`, `--ornament-bottom` — строки орнаментов (`♥ ♥ ♥`, `❦ ✦ ❦`, ``)
+- `--ornament-top`, `--ornament-bottom` — строки орнаментов (`♥ ♥ ♥`, `❦ ✦ ❦`, …)
 
-### Общие классы (в `assets/styles/diary-effects.css`)
-- `.text-indent-paragraph` — параграф с книжным отступом
+### Tailwind `@layer components` (в `src/assets/styles/tailwind.css`)
+
+Все `diary-page-*` — формат A4 (`max-width: 794px ≈ 210mm`), центрированы:
+
+- `.diary-page-artur` — светлая бумага `#f5f0e8`, текст `#2c2c2c`
+- `.diary-page-aza` — без фона (фон даёт `GothicBackground`), A4
+- `.diary-page-el` — тёмный фон `#2a1f14`, текст `#f4e8d0`
+- `.diary-page-ziraela` — без фона (фон даёт `ForestBackground`), A4
+- `.diary-page-minimal` — для заглушек Барандура/Малбрина (`max-width: 720px`)
+
+Классы перечислены в `tailwind.config.ts` → `safelist` (динамически подставляются через `:class="pageClass"` в `DiaryLayout.vue`).
+
+### Общие классы (в `src/assets/styles/diary-effects.css`)
+
+- `.text-indent-paragraph` — параграф с книжным отступом первой строки
 - `.drop-cap::first-letter` — буквица
 - `.diary-image` — изображение с `position: relative; z-index: 1` (важно — иначе перекроется фоном `.entry::before/::after`)
 - `.diary-image.left` / `.right` — обтекание с `--rot`
@@ -162,18 +167,11 @@ C:\Users\vk241\.github\dnd-chrono-game\
 - `.section-break`, `.chapter-break`, `.chapter-label` — разрывы
 - `.prophecy-box`, `.gem-box` (`.red/.green/.blue`) — рамки
 
-### Tailwind `@layer components` (в `assets/styles/tailwind.css`)
-- `.diary-page-artur` — светлая бумага, max-width 14.8cm
-- `.diary-page-aza` — без фона (фон даёт GothicBackground), max-width 820px
-- `.diary-page-el` — тёмный фон, max-width 1200px
-- `.diary-page-ziraela` — без фона (фон даёт ForestBackground), max-width 820px
-- `.diary-page-minimal` — для заглушек Барандура/Малбрина
-
 ### Соглашения по написанию Vue-страниц дневника
 
 1. **`<template>` оборачивает контент в `<DiaryLayout theme-key="<slug>">`** — он подставляет фон и тему.
 2. **Все стили — `<style scoped>`** в `.vue`-файле (никаких внешних CSS-файлов на страницу).
-3. **Шрифты** подключены глобально через `assets/styles/fonts.css` (`@font-face`); семейство доступно по CSS-переменной `--font-display`.
+3. **Шрифты** подключены глобально через `src/assets/styles/fonts.css` (`@font-face`); семейство доступно по CSS-переменной `--font-display`.
 4. **Изображения:** `<img src="/images/<slug>/<file>">` (абсолютные пути от корня сайта).
 5. **Буквица:** `.entry p:first-of-type::first-letter` — крупная, цвет через `var(--drop-cap)`.
 6. **Drop-cap и псевдоэлементы:** иллюстрации внутри `.entry` ОБЯЗАНЫ иметь `position: relative; z-index: 1` (см. `assets/styles/diary-effects.css`), иначе их перекроет фоновая текстура листа.
@@ -183,12 +181,13 @@ C:\Users\vk241\.github\dnd-chrono-game\
 
 ## Команды для запуска
 
+Все команды выполняются **из корня репозитория** (не из `web/` — `web/` опустел после Фазы 8).
+
 ### Локальная разработка
 
 ```bash
-cd web
 npm install          # один раз (или npm ci после обновления lock)
-npm run dev          # запускает Vite dev-сервер на http://localhost:5173
+npm run dev          # Vite dev-сервер на http://localhost:5173
 ```
 
 Пути к шрифтам/изображениям работают корректно, потому что Vite резолвит `/fonts/*` и `/images/*` из `public/`.
@@ -196,27 +195,25 @@ npm run dev          # запускает Vite dev-сервер на http://loca
 ### Сборка production-бандла
 
 ```bash
-cd web
 npm run build        # vue-tsc -b && vite build && node scripts/copy-404.cjs
 ```
 
-Результат:
-- `web/dist/index.html` — точка входа SPA
-- `web/dist/404.html` — копия для GitHub Pages SPA fallback (history mode)
-- `web/dist/assets/*.{js,css}` — lazy-loaded чанки страниц
-- `web/dist/fonts/`, `web/dist/images/` — статика из `public/`
+Результат в `dist/`:
+
+- `dist/index.html` — точка входа SPA (с restoration-скриптом)
+- `dist/404.html` — генерируется `scripts/copy-404.cjs` (SPA fallback для refresh на глубоких маршрутах)
+- `dist/assets/*.{js,css}` — lazy-loaded чанки страниц
+- `dist/fonts/`, `dist/images/` — статика из `public/`
 
 ### Локальный preview собранного билда
 
 ```bash
-cd web
 npm run preview      # локальный сервер для dist/
 ```
 
 ### Тип-чек без сборки
 
 ```bash
-cd web
 npm run type-check   # vue-tsc --noEmit
 ```
 
@@ -228,37 +225,60 @@ npm run type-check   # vue-tsc --noEmit
 ### Текущий способ — GitHub Actions
 
 `.github/workflows/deploy.yml`:
+
 1. Триггер: `push` в `master` или `workflow_dispatch`.
-2. `actions/setup-node@v4` (Node 20) → `npm ci` в `web/` → `npm run build`.
-3. `actions/upload-pages-artifact@v3` загружает `web/dist/` как артефакт.
-4. `actions/deploy-pages@v4` деплоит артефакт на GitHub Pages (GitHub-native, не требует ветки `gh-pages`).
+2. **Node 24** (`FORCE_JAVASCRIPT_ACTIONS_TO_NODE24: "true"` в env — убирает deprecation-варнинг от JS-actions, которые иначе цепляются за Node 20 из образа раннера).
+3. `actions/checkout@v4` → `actions/setup-node@v4` (Node 24, кеш npm по `package-lock.json`) → `npm ci` → `npm run build`.
+4. `actions/upload-pages-artifact@v3` загружает `./dist/` как артефакт.
+5. `actions/deploy-pages@v4` деплоит артефакт на GitHub Pages (GitHub-native, без ветки `gh-pages`).
 
 **Требования к репозиторию** (настраивается один раз через GitHub UI):
+
 - Settings → Pages → Source: **GitHub Actions** (не branch).
 - Settings → Actions → General → Workflow permissions: **Read and write permissions** + **Allow GitHub Actions to create and approve pull requests**.
 
-### Сайт
+### Как работает SPA fallback на GitHub Pages
 
-`https://siberianfoboz.github.io/dnd-chrono-game/`
+GitHub Pages не умеет в rewrite для SPA history-mode. Используется техника rafgraph/spa-github-pages (MIT) — двухфайловая конструкция:
+
+1. **`index.html`** содержит restoration-скрипт в `<head>`: если URL вида `/dnd-chrono-game/?/artur` (т.е. в `location.search` идёт `?/...`), скрипт декодирует query и заменяет URL на чистый `/dnd-chrono-game/artur` через `history.replaceState`. После этого Vue Router читает корректный маршрут.
+2. **`dist/404.html`** генерируется `scripts/copy-404.cjs` после `vite build`: redirect-скрипт берёт текущий URL `/dnd-chrono-game/<route>`, отрезает сегменты до `pathSegmentsToKeep = 1` (т.е. оставляет `dnd-chrono-game`) и перенаправляет на `/dnd-chrono-game/?/<route>`.
+
+Без этого refresh / прямой заход на `/artur`, `/aza`, … возвращал бы 404 → копию `index.html` → Vue Router видел бы `/404.html` → catch-all редиректил бы на `/`.
 
 ## Рабочий процесс с git
 
 - Ветка: `master`.
 - Remote: `origin` → `github.com:SiberianFoboZ/dnd-chrono-game.git`.
 - Сообщения коммитов — на русском, формат «{Объект}: {действие}» (например, `artur: перенос в Vue-страницу и theme`).
-- **НЕ коммитить** `web/dist/` и `web/node_modules/` (в `.gitignore` внутри `web/`).
-- **НЕ коммитить** рабочий прогресс в старых файлах (`Aza/index.html`, `Aza/new_text.txt`) без явного запроса.
+- **НЕ коммитить** `dist/` и `node_modules/` (в `.gitignore` корня).
 - **Push:** по явному запросу пользователя. Никогда не пушить автоматически.
 
 ## Заметки и ограничения
 
-- **Vue 3.5 + TypeScript strict** — код в `web/src/**` типизирован; `vue-tsc -b` запускается на каждом билде.
-- **Vite 5** с `base: '/dnd-chrono-game/'` — все ассеты подставляются с префиксом репозитория.
+- **Vue 3.5 + TypeScript strict** — код в `src/**` типизирован; `vue-tsc -b` запускается на каждом билде.
+- **Vite 8** с `base: '/dnd-chrono-game/'` — все ассеты подставляются с префиксом репозитория.
 - **Vue Router history mode** + `404.html` fallback — refresh на `/artur`, `/aza`, … корректно работает на GitHub Pages.
-- **Шрифты:** все `.ttf`/`.otf` лежат в `web/public/fonts/`; `ofont_ru_Corinthia.ttf` — резервный (не подключается в активном CSS, но скопирован для архива).
-- **Изображения:** все скопированы из старых `<character>/files/` (или из корня для Артура/Эла) в `web/public/images/<slug>/`. Исходники в корне не тронуты до Фазы 8.
-- **`hdphoto*.wdp` в El** — формат Windows HD Photo, могут быть сырыми заготовками для конвертации. Не задействованы в `index.html`. Размер велик — рассмотреть удаление, если не нужны.
-- **UUID-файл `Aza/files/2DD617AE-5435-...jpg`** — случ. артефакт, скопирован в `web/public/images/aza/` как есть.
-- **Git-ignored:** `.qwen/` (рабочая область Qwen Code), `*.bak`, `web/node_modules/`, `web/dist/`, `*.tsbuildinfo`.
+- **Шрифты:** все `.ttf`/`.otf` лежат в `public/fonts/`. Подключаются через `src/assets/styles/fonts.css` (`@font-face`). Файл `ofont_ru_Corinthia.ttf` лежит рядом для архива, но не используется в активном CSS.
+- **Изображения:** все скопированы в `public/images/<slug>/`. Исходники в корне репо удалены вместе со старой статикой (Фаза 8).
+- **UUID-файл `public/images/aza/2DD617AE-5435-...jpg`** — случ. артефакт, скопирован как есть.
+- **Извлечение иллюстраций из .docx:** skill `extract-docx`. Изображения хранятся в `word/media/` внутри docx. Извлекать в `<slug>/files/` с числовыми именами.
+- **Git-ignored:** `.qwen/` (рабочая область Qwen Code), `*.bak`, `node_modules/`, `dist/`, `.vite/`, `*.tsbuildinfo`, `.env*`.
 - **Связь персонажей:** Артур и Аза встретились первыми. Эл, Барандур, Малбрин и Зираэлла — часть того же отряда. В дневниках упоминаются друг друга.
-- **Извлечение иллюстраций из .docx:** skill `extract-docx`. Изображения хранятся в `word/media/` внутри docx. Извлекать в `<character>/files/` с числовыми именами.
+
+## Текущее состояние рабочей копии (uncommitted)
+
+`git status` показывает:
+
+```
+modified:   QWEN.md                  ← этот файл переписан полностью
+modified:   src/pages/ArturPage.vue  ← +296 строк (в работе)
+modified:   src/pages/AzaPage.vue    ← ~98 правок (в работе)
+
+Untracked files:
+        new_add_text/               ← новая рукопись для интеграции
+          artur/new text.txt
+          aza/dnevnik_Azy.docx
+```
+
+Перед коммитом проверить: завершена ли работа над `ArturPage.vue` и `AzaPage.vue`, синхронизировать `ElPage.vue` со статусом в `characters.ts` (см. «Известное расхождение» выше).
