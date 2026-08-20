@@ -6,7 +6,7 @@ export const artur: Theme = {
     ink: '#2c2c2c',
     accent: '#5a4a2c',
   },
-  fontFamily: '"Ink Free", "Segoe Print", "Caveat", "Bad Script", "Corinthia", "Great Vibes", cursive',
+  fontFamily: '"Ink Free", "Segoe Print", "Caveat", "Bad Script", cursive',
   background: 'parchment',
   ornamentTop: '',
   ornamentBottom: '',

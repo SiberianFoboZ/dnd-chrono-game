@@ -10,7 +10,7 @@ body {
   margin: 0;
   min-height: 100vh;
   background: #f5f0e8;
-  font-family: "Ink Free", "Segoe Print", "Caveat", "Bad Script", "Corinthia", "Great Vibes", cursive;
+  font-family: "Ink Free", "Segoe Print", "Caveat", "Bad Script", cursive;
   color: #2c2c2c;
 }
 </style>
