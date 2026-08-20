@@ -1,6 +1,6 @@
 # QWEN.md — Хроники отряда (dnd-chrono-game)
 
-> **Актуально по состоянию на 2026-08-17.** Миграция на Vue 3 + Vite + TypeScript + Tailwind **завершена** (включая Фазу 8 — перенос в корень). Все Vite-файлы теперь в корне репозитория; каталог `web/` опустел до `node_modules/`.
+> **Актуально по состоянию на 2026-08-21.** Миграция на Vue 3 + Vite + TypeScript + Tailwind **завершена** (включая Фазу 8 — перенос в корень). Все Vite-файлы теперь в корне репозитория; каталог `web/` опустел до `node_modules/`. Последняя сессия — очистка ArturPage.vue, введение классов «голосов» Азы и интеграция картинок Ирины в раздел «Валлаки».
 
 ## Обзор проекта
 
@@ -62,7 +62,7 @@ C:\Users\vk241\.github\dnd-chrono-game\
 ├── public/                 # Копируется 1:1 в dist/
 │   ├── fonts/              # 4 шрифта (GreatVibes, Comforter, Agretta, ofont_ru_Corinthia)
 │   └── images/
-│       ├── artur/          # 14 jpeg (русские имена с подчёркиваниями: 01_деревня.jpeg …)
+│       ├── artur/          # 16 файлов: 13 jpeg (русские имена с подчёркиваниями: 01_деревня.jpeg … 14_две_могилы.jpeg; 06_портрет_32_года удалён как сирота) + 3 Irena_*.jpg (Ирина в Валлаки)
 │       ├── aza/            # 16 jpg (1.jpg … 16.jpg) + UUID-артефакт 2DD617AE-…jpg
 │       ├── el/             # 63 файла (image1.jpeg … image63.jpeg, mix jpeg/png)
 │       └── ziraela/        # 4 файла
@@ -124,8 +124,8 @@ C:\Users\vk241\.github\dnd-chrono-game\
 
 | Персонаж              | Класс / роль               | Status     | Шрифт / тема (Vue) | Состояние страницы |
 |-----------------------|----------------------------|------------|--------------------|--------------------|
-| **Артур Могрейн**     | Паладин, бывший каратель   | `active`   | `artur` — `"Ink Free", "Segoe Print"...` · `parchment` · drop-cap `#2c2c2c` | `ArturPage.vue` (~1422 строк, в работе) |
-| **Аза** (Пепельная Роза) | Бард, цыганка, рассказчица | `active`   | `aza` — `"Corinthia"` · `gothic` · drop-cap `#8b1e2b` · ♥ ♥ ♥ | `AzaPage.vue` (~1024 строки, в работе) |
+| **Артур Могрейн**     | Паладин, бывший каратель   | `active`   | `artur` — `"Ink Free", "Segoe Print"...` · `parchment` · drop-cap `#2c2c2c` | `ArturPage.vue` (~1762 строк, 15 страниц + 16 иллюстраций) |
+| **Аза** (Пепельная Роза) | Бард, цыганка, рассказчица | `active`   | `aza` — `"Corinthia"` · `gothic` · drop-cap `#8b1e2b` · ♥ ♥ ♥ | `AzaPage.vue` (~1024 строки). Конвенция «двух рук» (Артур + Аза): классы `.aza-edit` (inline-вставки) и `.aza-voice` (sidebar) — см. `diary-effects.css`. |
 | **Эл**                | Дроу, покинувшая подземье  | `active` (но **placeholder**) | `el` — `'Comforter'` · `book` · drop-cap `#2a1f14` | `ElPage.vue` — заглушка |
 | **Барандур**          | Дварф                      | `wip`      | `barandur` — `"Ink Free"...` · `minimal` | `BarandurPage.vue` |
 | **Малбрин**           | Дроу (светлая)             | `wip`      | `malbrin` — `"Ink Free"...` · `minimal` | `MalbrinPage.vue` |
@@ -166,6 +166,21 @@ C:\Users\vk241\.github\dnd-chrono-game\
 - `.shout`, `.underline-wavy`, `.insert-above` — эффекты текста
 - `.section-break`, `.chapter-break`, `.chapter-label` — разрывы
 - `.prophecy-box`, `.gem-box` (`.red/.green/.blue`) — рамки
+- `.aza-edit` — **курсивная inline-вставка Азы в тексте предложения** (для «двух рук»): `font-family: "Corinthia", "Great Vibes", cursive; color: #991007; font-style: italic`. Замена длинных inline-стилей Азы (`style="font-style: italic; font-family: 'Corinthia', 'Great Vibes', cursive; color: #991007"`).
+- `.aza-voice` — **голос Азы в боковых заметках** (для `<div class="sidebar-note aza-voice">`): `font-family: "Corinthia", "Great Vibes", cursive; color: #991007` (без `font-style: italic` — italic даёт сам `.sidebar-note`).
+
+#### Специфика scoped-стилей и `.aza-voice`
+
+Vue `<style scoped>` добавляет к селектору `data-v-…`-атрибут, что повышает специфичность (`(0,1,1,0)`). Из-за этого scoped `.sidebar-note { color: #6a5a4a }` **перебивает** unscoped `.aza-voice { color: #991007 }`. Решение — добавить в scoped страницы явный override с двумя классами:
+
+```css
+.sidebar-note.aza-voice {
+  color: #991007;
+  font-family: "Corinthia", "Great Vibes", cursive;
+}
+```
+
+Специфичность `(0,2,1,0)` выигрывает у `(0,1,1,0)`. Сейчас этот override есть в `<style scoped>` `ArturPage.vue`; если понадобятся азовские сайдбары в других страницах (Aza, El, Ziraela) — добавить аналогично.
 
 ### Соглашения по написанию Vue-страниц дневника
 
@@ -271,14 +286,43 @@ GitHub Pages не умеет в rewrite для SPA history-mode. Использ�
 `git status` показывает:
 
 ```
-modified:   QWEN.md                  ← этот файл переписан полностью
-modified:   src/pages/ArturPage.vue  ← +296 строк (в работе)
-modified:   src/pages/AzaPage.vue    ← ~98 правок (в работе)
+modified:   QWEN.md                              ← этот файл переписан полностью
+modified:   src/assets/styles/diary-effects.css  ← +14 строк (.aza-edit, .aza-voice)
+modified:   src/pages/ArturPage.vue              ← 1552 +/- 1579: перенос блока Азы
+                                                в «Валлаки», вставка Irena-картинок,
+                                                удаление дубля sidebar-note и мёртвых
+                                                override, замена inline-стилей Азы
+                                                на .aza-edit / .aza-voice
+deleted:    public/images/artur/06_портрет_32_года.jpeg  ← сирота, не использовался
 
 Untracked files:
-        new_add_text/               ← новая рукопись для интеграции
+        public/images/artur/Irena_1.jpg         ← вставлена в раздел «Валлаки»
+        public/images/artur/Irena_2.jpg         ← вставлена в раздел «Валлаки»
+        public/images/artur/Irena_3.jpg         ← вставлена в раздел «Валлаки»
+        new_add_text/artur/                      ← черновики + новые иллюстрации
+          artur/index.html
           artur/new text.txt
+          artur/Irena_1.jpg, Irena_2.jpg, Irena_3.jpg  (уже интегрированы)
           aza/dnevnik_Azy.docx
 ```
 
-Перед коммитом проверить: завершена ли работа над `ArturPage.vue` и `AzaPage.vue`, синхронизировать `ElPage.vue` со статусом в `characters.ts` (см. «Известное расхождение» выше).
+### Что сделано в текущей сессии (2026-08-21)
+
+1. **Очистка `ArturPage.vue`:**
+   - Удалён дубликат `sidebar-note` про «Бросились в глаза» в разделе «Приют» (оставлено первое вхождение).
+   - Удалён пустой `.artur-diary { /* комментарий */ }` из `<style scoped>`.
+   - Удалён override `.typo { background: #ffe0e0; ... }` (класс нигде не использовался; после эксперимента с применением — откачено).
+2. **Консолидация inline-стилей Азы:**
+   - В `diary-effects.css` добавлены utility-классы `.aza-edit` (inline-вставки) и `.aza-voice` (sidebar).
+   - В `ArturPage.vue` все 80 inline-стилей `style="font-style: italic; font-family: 'Corinthia', 'Great Vibes', cursive; color: #991007"` заменены на `<span class="aza-edit">`; все 24 `style="color: #991007; font-family: 'Corinthia', 'Great Vibes', cursive"` в `<div class="sidebar-note">` заменены на `<div class="sidebar-note aza-voice">`.
+   - В scoped `ArturPage.vue` добавлен override `.sidebar-note.aza-voice { color: #991007; ... }` для перебивания scoped `.sidebar-note { color: #6a5a4a }` (специфичность data-атрибута).
+3. **Интеграция картинок Ирины:**
+   - Блок Азы про «Кстати, Артур, почему ты не обращаешь внимания на нашу новую спутницу…» **перемещён** из раздела «Пророчество» в раздел «Валлаки» (после абзаца «…Привал прошёл без происшествий. Почти.»).
+   - В том же месте добавлены три `<img>` (`/images/artur/Irena_1.jpg`, `Irena_2.jpg`, `Irena_3.jpg`) подряд.
+   - Файлы скопированы из `new_add_text/artur/` в `public/images/artur/`.
+4. **Удалён сирота `06_портрет_32_года.jpeg`** (лежал в `public/images/artur/`, но не использовался в коде).
+
+### Что осталось
+
+- `ElPage.vue` всё ещё placeholder при `status: 'active'` — нужно либо доделать миграцию Эла, либо вернуть `'wip'` в `src/data/characters.ts` (см. «Известное расхождение» выше).
+- Свежие неинтегрированные правки: `new_add_text/artur/new text.txt` и `new_add_text/aza/dnevnik_Azy.docx`.

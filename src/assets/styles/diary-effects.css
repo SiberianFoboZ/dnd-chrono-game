@@ -134,6 +134,20 @@
   top: -0.1em;
 }
 
+/* Курсивная ремарка Азы в тексте предложения (для «двух рук»: Артур + Аза) */
+.aza-edit {
+  font-family: "Corinthia", "Great Vibes", cursive;
+  color: #991007;
+  font-style: italic;
+}
+
+/* Голос Азы в боковых заметках (sidebar) — без italic,
+   применяется совместно с .sidebar-note */
+.aza-voice {
+  font-family: "Corinthia", "Great Vibes", cursive;
+  color: #991007;
+}
+
 /* Раздел-разрыв (центрированный ряд символов) */
 .section-break {
   text-align: center;
