@@ -1,6 +1,6 @@
 <script setup lang="ts">
-import { RouterLink } from "vue-router";
 import DiaryLayout from "@/components/DiaryLayout.vue";
+import { RouterLink } from "vue-router";
 </script>
 
 <template>
@@ -17,8 +17,7 @@ import DiaryLayout from "@/components/DiaryLayout.vue";
           У нас не было имени на картах. Просто три оврага, сходящихся в грязную
           балку, десяток хат, где дым ел глаза, а доски гнили под весом снега.
           Отец месил глину для печей. Мать пряла шерсть и знала, какие коренья
-          сбивают жар, а какие <span class="strikethrough">закрывают</span>
-          <span class="insert-above">открывают</span> глаза навечно.
+          сбивают жар, а какие закрывают глаза навечно.
         </p>
         <img
           class="diary-image"
@@ -33,7 +32,7 @@ import DiaryLayout from "@/components/DiaryLayout.vue";
           Я был обычным пацаном. Бегал босиком по крапиве, срывал колени,
           плакал, когда шиповник впивался в ладонь. Жизнь казалась простой и
           <span class="strikethrough">счастливой</span>
-          <span class="insert-above">понятной</span>, несмотря на нашу бедность.
+          <span class="aza-edit">понятной</span>, несмотря на нашу бедность.
         </p>
         <div class="sidebar-note">
           Странно писать об этом спустя столько лет. Помню запах сырой земли и
@@ -48,8 +47,7 @@ import DiaryLayout from "@/components/DiaryLayout.vue";
         <p>
           Дальше было хуже. В деревню стали заходить странные люди — красные
           одеяния, ритуальные украшения, тихие шаги. Мать велела мне не
-          подходить к ним. Говорила, что это
-          <span class="strikethrough-red">плохие</span> люди. —
+          подходить к ним. Говорила, что это плохие люди. —
           <span style="font-style: italic"
             >тогда я ещё верил, что есть «плохие» и «хорошие»… наивный.</span
           >
@@ -64,7 +62,7 @@ import DiaryLayout from "@/components/DiaryLayout.vue";
           Потом тело матери рухнуло на деревянный настил и придавило люк. Я
           просидел в темноте три дня. Пил воду, скопившуюся в щелях. Ел
           <span class="strikethrough">ничего</span>
-          <span class="insert-above">нечего</span>.
+          <span class="aza-edit">нечего</span>.
         </p>
         <p>
           Потом пришли другие. Люди в тяжёлой броне, с гербами на плащах.
@@ -529,7 +527,7 @@ import DiaryLayout from "@/components/DiaryLayout.vue";
           >. Выглядела она всегда как
           <span class="strikethrough-red"
             >ряженная и крашенная, словно куртизанка</span
-          ><span style="font-style: italic"
+          ><span class="aza-edit"
             >прекрасно, никто не мог отрвать от неё взгляд</span
           >. Были моменты, где она донимала и меня, но я не понял, что ей от
           меня было нужно. Вечно называет меня красавчиком и просит помочь ей с
@@ -1291,7 +1289,7 @@ import DiaryLayout from "@/components/DiaryLayout.vue";
 
       <div class="page">
         <div class="entry">
-          <div class="entry-date"> - Где то по пути в город -</div>
+          <div class="entry-date">- Где то по пути в город -</div>
           <div class="entry-title">Дорога</div>
         </div>
         <p class="no-indent">
@@ -1466,7 +1464,8 @@ import DiaryLayout from "@/components/DiaryLayout.vue";
           style="--rot: -0.3deg; max-width: 75%"
         />
         <div class="image-caption">
-          Постоялый двор «Синяя Вода». Утренний свет, оседланные лошади у столба.
+          Постоялый двор «Синяя Вода». Утренний свет, оседланные лошади у
+          столба.
         </div>
         <p>
           По возвращении к стойлам, когда мы остались вдвоем, она на удивление
@@ -1662,7 +1661,8 @@ import DiaryLayout from "@/components/DiaryLayout.vue";
           style="--rot: -0.6deg; max-width: 80%"
         />
         <div class="image-caption">
-          Дорога за воротами. Пустая, в сумерках. Светящиеся волчьи глаза у обочины.
+          Дорога за воротами. Пустая, в сумерках. Светящиеся волчьи глаза у
+          обочины.
         </div>
         <p>
           Ночь, наверное, была самой тяжелой. Я помню, как дрался с кем-то
