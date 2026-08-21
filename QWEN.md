@@ -1,6 +1,6 @@
 # QWEN.md — Хроники отряда (dnd-chrono-game)
 
-> **Актуально по состоянию на 2026-08-22.** Миграция на Vue 3 + Vite + TypeScript + Tailwind **завершена** (включая Фазу 8 — перенос в корень). Все Vite-файлы теперь в корне репозитория; каталог `web/` опустел до `node_modules/`. Последняя сессия — перенос полной версии дневника Эла из `new_add_text/El/Dnevnik_El.docx` в `ElPage.vue` (47 эпизодов, 58 изображений, текст со склейками оставлен для ручной корректуры).
+> **Актуально по состоянию на 2026-08-22.** Миграция на Vue 3 + Vite + TypeScript + Tailwind **завершена** (включая Фазу 8 — перенос в корень). Последняя сессия — реорганизация `new_add_text/` в три подпапки по типу контента (`texts/` / `images/` / `notes/`) и финализация дневника Эла (47 эпизодов, табличный layout).
 
 ## Обзор проекта
 
@@ -25,15 +25,13 @@
 | 3 | Дизайн-система (themes, `useTheme`, CSS-эффекты) | ✅ |
 | 4 | Переиспользуемые компоненты (DiaryLayout, Chapter, Paragraph, Image, Backgrounds) | ✅ |
 | 5.1 | Миграция Артура | ✅ |
-| 5.2 | Миграция Азы | ✅ (в работе — см. uncommitted diff) |
+| 5.2 | Миграция Азы | ✅ |
 | 5.3 | Миграция Эла | ✅ |
 | 5.4 | Миграция Зираэллы | ✅ |
 | 5.5 | Заглушки Барандура + Малбрина | ✅ |
 | 5.6 | HomePage (главное меню) | ✅ |
 | 7 | GitHub Actions + 404.html | ✅ |
 | 8 | Удаление старой статики + перенос в корень | ✅ (192b2cd) |
-
-**Известное расхождение:** нет — расхождение «status: active при пустой странице» разрешено в этой сессии (`ElPage.vue` теперь содержит все 47 эпизодов).
 
 ## Структура каталога
 
@@ -118,15 +116,13 @@ C:\Users\vk241\.github\dnd-chrono-game\
 └── dist/                     # Билд (gitignored)
 ```
 
-**Замечание:** каталог `web/` (наследие до Фазы 8) содержит только `node_modules/` и больше не используется. Новые команды выполняются из корня репо.
-
 ## Персонажи и состояние дневников
 
 | Персонаж              | Класс / роль               | Status     | Шрифт / тема (Vue) | Состояние страницы |
 |-----------------------|----------------------------|------------|--------------------|--------------------|
-| **Артур Могрейн**     | Паладин, бывший каратель   | `active`   | `artur` — `"Ink Free", "Segoe Print"...` · `parchment` · drop-cap `#2c2c2c` | `ArturPage.vue` (~1762 строк, 15 страниц + 16 иллюстраций) |
-| **Аза** (Пепельная Роза) | Бард, цыганка, рассказчица | `active`   | `aza` — `"Corinthia"` · `gothic` · drop-cap `#8b1e2b` · ♥ ♥ ♥ | `AzaPage.vue` (~1024 строки). Конвенция «двух рук» (Артур + Аза): классы `.aza-edit` (inline-вставки) и `.aza-voice` (sidebar) — см. `diary-effects.css`. |
-**Эл**                | Дроу, покинувшая подземье  | `active`   | `el` — `'Comforter'` · `book` · drop-cap `#2a1f14` | `ElPage.vue` (~728 строк, 47 эпизодов + 58 иллюстраций) |
+| **Артур Могрейн**     | Паладин, бывший каратель   | `active`   | `artur` — `"Ink Free", "Segoe Print"...` · `parchment` · drop-cap `#2c2c2c` | `ArturPage.vue` (~1762 строк, 15 страниц + 16 иллюстраций). Конвенция «двух рук» (Артур + Аза): классы `.strikethrough` (рука Артура) и `.aza-edit` / `.aza-voice` (рука Азы) — см. `diary-effects.css`. |
+| **Аза** (Пепельная Роза) | Бард, цыганка, рассказчица | `active`   | `aza` — `"Corinthia"` · `gothic` · drop-cap `#8b1e2b` · ♥ ♥ ♥ | `AzaPage.vue` (~1024 строки) |
+| **Эл**                | Дроу, покинувшая подземье  | `active`   | `el` — `'Comforter'` · `book` · drop-cap `#2a1f14` | `ElPage.vue` (~728 строк, 47 эпизодов + 58 иллюстраций, табличный layout) |
 | **Барандур**          | Дварф                      | `wip`      | `barandur` — `"Ink Free"...` · `minimal` | `BarandurPage.vue` |
 | **Малбрин**           | Дроу (светлая)             | `wip`      | `malbrin` — `"Ink Free"...` · `minimal` | `MalbrinPage.vue` |
 | **Зираэлла Ларус**    | Высший эльф, охотница      | `active`   | `ziraela` — `"Agretta"` · `forest` · drop-cap `#3a5e3a` · ❦ ✦ ❦ | `ZiraelaPage.vue` |
@@ -292,49 +288,3 @@ GitHub Pages не умеет в rewrite для SPA history-mode. Использ�
 - **Извлечение иллюстраций из .docx:** skill `extract-docx`. Изображения хранятся в `word/media/` внутри docx. Извлекать в `<slug>/files/` с числовыми именами.
 - **Git-ignored:** `.qwen/` (рабочая область Qwen Code), `*.bak`, `node_modules/`, `dist/`, `.vite/`, `*.tsbuildinfo`, `.env*`.
 - **Связь персонажей:** Артур и Аза встретились первыми. Эл, Барандур, Малбрин и Зираэлла — часть того же отряда. В дневниках упоминаются друг друга.
-
-## Текущее состояние рабочей копии (uncommitted)
-
-`git status` показывает:
-
-```
-modified:   QWEN.md                              ← этот файл переписан полностью
-modified:   src/assets/styles/diary-effects.css  ← +14 строк (.aza-edit, .aza-voice)
-modified:   src/pages/ArturPage.vue              ← 1552 +/- 1579: перенос блока Азы
-                                                в «Валлаки», вставка Irena-картинок,
-                                                удаление дубля sidebar-note и мёртвых
-                                                override, замена inline-стилей Азы
-                                                на .aza-edit / .aza-voice
-deleted:    public/images/artur/06_портрет_32_года.jpeg  ← сирота, не использовался
-
-Untracked files:
-        public/images/artur/Irena_1.jpg         ← вставлена в раздел «Валлаки»
-        public/images/artur/Irena_2.jpg         ← вставлена в раздел «Валлаки»
-        public/images/artur/Irena_3.jpg         ← вставлена в раздел «Валлаки»
-        new_add_text/artur/                      ← черновики + новые иллюстрации
-          artur/index.html
-          artur/new text.txt
-          artur/Irena_1.jpg, Irena_2.jpg, Irena_3.jpg  (уже интегрированы)
-          aza/dnevnik_Azy.docx
-```
-
-### Что сделано в текущей сессии (2026-08-21)
-
-1. **Очистка `ArturPage.vue`:**
-   - Удалён дубликат `sidebar-note` про «Бросились в глаза» в разделе «Приют» (оставлено первое вхождение).
-   - Удалён пустой `.artur-diary { /* комментарий */ }` из `<style scoped>`.
-   - Удалён override `.typo { background: #ffe0e0; ... }` (класс нигде не использовался; после эксперимента с применением — откачено).
-2. **Консолидация inline-стилей Азы:**
-   - В `diary-effects.css` добавлены utility-классы `.aza-edit` (inline-вставки) и `.aza-voice` (sidebar).
-   - В `ArturPage.vue` все 80 inline-стилей `style="font-style: italic; font-family: 'Corinthia', 'Great Vibes', cursive; color: #991007"` заменены на `<span class="aza-edit">`; все 24 `style="color: #991007; font-family: 'Corinthia', 'Great Vibes', cursive"` в `<div class="sidebar-note">` заменены на `<div class="sidebar-note aza-voice">`.
-   - В scoped `ArturPage.vue` добавлен override `.sidebar-note.aza-voice { color: #991007; ... }` для перебивания scoped `.sidebar-note { color: #6a5a4a }` (специфичность data-атрибута).
-3. **Интеграция картинок Ирины:**
-   - Блок Азы про «Кстати, Артур, почему ты не обращаешь внимания на нашу новую спутницу…» **перемещён** из раздела «Пророчество» в раздел «Валлаки» (после абзаца «…Привал прошёл без происшествий. Почти.»).
-   - В том же месте добавлены три `<img>` (`/images/artur/Irena_1.jpg`, `Irena_2.jpg`, `Irena_3.jpg`) подряд.
-   - Файлы скопированы из `new_add_text/artur/` в `public/images/artur/`.
-4. **Удалён сирота `06_портрет_32_года.jpeg`** (лежал в `public/images/artur/`, но не использовался в коде).
-
-### Что осталось
-
-- `ElPage.vue` теперь содержит полную версию дневника (47 эпизодов, 728 строк). Известное ограничение: текст импортирован «как есть» из `Dnevnik_El.docx`, где ~31% слов склеены (типичное последствие копирования из PDF/OCR). Пользователь планирует ручную корректуру.
-- Каталог `new_add_text/` очищен и реорганизован в `texts/` / `images/` / `notes/` (см. раздел выше). Активных черновиков на данный момент нет.
