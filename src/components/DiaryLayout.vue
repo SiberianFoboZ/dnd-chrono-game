@@ -1,26 +1,26 @@
 <script setup lang="ts">
-import { computed } from 'vue'
-import type { ThemeKey } from '@/types/character'
-import { useTheme } from '@/composables/useTheme'
-import { getTheme } from '@/themes'
-import ParchmentBackground from './backgrounds/ParchmentBackground.vue'
-import GothicBackground from './backgrounds/GothicBackground.vue'
-import BookBackground from './backgrounds/BookBackground.vue'
-import ForestBackground from './backgrounds/ForestBackground.vue'
-import MinimalBackground from './backgrounds/MinimalBackground.vue'
+import { useTheme } from "@/composables/useTheme";
+import { getTheme } from "@/themes";
+import type { ThemeKey } from "@/types/character";
+import { computed } from "vue";
+import BookBackground from "./backgrounds/BookBackground.vue";
+import ForestBackground from "./backgrounds/ForestBackground.vue";
+import GothicBackground from "./backgrounds/GothicBackground.vue";
+import MinimalBackground from "./backgrounds/MinimalBackground.vue";
+import ParchmentBackground from "./backgrounds/ParchmentBackground.vue";
 
-const props = defineProps<{ themeKey: ThemeKey }>()
+const props = defineProps<{ themeKey: ThemeKey }>();
 
-useTheme(() => props.themeKey)
+useTheme(() => props.themeKey);
 
-const theme = computed(() => getTheme(props.themeKey))
+const theme = computed(() => getTheme(props.themeKey));
 
 const pageClass = computed(() => {
-  const k = props.themeKey
-  return k === 'barandur' || k === 'malbrin'
-    ? 'diary-page-minimal'
-    : `diary-page-${k}`
-})
+  const k = props.themeKey;
+  return k === "barandur" || k === "malbrin" || k === "irena"
+    ? "diary-page-minimal"
+    : `diary-page-${k}`;
+});
 </script>
 
 <template>
