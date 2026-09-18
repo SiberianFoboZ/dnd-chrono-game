@@ -1,6 +1,6 @@
 # QWEN.md — Хроники отряда (dnd-chrono-game)
 
-> **Актуально по состоянию на 2026-09-05.** Миграция на Vue 3 + Vite + TypeScript + Tailwind **завершена** (включая Фазу 8 — перенос в корень). Последняя сессия — добавление продолжения Баровии в `ArturPage.vue` (7 новых сцен + 7 иллюстраций), регистрация Ирины в реестре, публикация коммита `2b5a397`. Запланирован рефакторинг модулей дневников (см. раздел ниже).
+> **Актуально по состоянию на 2026-09-19.** Миграция на Vue 3 + Vite + TypeScript + Tailwind **завершена** (включая Фазу 8 — перенос в корень). **Завершён также рефакторинг ArturPage и AzaPage** (коммит `89ac073`) — монолиты 2272 + 2376 строк разнесены в main-обёртки (196 / 410 строк) + отдельные файлы глав (30 + 21). Audio-card Азы с sonata.mp3 вынесена в `src/components/AzaAudioCard.vue`, рендерится в `AzaChapter20` (глава «Валлаки») на исходной позиции.
 
 ## Обзор проекта
 
@@ -55,7 +55,9 @@ C:\Users\vk241\.github\dnd-chrono-game\
 │       └── deploy.yml      # GitHub Actions → Pages (Node 24, FORCE_JAVASCRIPT_ACTIONS_TO_NODE24)
 │
 ├── scripts/
-│   └── copy-404.cjs        # Постбилд: генерирует dist/404.html (SPA fallback)
+│   ├── copy-404.cjs                # Постбилд: генерирует dist/404.html (SPA fallback)
+│   ├── split-pages-by-chapter.cjs  # Сплиттер ArturPage/AzaPage → main + chapters (для ре-генерации)
+│   └── verify-chapter-balance.cjs  # Проверка баланса <div>/</div> во всех главах
 │
 ├── public/                 # Копируется 1:1 в dist/
 │   ├── fonts/              # 4 шрифта (GreatVibes, Comforter, Agretta, ofont_ru_Corinthia)
@@ -94,6 +96,7 @@ C:\Users\vk241\.github\dnd-chrono-game\
 │   │   ├── DiaryImage.vue         # img + caption (left/right/none)
 │   │   ├── ImageCaption.vue       # <p class="image-caption">
 │   │   ├── DiaryFooter.vue        # «Запись обрывается...»
+│   │   ├── AzaAudioCard.vue       # Интерактивная карточка с sonata.mp3 (логика + разметка + стили)
 │   │   └── backgrounds/
 │   │       ├── ParchmentBackground.vue   # светлая бумага
 │   │       ├── GothicBackground.vue      # тёмная готика + звёздная пыль
@@ -103,13 +106,16 @@ C:\Users\vk241\.github\dnd-chrono-game\
 │   │
 │   ├── pages/
 │   │   ├── HomePage.vue       # Список из characters.ts + статусы + цитата
-│   │   ├── ArturPage.vue      # 24 страницы + 23 иллюстрации (~2272 строк)
-│   │   ├── AzaPage.vue        # Один <article class="entry"> + SVG torn-edge (~2376 строк)
-│   │   ├── ElPage.vue         # 47 эпизодов + 58 иллюстраций (~719 строк, табличный layout)
-│   │   ├── ZiraelaPage.vue    # 9 <article class="entry"> + forest-silhouette SVG (~917 строк)
+│   │   ├── ArturMainPage.vue  # Тонкая обёртка (~196 строк): импорты 30 ArturChapter*.vue + :deep()-стили
+│   │   ├── AzaMainPage.vue    # Тонкая обёртка (~410 строк): SVG torn-edge, header, divider, импорты 21 AzaChapter*.vue + audio-card через <AzaChapter20> + :deep()-стили
+│   │   ├── ElPage.vue         # 47 эпизодов + 58 иллюстраций (~719 строк, табличный layout; пока НЕ рефакторен)
+│   │   ├── ZiraelaPage.vue    # 9 <article class="entry"> + forest-silhouette SVG (~917 строк; пока НЕ рефакторен)
 │   │   ├── IrenaPage.vue      # «Эти страницы ещё не написаны...»
 │   │   ├── BarandurPage.vue   # «Эти страницы ещё не написаны...»
-│   │   └── MalbrinPage.vue    # «Эти страницы ещё не написаны...»
+│   │   ├── MalbrinPage.vue    # «Эти страницы ещё не написаны...»
+│   │   └── main/                          # Главы дневников Artur и Aza (импортируются в Main-страницы)
+│   │       ├── artur/ArturChapter1..30.vue   # 30 глав по <div class="page"> (~28–439 строк каждая)
+│   │       └── aza/AzaChapter1..21.vue       # 21 глава по <h2> (~17–813 строк каждая; Chapter20 содержит <AzaAudioCard />)
 │   │
 │   └── assets/styles/
 │       ├── tailwind.css       # @tailwind + @layer components (.diary-page-*)
@@ -123,8 +129,8 @@ C:\Users\vk241\.github\dnd-chrono-game\
 
 | Персонаж              | Класс / роль               | Status     | Шрифт / тема (Vue) | Состояние страницы |
 |-----------------------|----------------------------|------------|--------------------|--------------------|
-| **Артур Могрейн**     | Паладин, бывший каратель   | `active`   | `artur` — `"Ink Free", "Segoe Print"...` · `parchment` · drop-cap `#2c2c2c` | `ArturPage.vue` (~**2272** строк, 24 страницы + 23 иллюстрации). Конвенция «двух рук» (Артур + Аза): классы `.strikethrough` (рука Артура) и `.aza-edit` / `.aza-voice` (рука Азы) — см. `diary-effects.css`. |
-| **Аза** (Пепельная Роза) | Бард, цыганка, рассказчица | `active`   | `aza` — `"Corinthia"` · `gothic` · drop-cap `#8b1e2b` · ♥ ♥ ♥ | `AzaPage.vue` (~**2376** строк — самый крупный файл дневника, включает SVG torn-edge) |
+| **Артур Могрейн**     | Паладин, бывший каратель   | `active`   | `artur` — `"Ink Free", "Segoe Print"...` · `parchment` · drop-cap `#2c2c2c` | `ArturMainPage.vue` (~**196** строк, тонкий рендер) + `src/pages/main/artur/ArturChapter1..30.vue` (30 страниц, ~28–439 строк каждая). Конвенция «двух рук» (Артур + Аза): классы `.strikethrough` (рука Артура) и `.aza-edit` / `.aza-voice` (рука Азы) — см. `diary-effects.css`. |
+| **Аза** (Пепельная Роза) | Бард, цыганка, рассказчица | `active`   | `aza` — `"Corinthia"` · `gothic` · drop-cap `#8b1e2b` · ♥ ♥ ♥ | `AzaMainPage.vue` (~**410** строк: SVG torn-edge + header + footer + `:deep()`-стили) + `src/pages/main/aza/AzaChapter1..21.vue` (21 глава по `<h2>`, ~17–813 строк). Audio-card с sonata.mp3 — отдельный компонент `src/components/AzaAudioCard.vue`, рендерится внутри `AzaChapter20` (глава «Валлаки») на исходной позиции. |
 | **Эл**                | Дроу, покинувшая подземье  | `active`   | `el` — `'Comforter'` · `book` · drop-cap `#2a1f14` | `ElPage.vue` (~**719** строк, 47 эпизодов + 58 иллюстраций, табличный layout) |
 | **Барандур**          | Дварф                      | `wip`      | `barandur` — `"Ink Free"...` · `minimal` | `BarandurPage.vue` (~46 строк, заглушка) |
 | **Малбрин**           | Дроу (светлая)             | `wip`      | `malbrin` — `"Ink Free"...` · `minimal` | `MalbrinPage.vue` (~46 строк, заглушка) |
@@ -133,16 +139,21 @@ C:\Users\vk241\.github\dnd-chrono-game\
 
 Источник истины: `src/data/characters.ts` (реестр) и `src/themes/*.ts` (темы).
 
-### Рост файлов дневников (для контекста при планировании рефакторинга)
+### Размеры файлов дневников (после рефакторинга 2026-09-19)
 
-| Файл | Строк | Тренд |
-|------|-------|-------|
-| `ArturPage.vue` | 2272 | рос за каждую сессию: 1422 → 1762 → 1909 → 2272 (+360 за последнее добавление Баровии) |
-| `AzaPage.vue`   | 2376 | рос быстрее всех: 1024 → 2376 (за счёт inline-заметок «двух рук» и SVG-декораций) |
-| `ZiraelaPage.vue` | 917 | стабильно, добавлялось постепенно |
-| `ElPage.vue`    | 719 | финализирован в одну сессию (47 эпизодов + табличный layout) |
+После рефакторинга `ArturPage.vue` и `AzaPage.vue` разнесены в **main-обёртку + файлы глав по `<div class="page">` / `<h2>`**. Правка текста делается в файлах `src/pages/main/<slug>/<Slug>Chapter<N>.vue`, файл `MainPage` — только тонкий рендер + `:deep()`-стили.
 
-**Порог неудобства:** при ~2000+ строк в одном файле затрудняются правки (скролл, мержи, поиск). Рефакторинг запланирован, но **не начинать без явного согласования** — см. раздел ниже.
+| Файл | Строк | Назначение |
+|------|-------|-----------|
+| `ArturMainPage.vue`                | 196  | Тонкий рендер: `<article class="artur-diary">` + `<ArturChapter1..30 />` + `<RouterLink>` + scoped CSS с `:deep()` |
+| `src/pages/main/artur/ArturChapter1..30.vue` | 28–439 | 30 глав по `<div class="page">`. ArturChapter21 (Валлаки) самый крупный — 439 строк (внутри 6 под-entries: Дорога, Валлаки, Синяя Вода, Реликвии, Исмарк, Расследование) |
+| `AzaMainPage.vue`                  | 410  | SVG torn-edge + header + divider + `<article class="entry">` + `<AzaChapter1..21 />` + `<footer>` + scoped CSS с `:deep()` |
+| `src/pages/main/aza/AzaChapter1..21.vue`   | 17–813 | 21 глава по `<h2>`. AzaChapter20 (Валлаки) самый крупный — 813 строк (содержит `<AzaAudioCard />`); AzaChapter21 (У бургомистра) — 455 строк |
+| `src/components/AzaAudioCard.vue`  | ~95 | Интерактивная карточка с sonata.mp3 (логика `sonata`/`toggleSonata` + разметка + scoped CSS) |
+| `scripts/split-pages-by-chapter.cjs` | — | Сплиттер исходных `<slug>Page.vue` → main + chapters (для ре-генерации) |
+| `scripts/verify-chapter-balance.cjs` | — | Проверка баланса `<div>`/`</div>` во всех главах |
+
+ElPage и ZiraelaPage — кандидаты на следующий этап рефакторинга, **не приступать без явного согласования**.
 
 ## Стилистические конвенции
 
@@ -191,19 +202,20 @@ Vue `<style scoped>` добавляет к селектору `data-v-…`-ат�
 }
 ```
 
-Специфичность `(0,2,1,0)` выигрывает у `(0,1,1,0)`. Сейчас этот override есть в `<style scoped>` `ArturPage.vue`; если понадобятся азовские сайдбары в других страницах (Aza, El, Ziraela) — добавить аналогично.
+Специфичность `(0,2,1,0)` выигрывает у `(0,1,1,0)`. Сейчас этот override (`:deep(.sidebar-note.aza-voice)`) живёт в `<style scoped>` `ArturMainPage.vue`; если понадобятся азовские сайдбары в других страницах (Aza, El, Ziraela) — добавить аналогично.
 
 ### Соглашения по написанию Vue-страниц дневника
 
 1. **`<template>` оборачивает контент в `<DiaryLayout theme-key="<slug>">`** — он подставляет фон и тему.
-2. **Все стили — `<style scoped>`** в `.vue`-файле (никаких внешних CSS-файлов на страницу).
-3. **Шрифты** подключены глобально через `src/assets/styles/fonts.css` (`@font-face`); семейство доступно по CSS-переменной `--font-display`.
-4. **Изображения:** `<img src="/images/<slug>/<file>">` (абсолютные пути от корня сайта).
-5. **Буквица:** `.entry p:first-of-type::first-letter` — крупная, цвет через `var(--drop-cap)`.
-6. **Drop-cap и псевдоэлементы:** иллюстрации внутри `.entry` ОБЯЗАНЫ иметь `position: relative; z-index: 1` (см. `assets/styles/diary-effects.css`), иначе их перекроет фоновая текстура листа.
-7. **Имена файлов изображений:** на русском с подчёркиваниями (`01_деревня.jpeg`) или просто числовые (`1.jpg`, `2.png`).
-8. **Параграфы:** `text-align: justify`, `text-indent: 1.5em`.
-9. **Языковая конвенция:** контент полностью на русском. Не переводить без явного запроса.
+2. **Main-страница содержит `<style scoped>` с `:deep()`** для селекторов, таргетящих элементы внутри дочерних глав (`ArturMainPage.vue`, `AzaMainPage.vue`). Прямые селекторы (`.divider`, `.audio-card`, `header`, `footer`, RouterLink) — без `:deep()`, они таргетят только элементы в шаблоне main-страницы.
+3. **Файлы глав (`ArturChapter*.vue`, `AzaChapter*.vue`)** — **без** `<style>`-блока; только `<template>`. Все стили глав живут в соответствующей main-странице через `:deep()`. Исключение: главы с собственной интерактивной логикой (например, `AzaChapter20` содержит `<AzaAudioCard />`) могут иметь `<script setup lang="ts">` для импорта компонента.
+4. **Шрифты** подключены глобально через `src/assets/styles/fonts.css` (`@font-face`); семейство доступно по CSS-переменной `--font-display`.
+5. **Изображения:** `<img src="/images/<slug>/<file>">` (абсолютные пути от корня сайта).
+6. **Буквица:** `.entry p:first-of-type::first-letter` — крупная, цвет через `var(--drop-cap)`. В `AzaMainPage.vue` это `:deep(.entry p:first-of-type::first-letter)` — drop-cap применяется к первому `<p>` первой главы (как в исходнике).
+7. **Drop-cap и псевдоэлементы:** иллюстрации внутри `.entry` ОБЯЗАНЫ иметь `position: relative; z-index: 1` (см. `assets/styles/diary-effects.css`), иначе их перекроет фоновая текстура листа.
+8. **Имена файлов изображений:** на русском с подчёркиваниями (`01_деревня.jpeg`) или просто числовые (`1.jpg`, `2.png`).
+9. **Параграфы:** `text-align: justify`, `text-indent: 1.5em`.
+10. **Языковая конвенция:** контент полностью на русском. Не переводить без явного запроса.
 
 ## Команды для запуска
 
@@ -292,40 +304,27 @@ GitHub Pages не умеет в rewrite для SPA history-mode. Использ�
 - **Git-ignored:** `.qwen/` (рабочая область Qwen Code), `*.bak`, `node_modules/`, `dist/`, `.vite/`, `*.tsbuildinfo`, `.env*`.
 - **Связь персонажей:** Артур и Аза встретились первыми. Эл, Барандур, Малбрин и Зираэлла — часть того же отряда. В дневниках упоминаются друг друга.
 
-## Запланированный рефакторинг модулей дневников
+## Завершённый рефакторинг модулей дневников (2026-09-19, коммит `89ac073`)
 
-> ⚠️ **ВАЖНО:** Этот раздел — план на будущее. **Не приступать к рефакторингу без явного согласования с пользователем.** Любые предложения «а давайте сразу разобьём ArturPage на компоненты» — останавливать и спрашивать подтверждения.
+> ✅ **Завершено.** Подход «main-обёртка + файлы глав» применён к `ArturPage.vue` и `AzaPage.vue`. `ElPage` и `ZiraelaPage` — кандидаты на следующий этап, **не приступать без явного согласования**.
 
-### Проблема
+**Что сделано:**
 
-По состоянию на 2026-09-05 два дневника превысили 2000 строк в одном файле:
+- **Главы — отдельные Vue SFC**, импортируются в main-страницу. Гранулярность:
+  - **Artur:** 1 глава = 1 `<div class="page">` (всего 30). Внутри ArturChapter21 (Валлаки) — 6 под-entries в одном файле.
+  - **Aza:** 1 глава = 1 `<h2>` (всего 21). Внутри одной `<article class="entry">` в main-странице рендерятся все 21 глав как фрагменты (Vue 3 multi-root).
+- **Main-страница:**
+  - `ArturMainPage.vue` (196 строк): `<article class="artur-diary">` + `<ArturChapter1..30 />` + `<RouterLink>`.
+  - `AzaMainPage.vue` (410 строк): SVG-фильтр `torn-edge`, header, divider, `<article class="entry">` с 21 `<AzaChapter* />`, footer. Без audio-card (она внутри `<AzaChapter20 />`).
+- **CSS — `<style scoped>` с `:deep()`** в main-странице для селекторов, таргетящих элементы внутри глав (`.page`, `.entry`, `.entry-title`, `.sidebar-note`, `.margin-note`, `.shout`, `.image-caption`, `.prophecy-box`, `.gem-box`, `p`). Прямые селекторы (`header`, `.divider`, `.audio-card`, `.back`, `.entry` wrapper) — без `:deep()`, таргетят только прямых потомков main.
+- **Audio-card** (`src/components/AzaAudioCard.vue`, ~95 строк) — самодостаточный компонент: `<script setup>` (`sonata`/`sonataPlaying`/`toggleSonata`/`sonataUrl`) + `<template>` + scoped CSS. Импортируется в `AzaChapter20.vue` через `<script setup lang="ts">` и рендерится на исходной позиции (между теми же двумя параграфами, что в исходном `AzaPage.vue` строки 1138-1165).
+- **Скрипты** для будущих ре-генераций:
+  - `scripts/split-pages-by-chapter.cjs` — сплиттер по границам глав (hardcoded line ranges в исходных `<slug>Page.vue`).
+  - `scripts/verify-chapter-balance.cjs` — проверяет баланс `<div>`/`</div>` во всех 51 файле глав.
 
-- `AzaPage.vue` — **2376** строк (самый крупный)
-- `ArturPage.vue` — **2272** строк (после добавления Баровии в этой сессии)
+**Что НЕ в скоупе:**
+- Lazy-загрузка глав — сейчас все импорты static (`import ArturChapter1 from ...`), все главы грузятся в одном чанке с main-страницей. Для контентного сайта это приемлемо (пользователь читает все главы подряд). Если понадобится lazy — обернуть в `defineAsyncComponent` или dynamic `import()`.
+- ElPage и ZiraelaPage — пока не тронуты (719 и 917 строк, ниже порога).
+- Скрипт `extract-artur-data.cjs` (из старого Approach C) не создавался — мы пошли по другому пути.
 
-Дальнейший рост приведёт к:
-- трудностям в редактировании (длинный скролл, тяжёлый поиск)
-- проблемам при слиянии параллельных правок (особенно заметки Азы в ArturPage)
-- замедлению type-check / IDE
-
-### Рассмотренные подходы
-
-| Подход | Суть | Плюсы | Минусы |
-|--------|------|-------|--------|
-| **A. Глава = компонент** | Каждый `<div class="page">` — отдельный `.vue` файл в `src/components/<slug>/chapters/` | Минимальное изменение конвенций; проще мержить; лучше LSP | Весь дневник остаётся в одном чанке (lazy нет); scoped-стили дублируются |
-| **B. Lazy chapters** | A + `defineAsyncComponent()` для динамической подгрузки | Падение initial bundle (ArturPage был 132 kB) | Чуть сложнее: нужен IntersectionObserver для триггера |
-| **C. Контент в data-файле** | Текст в типизированный TS-массив `data/<slug>-diary.ts`; страница — тонкий рендер | Радикальное решение; **упрощает работу не-тех. коллаборатора (Азы)** — править `paragraphs[i].content` без `<span>`-ов; легче аудит осиротевших изображений | Большой рефактор (~2300 строк переписать); inline-стили теряются (нужны utility-классы, например `.klatva-block` для латинских клятв) |
-
-### Рекомендуемая последовательность (НЕ выполнять без согласования)
-
-1. **Этап 1 (ближайший, когда станет совсем неудобно):** подход A для `ArturPage.vue` (или для самого большого — `AzaPage.vue`). Общие стили выносятся в `assets/styles/diary-effects.css`.
-2. **Этап 2 (когда следующий персонаж достигнет ~1500 строк):** подход C. Шаблон `<Slug>Page.vue` становится универсальным рендером, контент — в `data/<slug>-diary.ts`. Естественно ложится на память про **не-тех. коллаборатора** — заметки Азы редактируются в массиве.
-
-Подход B пропускается: для контентного сайта экономия bundle не критична (пользователь всё равно читает все главы).
-
-### Что должно предшествовать любому рефакторингу
-
-- Согласование выбранного подхода (A / C) с пользователем.
-- Снимок текущего состояния (`git status` чистый, ветка `master` синхронизирована).
-- Описание в этом разделе конкретного плана: какие файлы создаются, какая конвенция меняется, как обновляются памяти и `MIGRATION_PLAN_V1.MD`.
-- После завершения — обновить «Актуально по состоянию на …» в первой строке этого файла.
+**План-источник:** согласован в чате 2026-09-19; выполнен в том же коммите `89ac073`.
