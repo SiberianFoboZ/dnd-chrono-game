@@ -23,7 +23,7 @@ const routes: RouteRecordRaw[] = [
   {
     path: "/el",
     name: "el",
-    component: () => import("@/pages/ElPage.vue"),
+    component: () => import("@/pages/ElMainPage.vue"),
   },
   {
     path: "/ziraela",

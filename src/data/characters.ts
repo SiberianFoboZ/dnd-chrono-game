@@ -53,7 +53,7 @@ export const characters: Character[] = [
   {
     id: "malbrin",
     name: "Малбрин",
-    slug: "malbrin",
+    slug: "drow",
     title: "Дроу (светлая)",
     role: "drow",
     status: "wip",
